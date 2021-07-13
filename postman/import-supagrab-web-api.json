@@ -1,0 +1,278 @@
+{
+    "info": {
+      "_postman_id": "28f02b92-9f9a-4018-b13f-a467e750a257",
+      "name": "supagrab-local",
+      "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "1. Auth",
+        "item": [
+          {
+            "name": "signUp user",
+            "id": "2e1da147-fd42-416b-b658-f4187b810eef",
+            "request": {
+              "method": "POST",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "urlencoded": [
+                  {
+                    "key": "first_name",
+                    "value": "deepak bawa",
+                    "type": "text"
+                  },
+                  {
+                    "key": "email",
+                    "value": "bawa_d1@ymail.com",
+                    "type": "text"
+                  },
+                  {
+                    "key": "password",
+                    "value": "123456",
+                    "type": "text"
+                  },
+                  {
+                    "key": "contact_number",
+                    "value": "7508498586",
+                    "type": "text"
+                  },
+                  {
+                    "key": "role",
+                    "value": "CUSTOMER",
+                    "type": "text"
+                  }
+                ]
+              },
+              "url": "{{base_url}}/auth/signUp"
+            },
+            "response": [
+              
+            ]
+          },
+          {
+            "name": "signIn user",
+            "id": "3546b69f-1925-483d-8359-49c5ff8c0ece",
+            "request": {
+              "method": "POST",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "urlencoded": [
+                  {
+                    "key": "email",
+                    "value": "bawa_d@ymail.com",
+                    "type": "text"
+                  },
+                  {
+                    "key": "password",
+                    "value": "123456",
+                    "type": "text"
+                  }
+                ]
+              },
+              "url": "{{base_url}}/auth/signIn"
+            },
+            "response": [
+              
+            ]
+          }
+        ],
+        "id": "334d39ec-f993-4519-97a2-646a81e9fbd6"
+      },
+      {
+        "name": "2. Users",
+        "item": [
+          {
+            "name": "201. Insert User",
+            "id": "e0d7b846-db22-4465-8009-043c5db5f8cf",
+            "request": {
+              "auth": {
+                "type": "bearer",
+                "bearer": {
+                  "token": "{{token}}"
+                }
+              },
+              "method": "POST",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "urlencoded": [
+                  {
+                    "key": "first_name",
+                    "value": "deepak bawa",
+                    "type": "text"
+                  },
+                  {
+                    "key": "email",
+                    "value": "bawa_d2@ymail.com",
+                    "type": "text"
+                  },
+                  {
+                    "key": "password",
+                    "value": "123456",
+                    "type": "text"
+                  },
+                  {
+                    "key": "contact_number",
+                    "value": "7508498587",
+                    "type": "text"
+                  },
+                  {
+                    "key": "role",
+                    "value": "CUSTOMER",
+                    "type": "text"
+                  }
+                ]
+              },
+              "url": "{{base_url}}/users"
+            },
+            "response": [
+              
+            ]
+          },
+          {
+            "name": "202. Update User",
+            "id": "0e61c43d-165c-4be2-bd0c-54f1e9071b32",
+            "request": {
+              "method": "PATCH",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "urlencoded": [
+                  {
+                    "key": "first_name",
+                    "value": "deepak bawa",
+                    "type": "text"
+                  },
+                  {
+                    "key": "email",
+                    "value": "bawa_d@ymail.com",
+                    "type": "text"
+                  },
+                  {
+                    "key": "password",
+                    "value": "123456",
+                    "type": "text"
+                  },
+                  {
+                    "key": "contact_number",
+                    "value": "7508498585",
+                    "type": "text"
+                  },
+                  {
+                    "key": "role",
+                    "value": "CUSTOMER",
+                    "type": "text"
+                  }
+                ]
+              },
+              "url": "{{base_url}}/users/60dc1900059e651c942bef73"
+            },
+            "response": [
+              
+            ]
+          },
+          {
+            "name": "203. Delete User",
+            "id": "1d628423-c583-4bf8-ae38-e950bb3cfa41",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "urlencoded": [
+                  
+                ]
+              },
+              "url": "{{base_url}}/users/60dc1900059e651c942bef73"
+            },
+            "response": [
+              
+            ]
+          },
+          {
+            "name": "203. get User By Id",
+            "id": "76f3a3e2-5c02-437b-990e-c77002599624",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "GET",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "urlencoded": [
+                  
+                ]
+              },
+              "url": "{{base_url}}/users/60dc1900059e651c942bef73"
+            },
+            "response": [
+              
+            ]
+          },
+          {
+            "name": "204. get all User",
+            "id": "e3203ee5-748f-496d-a9d4-a509d78940ac",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "GET",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "urlencoded": [
+                  
+                ]
+              },
+              "url": "{{base_url}}/users"
+            },
+            "response": [
+              
+            ]
+          },
+          {
+            "name": "205. Upload User Profile Pic",
+            "id": "24a3dfa6-e367-45d5-8bc0-34b487fa6df5",
+            "request": {
+              "method": "POST",
+              "header": [
+                
+              ],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "profile_pic",
+                    "type": "file",
+                    "src": "/C:/Users/immi/Pictures/Screenshots/Screenshot (1).png"
+                  }
+                ]
+              },
+              "url": "{{base_url}}/users/changePic/60dc1900059e651c942bef73"
+            },
+            "response": [
+              
+            ]
+          }
+        ],
+        "id": "0b347f29-4d30-43fc-882c-6e08c0d57003"
+      }
+    ]
+  }
