@@ -1,20 +1,9 @@
-const dbUsername = `deepak`;
-const dbPassword = `rAlYCkd3p6uJOFbK`;
-const dbName = `supagrab`;
-
-// LIVE DB CLUSTER
-// const mongodbUrl = `mongodb+srv://${dbUsername}:${dbPassword}@cartcluster.ozjjy.mongodb.net/${dbName}`;
-
-// LOCAL DB CLUSTER
-const mongodbUrl = `mongodb://localhost:27017/${dbName}`;
-const basePath = 'http://localhost:3000/';
+require('dotenv').config();
 
 module.exports = {
-    mongodbUrl: mongodbUrl,
-    basePath: basePath,
-
+    mongodbUrl: process.env.MONGODB_URL,
+    basePath: process.env.BASE_URL,
     userImageUploadPath: 'public/images/uploads/users',
-    userImageBasePath: basePath + 'images/uploads/users',
-
-    JWT_SECRET: 'secretKey'
+    userImageBasePath: process.env.BASE_URL + 'images/uploads/users',
+    JWT_SECRET: process.env.JWT_SECRET_KEY
 }
