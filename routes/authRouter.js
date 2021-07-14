@@ -49,9 +49,9 @@ router.post('/signUp', upload.single('profile_pic'), [
     UserControllerObj.insertUser
 ]);
 
-router.post('/signIn', upload.single('profile_pic'), [
-  AuthControllerObj.signIn
-]);
+router.post('/signIn', [AuthControllerObj.signIn]);
+
+router.post('/social-sign-in', [AuthControllerObj.socialSignIn]);
 
 router.post('/signOut', [
   AuthControllerObj.signOut

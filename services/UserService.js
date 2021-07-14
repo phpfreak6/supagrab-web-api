@@ -1,262 +1,302 @@
 const UserModel = require('../models').UserModel;
-const { ObjectId } = require('mongodb');
+const {ObjectId} = require('mongodb');
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+var {userImageBasePath, JWT_SECRET} = require('../config/config');
 
 module.exports = class UserService {
 
     constructor() {}
 
-    async getAllUser( searchTxt ) {
+    async getAllUser(searchTxt) {
         try {
 
-            if( !searchTxt ) {
+            if (!searchTxt) {
 
-                let result = await UserModel.find( 
-                    {
-                        status: { $ne: 'DELETED' } 
-                    }, // condition
-                    [
-                        'parent_id',
+                let result = await UserModel.find(
+                        {
+                            status: {$ne: 'DELETED'}
+                        }, // condition
+                        [
+                            'parent_id',
 
-                        'first_name',
-                        'last_name',
-                        'profilePic',
-                            
-                        'email',
-                        'contact_number',
+                            'first_name',
+                            'last_name',
+                            'profilePic',
 
-                        'password',
-                        'pwd_reset_token',
-                        'refresh_token',
-                        
-                        'gender',
-                        'role',
-                        'status',
+                            'email',
+                            'contact_number',
 
-                        'fb_token',
-                        'fb_details',
+                            'password',
+                            'pwd_reset_token',
+                            'refresh_token',
 
-                        'gmail_token',
-                        'gmail_details',
-                        
-                        'account_verification_token',
+                            'gender',
+                            'role',
+                            'status',
 
-                        'fcm_device_type',
-                        'fcm_token',
-                        
-                        'addresses',
+                            'fb_token',
+                            'fb_details',
 
-                        'device_info',
+                            'gmail_token',
+                            'gmail_details',
 
-                        'otp_code',
-                        
-                        'deletedAt',
-                        'createdAt',
-                        'updatedAt'
-                    ], // Columns to Return
-                    {
-                        sort: {
-                            createdAt: -1 //Sort by Date Added DESC
-                        }
-                    } );
+                            'account_verification_token',
+
+                            'fcm_device_type',
+                            'fcm_token',
+
+                            'addresses',
+
+                            'device_info',
+
+                            'otp_code',
+
+                            'deletedAt',
+                            'createdAt',
+                            'updatedAt'
+                        ], // Columns to Return
+                        {
+                            sort: {
+                                createdAt: -1 //Sort by Date Added DESC
+                            }
+                        });
                 return result;
             } else {
 
-                let result = await UserModel.find( {
-                    $and:[
+                let result = await UserModel.find({
+                    $and: [
                         {
 
-                            $or:[
+                            $or: [
                                 {
-                                    email: new RegExp( searchTxt, 'i')
+                                    email: new RegExp(searchTxt, 'i')
                                 },
                                 {
-                                    first_name: new RegExp( searchTxt, 'i')
+                                    first_name: new RegExp(searchTxt, 'i')
                                 },
                                 {
-                                    last_name: new RegExp( searchTxt, 'i')
+                                    last_name: new RegExp(searchTxt, 'i')
                                 },
                                 {
-                                    status: new RegExp( searchTxt, 'i')
+                                    status: new RegExp(searchTxt, 'i')
                                 },
                                 {
-                                    role: new RegExp( searchTxt, 'i')
+                                    role: new RegExp(searchTxt, 'i')
                                 }
                             ],
-                            status: { $ne: 'DELETED' }
+                            status: {$ne: 'DELETED'}
                         },
                     ],
                 },
-                [
-                    'parent_id',
+                        [
+                            'parent_id',
 
-                    'first_name',
-                    'last_name',
-                    'profilePic',
-                        
-                    'email',
-                    'contact_number',
+                            'first_name',
+                            'last_name',
+                            'profilePic',
 
-                    'password',
-                    'pwd_reset_token',
-                    'refresh_token',
-                    
-                    'gender',
-                    'role',
-                    'status',
+                            'email',
+                            'contact_number',
 
-                    'fb_token',
-                    'fb_details',
+                            'password',
+                            'pwd_reset_token',
+                            'refresh_token',
 
-                    'gmail_token',
-                    'gmail_details',
-                    
-                    'account_verification_token',
+                            'gender',
+                            'role',
+                            'status',
 
-                    'fcm_device_type',
-                    'fcm_token',
-                    
-                    'addresses',
+                            'fb_token',
+                            'fb_details',
 
-                    'device_info',
+                            'gmail_token',
+                            'gmail_details',
 
-                    'otp_code',
-                    
-                    'deletedAt',
-                    'createdAt',
-                    'updatedAt'
-                ], // Columns to Return
-                {
-                    sort:{
-                        createdAt: -1 //Sort by Date Added DESC
-                    }
-                });
+                            'account_verification_token',
+
+                            'fcm_device_type',
+                            'fcm_token',
+
+                            'addresses',
+
+                            'device_info',
+
+                            'otp_code',
+
+                            'deletedAt',
+                            'createdAt',
+                            'updatedAt'
+                        ], // Columns to Return
+                        {
+                            sort: {
+                                createdAt: -1 //Sort by Date Added DESC
+                            }
+                        });
                 return result;
             }
-        } catch(ex) {            
+        } catch (ex) {
             throw ex;
         }
     }
 
-    async getUserById( in_id ) {
+    async getUserById(in_id) {
         try {
 
-            let id = ObjectId( in_id );
-            let result = await UserModel.findOne( { _id: id, status: { $ne: 'DELETED' } } );    
+            let id = ObjectId(in_id);
+            let result = await UserModel.findOne({_id: id, status: {$ne: 'DELETED'}});
             return result;
-        } catch(ex) {
-            
+        } catch (ex) {
+
             throw ex;
         }
     }
 
-    async getUserByEmail( email ) {
+    async getUserByEmail(email) {
         try {
-
-            let result = await UserModel.findOne( { email: email, status: { $ne: 'DELETED' } } );    
+            let result = await UserModel.findOne({email: email, status: {$ne: 'DELETED'}});
             return result;
-        } catch(ex) {
-            
+        } catch (ex) {
             throw ex;
         }
     }
 
-    async insertUser( in_data ) {
+    async insertUser(in_data) {
         try {
 
             // generate salt to hash password
             const salt = await bcrypt.genSalt(10);
             // now we set user password to hashed password
             in_data.password = await bcrypt.hash(in_data.password, salt);
-            let result = await UserModel.create( in_data );
+            let result = await UserModel.create(in_data);
             return result;
-        } catch(ex) {
+        } catch (ex) {
             throw ex;
         }
     }
 
-    async updateUser( in_data, in_id ) {
+    async updateUser(in_data, in_id) {
         try {
-            
-            let id = ObjectId( in_id );
-            let result = await UserModel.updateOne({ _id: id }, in_data, { multi: false });
+
+            let id = ObjectId(in_id);
+            let result = await UserModel.updateOne({_id: id}, in_data, {multi: false});
             return result;
-        } catch(ex) {
+        } catch (ex) {
             throw ex;
         }
     }
 
-    async deleteUser( in_data, id ) {
+    async deleteUser(in_data, id) {
         try {
-            
-            let id = ObjectId( id );
-            let result = await UserModel.updateOne({ _id: id }, in_data, { multi: false } );
+
+            let id = ObjectId(id);
+            let result = await UserModel.updateOne({_id: id}, in_data, {multi: false});
             return result;
-        } catch(ex) {
+        } catch (ex) {
             throw ex;
         }
     }
 
-    async updateUserProfilePic( in_data, in_id ) {
+    async updateUserProfilePic(in_data, in_id) {
         try {
-            let id = ObjectId( in_id );
-            let result = await UserModel.updateOne({ _id: id }, in_data, { multi: false } );
+            let id = ObjectId(in_id);
+            let result = await UserModel.updateOne({_id: id}, in_data, {multi: false});
             return result;
-        } catch(ex) {
+        } catch (ex) {
             throw ex;
         }
     }
 
-    async isUserIdExists( user_id ) {
+    async isUserIdExists(user_id) {
         try {
 
-            let result = await UserModel.countDocuments( { _id: user_id } );
+            let result = await UserModel.countDocuments({_id: user_id});
             let isExists = result > 0 ? true : false;
             return isExists;
-        } catch(ex) {
+        } catch (ex) {
             throw ex;
         }
     }
-    
-    async isUserEmailExists( in_email, user_id = false ) {
-        try {
-            if( user_id ) {
 
-                let result = await UserModel.countDocuments( {
+    async isUserEmailExists(in_email, user_id = false) {
+        try {
+            if (user_id) {
+
+                let result = await UserModel.countDocuments({
                     email: in_email,
-                    _id: { $ne: user_id }
-                } );
+                    _id: {$ne: user_id}
+                });
                 let isExists = result > 0 ? true : false;
                 return isExists;
             } else {
 
-                let result = await UserModel.countDocuments( { email: in_email } );
+                let result = await UserModel.countDocuments({email: in_email});
                 let isExists = result > 0 ? true : false;
                 return isExists;
             }
-        } catch(ex) {
+        } catch (ex) {
+            throw ex;
+    }
+    }
+
+    async isUserContactNoExists(in_contact_no, user_id = false) {
+        try {
+
+            if (user_id) {
+
+                let result = await UserModel.countDocuments({
+                    contact_number: in_contact_no,
+                    _id: {$ne: user_id}
+                });
+                let isExists = result > 0 ? true : false;
+                return isExists;
+            } else {
+
+                let result = await UserModel.countDocuments({contact_number: in_contact_no});
+                let isExists = result > 0 ? true : false;
+                return isExists;
+            }
+        } catch (ex) {
+            throw ex;
+    }
+    }
+
+    async checkSocialUserExists(dataObj) {
+        try {
+            let result = await UserModel.countDocuments({token: dataObj.token, social_flag: dataObj.social_flag});
+            return result > 0 ? true : false;
+        } catch (ex) {
+            throw ex;
+        }
+
+    }
+
+    async createJwtToken(userData) {
+        try {
+            let tokenParamObj = {id: userData._id, email: userData.email, contact_number: userData.contact_number, role: userData.role, status: userData.status};
+            let result = await jwt.sign({tokenParamObj}, JWT_SECRET, {expiresIn: 60 * 60});
+            return result;
+        } catch (ex) {
             throw ex;
         }
     }
 
-    async isUserContactNoExists( in_contact_no, user_id = false ) {
+    async getUserByFeededData(data) {
         try {
+            let result = await UserModel.findOne(data);
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
 
-            if( user_id ) {
-
-                let result = await UserModel.countDocuments( { 
-                    contact_number: in_contact_no,
-                    _id: { $ne: user_id }
-                } );
-                let isExists = result > 0 ? true : false;
-                return isExists;
-            } else {
-
-                let result = await UserModel.countDocuments( { contact_number: in_contact_no } );
-                let isExists = result > 0 ? true : false;
-                return isExists;
+    validateUserStatus(userObj) {
+        try {
+            if (['PENDING', 'BLOCK', 'DELETED'].includes(userObj.status)) {
+                throw 'Your account status is ' + userObj.status.toLowerCase() + '. Please contact administrator.';
             }
-        } catch(ex) {
+            return true;
+        } catch (ex) {
             throw ex;
         }
     }

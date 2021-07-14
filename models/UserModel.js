@@ -8,43 +8,41 @@ const DEVICE_TYPE = ['WEB', 'IPHONE', 'ANDROID'];
 const dated = new Date();
 
 const UserSchema = new Schema({
-    parent_id: { type: ObjectId, default: null },
+    parent_id: {type: ObjectId, default: null},
 
-	first_name: { type: String },
-	last_name: { type: String, default: null },
-    profilePic: { type: String, default: null },
-        
-    email: { type: String, unique: true },
-    contact_number: { type: String, unique: true, default: null },
+    first_name: {type: String},
+    last_name: {type: String, default: null},
+    profilePic: {type: String, default: null},
 
-    password: { type: String, default: null },
-    pwd_reset_token: { type: String, default: null },
-    refresh_token: { type: String, default: null },
-    
-    gender: { type: String, enum: GENDER, default: 'MALE' },
-    role: { type: String, enum: ROLES, default: 'CUSTOMER' },
-    status: { type: String, enum: STATUSES, default: 'PENDING' },
+    email: {type: String, unique: true},
+    contact_number: {type: String, unique: true, default: null},
 
-    fb_token: { type: String, default: null },
-    fb_details: { type: String, default: null },
+    password: {type: String, default: null},
+    pwd_reset_token: {type: String, default: null},
+    refresh_token: {type: String, default: null},
 
-    gmail_token: { type: String, default: null },
-    gmail_details: { type: String, default: null },
-    
-    account_verification_token: { type: String, default: null },
+    gender: {type: String, enum: GENDER, default: 'MALE'},
+    role: {type: String, enum: ROLES, default: 'CUSTOMER'},
+    status: {type: String, enum: STATUSES, default: 'PENDING'},
 
-    fcm_device_type: { type: String, enum: DEVICE_TYPE, default: 'WEB' },
-    fcm_token: { type: String, default: null },
-    
-    addresses: { type: Array, default: [] },
+    token: {type: String, default: null},
+    social_flag: {type: String, default: null},
+    social_user_detail: {type: Object, default: null},
 
-    device_info: { type: Object, default: null },
+    account_verification_token: {type: String, default: null},
 
-    otp_code: { type: String, default: null },
-    
-    deletedAt: { type: Date, default: null },
-    createdAt: { type: Date, default: dated },
-    updatedAt: { type: Date, default: dated },
+    fcm_device_type: {type: String, enum: DEVICE_TYPE, default: 'WEB'},
+    fcm_token: {type: String, default: null},
+
+    addresses: {type: Array, default: []},
+
+    device_info: {type: Object, default: null},
+
+    otp_code: {type: String, default: null},
+
+    deletedAt: {type: Date, default: null},
+    createdAt: {type: Date, default: dated},
+    updatedAt: {type: Date, default: dated},
 });
 
 module.exports = mongoose.model('User', UserSchema);
