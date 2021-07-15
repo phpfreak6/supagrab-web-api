@@ -3,6 +3,7 @@ var router = express.Router();
 
 const authRouter = require('./authRouter');
 const userRouter = require('./usersRouter');
+const userAddressRouter = require('./userAddressRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -17,11 +18,12 @@ router.use( '/auth', authRouter );
 /**
  * auth middleware starts
  */
-// router.use( AuthControllerObj.verifyToken );
+ router.use( AuthControllerObj.verifyToken );
 /**
  * auth middleware ends
  */
 
 router.use( '/users', userRouter );
+router.use( '/users', userAddressRouter );
 
 module.exports = router;
