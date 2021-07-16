@@ -67,4 +67,15 @@ module.exports = class UserAddressService {
         }
     }
 
+    async getUserAddressByAddressId(user_id, address_id) {
+        try {
+            let result = await UserModel
+                    .findOne({_id: user_id, "addresses._id": address_id})
+                    .select({addresses: {$elemMatch: {_id: address_id}}});
+            return result.addresses[0];
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
 };

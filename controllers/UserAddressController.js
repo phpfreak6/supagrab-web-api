@@ -119,4 +119,22 @@ module.exports = class UserAddressController {
             });
         }
     }
+
+    async getUserAddressByAddressId(req, res, next) {
+        try {
+            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            let address_id = ObjectId(req.params.address_id);
+            let result = await UserAddressServiceObj.getUserAddressByAddressId(user_id, address_id);
+            return await responseServiceObj.sendResponse(res, {
+                msg: 'User Address By Address Id',
+                data: {
+                    user_address: result
+                }
+            });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 };
