@@ -15,12 +15,12 @@ module.exports = class UserAddressController {
 
     async getUserAddresses(req, res, next) {
         try {
-            let user_id = req.authData.id ? req.authData.id : req.params.user_id;
+            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
             let userAddressesObj = await UserAddressServiceObj.getUserAddresses(user_id);
             return await responseServiceObj.sendResponse(res, {
                 msg: 'User Addresses Fetched Successfully',
                 data: {
-                    userAddressesObj: userAddressesObj,
+                    user_addresses: userAddressesObj
                 }
             });
         } catch (ex) {
@@ -32,7 +32,7 @@ module.exports = class UserAddressController {
 
     async insertUserAddress(req, res, next) {
         try {
-            let user_id = req.authData.id ? req.authData.id : req.params.user_id;
+            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
             let dataObj = req.body;
             let rules = {
                 full_name: 'required',
@@ -43,7 +43,7 @@ module.exports = class UserAddressController {
                 landmark: 'required|string',
                 type: 'required|string|in:HOME,WORK',
                 title: 'required|string',
-                pincode: 'required|numeric',
+                pincode: 'required|numeric'
             };
             let validation = new Validator(dataObj, rules);
             if (validation.fails()) {
@@ -51,11 +51,11 @@ module.exports = class UserAddressController {
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            let userAddressesObj = await UserAddressServiceObj.insertUserAddress(dataObj, user_id);
+            let userAddressObj = await UserAddressServiceObj.insertUserAddress(dataObj, user_id);
             return await responseServiceObj.sendResponse(res, {
                 msg: 'User Address Saved Successfully',
                 data: {
-                    userAddressesObj: userAddressesObj
+                    user_address: userAddressObj
                 }
             });
         } catch (ex) {
