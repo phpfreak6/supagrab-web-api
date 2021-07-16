@@ -17,7 +17,7 @@ const UserSchema = new Schema({
     email: {type: String, unique: true},
     contact_number: {type: String, unique: true, default: null},
 
-    password: {type: String, default: null},
+    password: {type: String, default: null, select: false},
     pwd_reset_token: {type: String, default: null},
     refresh_token: {type: String, default: null},
 

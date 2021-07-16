@@ -18,22 +18,27 @@
 							"urlencoded": [
 								{
 									"key": "first_name",
-									"value": "deepak bawa",
+									"value": "Abhishek",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Tyagi",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "bawa_d1@ymail.com",
+									"value": "abhishektyagi@whizkraft.net",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "123456",
+									"value": "12345678",
 									"type": "text"
 								},
 								{
 									"key": "contact_number",
-									"value": "7508498586",
+									"value": "7618666966",
 									"type": "text"
 								},
 								{
@@ -44,9 +49,9 @@
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/auth/signUp",
+							"raw": "{{url}}/auth/signUp",
 							"host": [
-								"{{base_url}}"
+								"{{url}}"
 							],
 							"path": [
 								"auth",
@@ -66,12 +71,12 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "bawa_d@ymail.com",
+									"value": "abhishektyagi@whizkraft.net",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "123456",
+									"value": "12345678",
 									"type": "text"
 								}
 							]
@@ -348,9 +353,9 @@
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/users/60dc1900059e651c942bef73",
+							"raw": "{{url}}/users/60dc1900059e651c942bef73",
 							"host": [
-								"{{base_url}}"
+								"{{url}}"
 							],
 							"path": [
 								"users",
@@ -370,9 +375,9 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{base_url}}/users/60dc1900059e651c942bef73",
+							"raw": "{{url}}/users/60dc1900059e651c942bef73",
 							"host": [
-								"{{base_url}}"
+								"{{url}}"
 							],
 							"path": [
 								"users",
@@ -395,9 +400,9 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{base_url}}/users",
+							"raw": "{{url}}/users",
 							"host": [
-								"{{base_url}}"
+								"{{url}}"
 							],
 							"path": [
 								"users"
@@ -422,9 +427,9 @@
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/users/changePic/60dc1900059e651c942bef73",
+							"raw": "{{url}}/users/changePic/60dc1900059e651c942bef73",
 							"host": [
-								"{{base_url}}"
+								"{{url}}"
 							],
 							"path": [
 								"users",
@@ -457,9 +462,9 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{base_url}}/users/60dc1900059e651c942bef73",
+							"raw": "{{url}}/users/60dc1900059e651c942bef73",
 							"host": [
-								"{{base_url}}"
+								"{{url}}"
 							],
 							"path": [
 								"users",
@@ -477,8 +482,73 @@
 				{
 					"name": "301. Insert User Address",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "ABHISHEK TYAGI",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "7618666966",
+									"type": "text"
+								},
+								{
+									"key": "alternate_phone_number",
+									"value": "7467075620",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Mohali",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "Punjab",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "#8812, Street No. 15, Sector 1, Swaraj Nagar, Kharar",
+									"type": "text"
+								},
+								{
+									"key": "landmark",
+									"value": "Mata Gujri Gurudwara",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "HOME",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Mohali Address",
+									"type": "text"
+								},
+								{
+									"key": "pincode",
+									"value": "140301",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "{{url}}/users/{{user_id}}/addresses",
 							"host": [
