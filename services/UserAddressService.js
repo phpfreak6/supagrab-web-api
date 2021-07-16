@@ -9,8 +9,8 @@ module.exports = class UserAddressService {
 
     async getUserAddresses(in_user_id) {
         try {
-            user_id = ObjectId(in_user_id);
-            var result = await UserModel.findById(user_id, 'addresses');
+            let user_id = ObjectId(in_user_id);
+            let result = await UserModel.findById(user_id, 'addresses');
             return result.addresses;
         } catch (ex) {
             throw ex;
@@ -19,7 +19,7 @@ module.exports = class UserAddressService {
 
     async insertUserAddress(dataObj, in_user_id) {
         try {
-            user_id = ObjectId(in_user_id);
+            let user_id = ObjectId(in_user_id);
             dataObj._id = new ObjectId();
             let result = await UserModel.findOneAndUpdate({_id: user_id}, {$push: {addresses: dataObj}});
             return result;
