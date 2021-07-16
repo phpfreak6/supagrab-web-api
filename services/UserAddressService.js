@@ -56,7 +56,9 @@ module.exports = class UserAddressService {
                             'addresses.$.landmark': dataObj.landmark,
                             'addresses.$.type': dataObj.type,
                             'addresses.$.title': dataObj.title,
-                            'addresses.$.pincode': dataObj.pincode
+                            'addresses.$.pincode': dataObj.pincode,
+                            'addresses.$.email': dataObj.email,
+                            'addresses.$.country': dataObj.country
                         }
                     },
                     {new : true}

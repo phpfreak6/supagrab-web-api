@@ -43,7 +43,9 @@ module.exports = class UserAddressController {
                 landmark: 'required|string',
                 type: 'required|string|in:HOME,WORK',
                 title: 'required|string',
-                pincode: 'required|numeric'
+                pincode: 'required|numeric',
+                email: 'required|email',
+                country: 'required|string'
             };
             let validation = new Validator(dataObj, rules);
             if (validation.fails()) {
@@ -98,7 +100,9 @@ module.exports = class UserAddressController {
                 landmark: 'required|string',
                 type: 'required|string|in:HOME,WORK',
                 title: 'required|string',
-                pincode: 'required|numeric'
+                pincode: 'required|numeric',
+                email: 'required|email',
+                country: 'required|string'
             };
             let validation = new Validator(dataObj, rules);
             if (validation.fails()) {
