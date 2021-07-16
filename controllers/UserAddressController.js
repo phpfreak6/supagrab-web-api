@@ -64,4 +64,59 @@ module.exports = class UserAddressController {
             });
         }
     }
+
+    async deleteUserAddress(req, res, next) {
+        try {
+            let user_id = ObjectId(req.params.user_id);
+            let address_id = ObjectId(req.params.address_id);
+            let result = await UserAddressServiceObj.deleteUserAddress(user_id, address_id);
+            return await responseServiceObj.sendResponse(res, {
+                msg: 'Address Deleted Successfully',
+                data: {
+                    user_addresses: result
+                }
+            });
+
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    async updateUserAddress(req, res, next) {
+        try {
+            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            let address_id = ObjectId(req.params.address_id);
+            let dataObj = req.body;
+            let rules = {
+                full_name: 'required',
+                phone_number: 'required|numeric',
+                city: 'required|string',
+                state: 'required|string',
+                address: 'required|string',
+                landmark: 'required|string',
+                type: 'required|string|in:HOME,WORK',
+                title: 'required|string',
+                pincode: 'required|numeric'
+            };
+            let validation = new Validator(dataObj, rules);
+            if (validation.fails()) {
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+            let userAddressObj = await UserAddressServiceObj.updateUserAddress(dataObj, user_id, address_id);
+            return await responseServiceObj.sendResponse(res, {
+                msg: 'User Address Updated Successfully',
+                data: {
+                    user_address: userAddressObj
+                }
+            });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 };

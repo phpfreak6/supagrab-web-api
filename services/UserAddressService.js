@@ -21,10 +21,53 @@ module.exports = class UserAddressService {
         try {
             let user_id = ObjectId(in_user_id);
             dataObj._id = new ObjectId();
-            let result = await UserModel.findOneAndUpdate({_id: user_id}, {$push: {addresses: dataObj}});
+            let result = await UserModel.findOneAndUpdate({_id: user_id}, {$push: {addresses: dataObj}}, {new : true});
             return result;
         } catch (ex) {
             throw ex;
         }
     }
+
+    async deleteUserAddress(in_user_id, in_address_id) {
+        try {
+            let user_id = ObjectId(in_user_id);
+            let address_id = ObjectId(in_address_id);
+            let result = await UserModel.findOneAndUpdate({_id: user_id}, {$pull: {addresses: {_id: address_id}}}, {new : true});
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async updateUserAddress(dataObj, in_user_id, in_address_id) {
+        try {
+            let user_id = ObjectId(in_user_id);
+            let address_id = ObjectId(in_address_id);
+            let result = await UserModel.findOneAndUpdate(
+                    {
+                        _id: user_id,
+                        addresses: {$elemMatch: {_id: address_id}}
+                    },
+                    {$set: {
+                            'addresses.$._id': address_id,
+                            'addresses.$.full_name': dataObj.full_name,
+                            'addresses.$.phone_number': dataObj.phone_number,
+                            'addresses.$.alternate_phone_number': dataObj.alternate_phone_number,
+                            'addresses.$.city': dataObj.city,
+                            'addresses.$.state': dataObj.state,
+                            'addresses.$.address': dataObj.address,
+                            'addresses.$.landmark': dataObj.landmark,
+                            'addresses.$.type': dataObj.type,
+                            'addresses.$.title': dataObj.title,
+                            'addresses.$.pincode': dataObj.pincode
+                        }
+                    },
+                    {new : true}
+            );
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
 };
