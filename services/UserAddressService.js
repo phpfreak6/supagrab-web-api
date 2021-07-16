@@ -44,10 +44,7 @@ module.exports = class UserAddressService {
             let user_id = ObjectId(in_user_id);
             let address_id = ObjectId(in_address_id);
             let result = await UserModel.findOneAndUpdate(
-                    {
-                        _id: user_id,
-                        addresses: {$elemMatch: {_id: address_id}}
-                    },
+                    {_id: user_id, "addresses._id": address_id},
                     {$set: {
                             'addresses.$._id': address_id,
                             'addresses.$.full_name': dataObj.full_name,
