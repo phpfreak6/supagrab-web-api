@@ -7,6 +7,14 @@ const STATUSES = ['PENDING', 'ACTIVE', 'BLOCK', 'DELETED'];
 const DEVICE_TYPE = ['WEB', 'IPHONE', 'ANDROID'];
 const dated = new Date();
 
+
+const WishlistSchema = new Schema({
+    _id: {type: ObjectId, default: null},
+    user_id: {type: ObjectId, default: null},
+    product_id: {type: ObjectId, default: null},
+    product_detail: {type: Object, default: null}
+});
+
 const UserSchema = new Schema({
     parent_id: {type: ObjectId, default: null},
 
@@ -35,6 +43,8 @@ const UserSchema = new Schema({
     fcm_token: {type: String, default: null},
 
     addresses: {type: Array, default: []},
+        
+    wishlist: [WishlistSchema],
 
     device_info: {type: Object, default: null},
 
