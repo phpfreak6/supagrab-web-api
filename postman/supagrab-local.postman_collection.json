@@ -499,7 +499,91 @@
 							"urlencoded": [
 								{
 									"key": "full_name",
-									"value": "ABHISHEK TYAGI",
+									"value": "DEPAK BAWA",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "7618666966",
+									"type": "text"
+								},
+								{
+									"key": "alternate_phone_number",
+									"value": "7467075620",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Mohali",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "Punjab",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Amritsar",
+									"type": "text"
+								},
+								{
+									"key": "landmark",
+									"value": "Mata Gujri Gurudwara",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "HOME",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Mohali Address",
+									"type": "text"
+								},
+								{
+									"key": "pincode",
+									"value": "140301",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/users/{{user_id}}/addresses",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "302. Update User Address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "DEEPIKA AMRITSAR",
 									"type": "text"
 								},
 								{
@@ -550,33 +634,15 @@
 							]
 						},
 						"url": {
-							"raw": "{{url}}/users/{{user_id}}/addresses",
+							"raw": "{{url}}/users/{{user_id}}/addresses/{{address_id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"users",
 								"{{user_id}}",
-								"addresses"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "302. Update User Address",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users/{{user_id}}/addresses",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"{{user_id}}",
-								"addresses"
+								"addresses",
+								"{{address_id}}"
 							]
 						}
 					},
@@ -585,6 +651,16 @@
 				{
 					"name": "303. Get Addresses By User Id",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -604,6 +680,16 @@
 				{
 					"name": "304. Get Address By Address Id",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -624,6 +710,16 @@
 				{
 					"name": "305. Delete Address By Address Id",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -1191,6 +1287,16 @@
 				{
 					"name": "701. Insert Wishlist Item",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1198,7 +1304,12 @@
 							"urlencoded": [
 								{
 									"key": "product_id",
-									"value": "",
+									"value": "60ed717f38fed7395e4596e4",
+									"type": "text"
+								},
+								{
+									"key": "product_detail",
+									"value": "{class:\"green\"}",
 									"type": "text"
 								}
 							]
@@ -1220,6 +1331,16 @@
 				{
 					"name": "702. Get Wishlist",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1239,6 +1360,16 @@
 				{
 					"name": "703. Delete Wishlist Item",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -1778,6 +1909,40 @@
 		{
 			"name": "14. banners",
 			"item": []
+		},
+		{
+			"name": "0. Others",
+			"item": [
+				{
+					"name": "PARAMS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "?local=http://localhost:3000/&live=https://supagrab.herokuapp.com&MONGODB_URL=mongodb+srv://deepak:rAlYCkd3p6uJOFbK@cartcluster.ozjjy.mongodb.net/supagrab&LOCAL_MONGO_URL=mongodb://localhost:27017/supagrab",
+							"query": [
+								{
+									"key": "local",
+									"value": "http://localhost:3000/"
+								},
+								{
+									"key": "live",
+									"value": "https://supagrab.herokuapp.com"
+								},
+								{
+									"key": "MONGODB_URL",
+									"value": "mongodb+srv://deepak:rAlYCkd3p6uJOFbK@cartcluster.ozjjy.mongodb.net/supagrab"
+								},
+								{
+									"key": "LOCAL_MONGO_URL",
+									"value": "mongodb://localhost:27017/supagrab"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
