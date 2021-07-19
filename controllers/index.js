@@ -1,6 +1,5 @@
 module.exports = {
-    AuthController: require('./AuthController'),
-    UserController: require('./UserController'),
-    UserAddressController: require('./UserAddressController'),
-    WishlistController: require('./WishlistController')
+    AuthController : require('./AuthController'),
+    UserController : require('./UserController'),
+    UserAddressController: require('./UserAddressController')
 };
