@@ -68,4 +68,22 @@ module.exports = class WishlistController {
             });
         }
     }
+
+    async deleteWishlistItem(req, res, next) {
+        try {
+            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            let wishlist_item_id = ObjectId(req.params.wishlist_item_id);
+            let result = await WishlistServiceObj.deleteWishlistItem(user_id, wishlist_item_id);
+            return await responseServiceObj.sendResponse(res, {
+                msg: 'Wishlist Item Deleted Successfully',
+                data: {
+                    wishlist_items: result
+                }
+            });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 };

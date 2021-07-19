@@ -50,4 +50,15 @@ module.exports = class WishlistService {
             throw ex;
         }
     }
+
+    async deleteWishlistItem(in_user_id, in_wishlist_item_id) {
+        try {
+            let user_id = ObjectId(in_user_id);
+            let wishlist_item_id = ObjectId(in_wishlist_item_id);
+            let result = await UserModel.findOneAndUpdate({_id: user_id}, {$pull: {wishlist: {_id: wishlist_item_id}}}, {new : true});
+            return result.wishlist;
+        } catch (ex) {
+            throw ex;
+        }
+    }
 };
