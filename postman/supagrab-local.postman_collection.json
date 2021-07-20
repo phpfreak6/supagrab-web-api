@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "fb5ce54f-c17c-4bcb-921c-fecd3b3e4518",
+		"_postman_id": "a83913d8-cacb-4ad6-8f4a-a2a9a01c9937",
 		"name": "supagrab-local",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -445,7 +445,9 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": null
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				},
@@ -1622,8 +1624,18 @@
 			"name": "11. cms",
 			"item": [
 				{
-					"name": "Insert CMS",
+					"name": "1101. Insert CMS",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1631,12 +1643,12 @@
 							"urlencoded": [
 								{
 									"key": "key",
-									"value": "",
+									"value": "about-usss",
 									"type": "text"
 								},
 								{
 									"key": "value",
-									"value": "",
+									"value": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
 									"type": "text"
 								}
 							]
@@ -1654,8 +1666,18 @@
 					"response": []
 				},
 				{
-					"name": "Get CMS",
+					"name": "1102. Get All CMS",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1671,6 +1693,24 @@
 					"response": []
 				},
 				{
+					"name": "1103. Get CMS By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cms/{{cms_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cms",
+								"{{cms_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update CMS",
 					"request": {
 						"method": "PATCH",
@@ -1680,12 +1720,12 @@
 							"urlencoded": [
 								{
 									"key": "key",
-									"value": "",
+									"value": "about-us",
 									"type": "text"
 								},
 								{
 									"key": "value",
-									"value": "",
+									"value": "sSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
 									"type": "text"
 								}
 							]
@@ -1722,26 +1762,18 @@
 					"response": []
 				},
 				{
-					"name": "Get CMS By Id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/cms/{{cms_id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"cms",
-								"{{cms_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "CMS Exist",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1773,8 +1805,18 @@
 			"name": "12. faq",
 			"item": [
 				{
-					"name": "Insert Faq",
+					"name": "1201. Insert Faq",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1782,12 +1824,12 @@
 							"urlencoded": [
 								{
 									"key": "question",
-									"value": "",
+									"value": "question",
 									"type": "text"
 								},
 								{
 									"key": "answer",
-									"value": "",
+									"value": "answer",
 									"type": "text"
 								}
 							]
@@ -1805,8 +1847,18 @@
 					"response": []
 				},
 				{
-					"name": "Get Faqs",
+					"name": "1202. Get All Faqs",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1822,9 +1874,9 @@
 					"response": []
 				},
 				{
-					"name": "Delete Faq",
+					"name": "1203. Get Faqs By Id",
 					"request": {
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{url}}/faqs/{{faq_id}}",
@@ -1840,7 +1892,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Faq",
+					"name": "1204. Update Faq",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -1849,12 +1901,17 @@
 							"urlencoded": [
 								{
 									"key": "question",
-									"value": "",
+									"value": "question1",
 									"type": "text"
 								},
 								{
 									"key": "answer",
-									"value": "",
+									"value": "answer1",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "OPEN",
 									"type": "text"
 								}
 							]
@@ -1873,20 +1930,10 @@
 					"response": []
 				},
 				{
-					"name": "Faq Exists",
+					"name": "1205. Delete Faq",
 					"request": {
-						"method": "POST",
+						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "faq_title",
-									"value": "",
-									"type": "text"
-								}
-							]
-						},
 						"url": {
 							"raw": "{{url}}/faqs/{{faq_id}}",
 							"host": [
@@ -1937,6 +1984,42 @@
 									"key": "LOCAL_MONGO_URL",
 									"value": "mongodb://localhost:27017/supagrab"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "NewsLetter",
+			"item": [
+				{
+					"name": "Subscribe Newsletter",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "abhishektyagi@whizkraft.net",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/newsletter/subscribe",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"newsletter",
+								"subscribe"
 							]
 						}
 					},

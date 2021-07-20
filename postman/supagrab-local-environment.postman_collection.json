@@ -1,5 +1,5 @@
 {
-	"id": "18aff4a2-e72c-490f-a349-e292ea4a4c77",
+	"id": "41f2caa2-d1b4-41b0-811c-f6f4cb038c3e",
 	"name": "Supagrab Local",
 	"values": [
 		{
@@ -9,12 +9,12 @@
 		},
 		{
 			"key": "token",
-			"value": "eyJ1c2VyRGF0YSI6eyJpZCI6IjYwZWJmNTcxM2M1MWIyMWQxNDllNzgyNCIsImZpcnN0X25hbWUiOiJBYmhpc2hlayIsImxhc3RfbmFtZSI6IlR5YWdpIiwiZW1haWwiOiJhYmhpc2hla3R5YWdpQHdoaXprcmFmdC5uZXQiLCJyb2xlIjoiQ1VTVE9NRVIiLCJzdGF0dXMiOiJQRU5ESU5HIiwiZGVsZXRlZEF0IjpudWxsLCJjcmVhdGVkQXQiOiIyMDIxLTA3LTEyVDA3OjI2OjM5LjA3NVoiLCJ1cGRhdGVkQXQiOiIyMDIxLTA3LTEyVDA3OjI2OjM5LjA3NVoifSwiaWF0IjoxNjI2MDc2NzI0LCJleHAiOjE2MjYwODAzMjR9.B37I-k0x-s2I6Gx51sQvdC11EmaIZD2ulHdjIcuP3BI",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblBhcmFtT2JqIjp7ImVtYWlsIjoiYmF3YV9kQHltYWlsLmNvbSIsInJvbGUiOiJDVVNUT01FUiIsInN0YXR1cyI6IkFDVElWRSJ9LCJpYXQiOjE2MjY0MjE2NzksImV4cCI6MTYyNjQyNTI3OX0.SbjwU2DxUtY5bkaz3OU1p3jz7DN6Ie2lSYHGPE8YXzo",
 			"enabled": true
 		},
 		{
 			"key": "user_id",
-			"value": "",
+			"value": "60e452c30819c42d9044eb57",
 			"enabled": true
 		},
 		{
@@ -44,16 +44,26 @@
 		},
 		{
 			"key": "address_id",
-			"value": "",
+			"value": "60f1401ecb8d921f1cc40912",
 			"enabled": true
 		},
 		{
 			"key": "wishlist_item_id",
-			"value": "",
+			"value": "60f548336815340614c28bb7",
+			"enabled": true
+		},
+		{
+			"key": "faq_id",
+			"value": "60f6c435587b3f06f0d50519",
+			"enabled": true
+		},
+		{
+			"key": "cms_id",
+			"value": "60f6cd3e7616611a786fa881",
 			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2021-07-19T08:25:07.750Z",
+	"_postman_exported_at": "2021-07-20T13:38:10.658Z",
 	"_postman_exported_using": "Postman/8.8.0"
 }

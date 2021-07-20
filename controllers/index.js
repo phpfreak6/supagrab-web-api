@@ -3,5 +3,6 @@ module.exports = {
     UserController: require('./UserController'),
     UserAddressController: require('./UserAddressController'),
     WishlistController: require('./WishlistController'),
-    FaqController: require('./FaqController')
+    FaqController: require('./FaqController'),
+    CmsController: require('./CmsController')
 };
