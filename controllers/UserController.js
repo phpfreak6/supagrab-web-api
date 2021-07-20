@@ -147,7 +147,8 @@ module.exports = class UserController {
             } )
             .then( async (inResult) => {
                 let in_data = {
-                    status: 'DELETED'
+                    status: 'DELETED',
+                    deletedAt: new Date()
                 };
                 let result = await UserServiceObj.updateUser( in_data, id );
                 return await responseServiceObj.sendResponse( res, {
