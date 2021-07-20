@@ -24,9 +24,22 @@ module.exports = class NewsletterController {
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            NewsLetterSubscriptionService.checkNewsletterEmailExists(dataObj.email);
+            NewsLetterSubscriptionServiceObj.sendSubscriptionVerifyEmail(dataObj.email)
+                    .then(async (result) => {
+                        if (result.sent == false) {
+                            console.log('failed', result);
+                        }
+                    })
+                    .catch(async (ex) => {
+                        return await responseServiceObj.sendException(res, {msg: ex.toString()});
+                    });
+            return await responseServiceObj.sendResponse(res, {
+                msg: 'Verification Mail Sent Successfully'
+            });
         } catch (ex) {
-
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
         }
 
     }

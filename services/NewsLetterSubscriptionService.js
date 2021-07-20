@@ -1,5 +1,9 @@
 const UserModel = require('../models').NewsletterSubscriptionModel;
 const {ObjectId} = require('mongodb');
+const view = require('ejs');
+const MailService = require('./MailService');
+const MailServiceObj = new MailService();
+var {VIEW_PATH, basePath} = require('../config/config');
 
 module.exports = class NewsletterSubscriptionService {
 
@@ -8,61 +12,22 @@ module.exports = class NewsletterSubscriptionService {
     }
 
     async checkNewsletterEmailExists(email) {
-        console.log();
+        console.log('we are here');
     }
 
-//    async getWishlistItems(in_user_id) {
-//        try {
-//            let user_id = ObjectId(in_user_id);
-//            let result = await UserModel.findById(user_id);
-//            return result.wishlist;
-//        } catch (ex) {
-//            throw ex;
-//        }
-//    }
-//
-//    async checkWishlistItemExists(user_id, in_product_id) {
-//        try {
-//            let product_id = ObjectId(in_product_id);
-//            let result = await UserModel.findOne({_id: user_id, "wishlist.product_id": product_id});
-//            if (result) {
-//                return true;
-//            }
-//            return false;
-//        } catch (ex) {
-//            throw ex;
-//        }
-//    }
-//
-//    async insertWishlistItem(in_user_id, dataObj) {
-//        try {
-//            let product_id = ObjectId(dataObj.product_id);
-//            let user_id = ObjectId(in_user_id);
-//            let result = await UserModel.findOneAndUpdate(
-//                    {_id: user_id}, {$push: {
-//                    wishlist: {
-//                        _id: new ObjectId(),
-//                        user_id: user_id,
-//                        product_id: product_id,
-//                        product_detail: dataObj.product_detail
-//                    }
-//                }
-//            }, {new : true}
-//            );
-//            return result.wishlist;
-//        } catch (ex) {
-//            throw ex;
-//        }
-//    }
-//
-//    async deleteWishlistItem(in_user_id, in_wishlist_item_id) {
-//        try {
-//            let user_id = ObjectId(in_user_id);
-//            let wishlist_item_id = ObjectId(in_wishlist_item_id);
-//            let result = await UserModel.findOneAndUpdate({_id: user_id}, {$pull: {wishlist: {_id: wishlist_item_id}}}, {new : true});
-//            return result.wishlist;
-//        } catch (ex) {
-//            throw ex;
-//        }
-//    }
+    async sendSubscriptionVerifyEmail(email) {
+        try {
+            let encrypted_string = Buffer.from(email + '-' + (+new Date())).toString('base64');
+            let dataObj = {};
+            dataObj.email = email;
+            dataObj.encrypted_string = encrypted_string;
+            dataObj.basePath = basePath;
+            let html = await view.renderFile(VIEW_PATH + '/emails/newsletter-verification.ejs', dataObj);
+            const mailData = {to: email, html: html, subject: 'Verify Supagrab Newsletter'};
+            return await MailServiceObj.sendMail(mailData);
+        } catch (ex) {
+            throw ex;
+        }
+
+    }
 };
