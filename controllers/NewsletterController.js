@@ -24,18 +24,36 @@ module.exports = class NewsletterController {
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            NewsLetterSubscriptionServiceObj.sendSubscriptionVerifyEmail(dataObj.email)
+            NewsLetterSubscriptionServiceObj.checkNewsletterEmailExists(dataObj.email)
                     .then(async (result) => {
-                        if (result.sent == false) {
-                            console.log('failed', result);
+                        if (result) {
+                            if (result.status == 'CLOSE') {
+                                await NewsLetterSubscriptionServiceObj.updateNewsLetter(result._id, {status: 'OPEN'});
+                                return await responseServiceObj.sendResponse(res, {
+                                    msg: 'Newsletter Subscribed Successfully'
+                                });
+                            }
+                            return await responseServiceObj.sendResponse(res, {
+                                msg: 'You are already subscribed to Supagrab Newsletters'
+                            });
+                        } else {
+                            NewsLetterSubscriptionServiceObj.sendSubscriptionVerifyEmail(dataObj.email)
+                                    .then(async (result) => {
+                                        if (result.sent == false) {
+                                            console.log('failed', result);
+                                        }
+                                    })
+                                    .catch(async (ex) => {
+                                        return await responseServiceObj.sendException(res, {msg: ex.toString()});
+                                    });
+                            return await responseServiceObj.sendResponse(res, {
+                                msg: 'Verification Mail Sent Successfully'
+                            });
                         }
                     })
                     .catch(async (ex) => {
                         return await responseServiceObj.sendException(res, {msg: ex.toString()});
                     });
-            return await responseServiceObj.sendResponse(res, {
-                msg: 'Verification Mail Sent Successfully'
-            });
         } catch (ex) {
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()

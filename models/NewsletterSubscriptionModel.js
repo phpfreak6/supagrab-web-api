@@ -9,9 +9,9 @@ const NewsletterSubscriptionSchema = new Schema({
 
     user_id: {type: ObjectId, default: null},
 
-    email: {type: ObjectId, default: null},
+    email: {type: String, default: null},
 
-    status: {type: ObjectId, default: null},
+    status: {type: String, enum: STATUSES, default: 'CLOSE'},
 
     created_at: {type: Date, default: dated},
 

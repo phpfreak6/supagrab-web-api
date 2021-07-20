@@ -1,4 +1,4 @@
-const UserModel = require('../models').NewsletterSubscriptionModel;
+const NewsletterSubscriptionModel = require('../models').NewsletterSubscriptionModel;
 const {ObjectId} = require('mongodb');
 const view = require('ejs');
 const MailService = require('./MailService');
@@ -11,8 +11,26 @@ module.exports = class NewsletterSubscriptionService {
 
     }
 
+    async updateNewsLetter(in_newsletter_id, dataObj) {
+        let newsletter_id = ObjectId(in_newsletter_id);
+        try {
+            await NewsletterSubscriptionModel.findByIdAndUpdate(newsletter_id, dataObj);
+            return true;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
     async checkNewsletterEmailExists(email) {
-        console.log('we are here');
+        try {
+            let newsLetterObj = await NewsletterSubscriptionModel.findOne({email: email});
+            if (newsLetterObj) {
+                return newsLetterObj;
+            }
+            return false;
+        } catch (ex) {
+            throw ex;
+        }
     }
 
     async sendSubscriptionVerifyEmail(email) {
