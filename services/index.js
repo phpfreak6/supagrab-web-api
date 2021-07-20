@@ -3,5 +3,6 @@ module.exports = {
     UserService: require('./UserService'),
     UserAddressService: require('./UserAddressService'),
     WishlistService: require('./WishlistService'),
-    FaqService: require('./FaqService')
+    FaqService: require('./FaqService'),
+    CmsService: require('./CmsService')
 };

@@ -6,6 +6,7 @@ const userRouter = require('./usersRouter');
 const userAddressRouter = require('./userAddressRouter');
 const WishlistRouter = require('./WishlistRouter');
 const FaqRouter = require('./FaqRouter');
+const CmsRouter = require('./CmsRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -17,6 +18,7 @@ router.get('/', function (req, res, next) {
 
 router.use('/auth', authRouter);
 router.use('/faqs', FaqRouter);
+router.use('/cms', CmsRouter);
 
 /**
  * auth middleware starts
