@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 const STATUSES = ['OPEN', 'CLOSE'];
 const dated = new Date();
-const EXPIRY_DAYS = 10;
 
 const NewsletterSubscriptionSchema = new Schema({
 

@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
 
 router.use('/auth', authRouter);
 
-router.use('/', NewsletterRouter);
+router.use('/newsletter', NewsletterRouter);
 
 /**
  * auth middleware starts

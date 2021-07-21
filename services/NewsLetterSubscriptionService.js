@@ -48,4 +48,17 @@ module.exports = class NewsletterSubscriptionService {
         }
 
     }
+
+    async insertNewsletter(dataObj) {
+        try {
+            let result = await NewsletterSubscriptionModel.create(dataObj);
+            if (result) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (ex) {
+            throw ex;
+        }
+    }
 };
