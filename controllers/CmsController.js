@@ -245,4 +245,44 @@ module.exports = class CmsController {
             });
         }
     }
+
+    isCmsExists( req, res, next ) {
+        
+        try {
+
+            let in_data = req.params;
+            let rules = {
+                cms_key: 'required',
+            };
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+            let cms_key = in_data.cms_key;
+            let cms_id = in_data.cms_id ? in_data.cms_id : false;
+            CmsServiceObj.isCmsExists( cms_key, cms_id )
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse( res, {
+                    msg : 'Record found',
+                    data : {
+                        cms: result
+                    }
+                } );
+            } )
+            .catch( async (ex) => {
+                return await responseServiceObj.sendException( res, {
+                    msg : ex.toString()
+                } );
+            } );
+
+        } catch(ex) {
+    
+            return responseServiceObj.sendException( res, {
+                msg : ex.toString()
+            } );
+        }
+    }
 }

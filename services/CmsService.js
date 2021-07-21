@@ -125,10 +125,10 @@ module.exports = class FaqService {
         }
     }
 
-    async isFaqkeyExists(in_key, in_id = false) {
+    async isCmsExists(in_key, in_id = false) {
         try {
             if (in_id) {
-
+console.log('inside if');
                 let result = await CmsModel.countDocuments({
                     key: in_key,
                     _id: {$ne: in_id}
@@ -136,13 +136,13 @@ module.exports = class FaqService {
                 let isExists = result > 0 ? true : false;
                 return isExists;
             } else {
-
+console.log('inside else');
                 let result = await CmsModel.countDocuments({key: in_key});
                 let isExists = result > 0 ? true : false;
                 return isExists;
             }
         } catch (ex) {
             throw ex;
-    }
+        }
     }
 }
