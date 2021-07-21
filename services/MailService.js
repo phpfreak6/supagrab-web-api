@@ -25,7 +25,7 @@ module.exports = class MailService {
             return new Promise((resolve, reject) => {
                 $this.transporter.sendMail(mailOptionsObj, function (error, info) {
                     if (error) {
-                        resolve({sent: false, msg: error.response, obj: error});
+                        resolve({sent: false, msg: error.response, obj: error, data: mailOptionsObj});
                     } else {
                         resolve({sent: true, msg: info.response, obj: info});
                     }
