@@ -1,6 +1,6 @@
 const Validator = require('validatorjs');
 const {ObjectId} = require('mongodb');
-
+const moment = require('moment');
 const ResponseService = require('../services').ResponseService;
 const responseServiceObj = new ResponseService();
 
@@ -10,6 +10,8 @@ const NewsLetterSubscriptionServiceObj = new NewsLetterSubscriptionService();
 const FailedMailService = require('../services').FailedMailService;
 const FailedMailServiceObj = new FailedMailService();
 
+var {NEWSLETTER_LINK_EXPIRY_DAYS} = require('../config/config');
+
 
 module.exports = class NewsletterController {
 
@@ -17,7 +19,7 @@ module.exports = class NewsletterController {
 
     }
 
-    async subscribe(req, res, next) {
+    subscribe(req, res, next) {
         try {
             let dataObj = req.body;
             let rules = {email: 'required|email'};
@@ -70,5 +72,38 @@ module.exports = class NewsletterController {
             });
         }
 
+    }
+
+    verify(req, res, next) {
+        try {
+            let encrypted_string = req.params.encrypted_string;
+            let decrypted_string = Buffer.from(encrypted_string, 'base64').toString('ascii');
+            let email = decrypted_string.split('-')[0];
+            let timestamp = decrypted_string.split('-')[1];
+            let shouldBeTimestamp = moment.unix(timestamp / 1000).add(NEWSLETTER_LINK_EXPIRY_DAYS, 'days').unix();
+            if (shouldBeTimestamp >= moment().unix()) {
+                NewsLetterSubscriptionServiceObj.checkNewsletterEmailExists(email)
+                        .then(async (result) => {
+                            if (result) {
+                                if (result.status == 'CLOSE') {
+                                    await NewsLetterSubscriptionServiceObj.updateNewsLetter(result._id, {status: 'OPEN'});
+                                    res.render('newsletter/welcome', {status: true});
+                                } else {
+                                    res.render('newsletter/welcome', {status: true});
+                                }
+                            } else {
+                                await NewsLetterSubscriptionServiceObj.insertNewsletter({email: email, status: 'OPEN'});
+                                res.render('newsletter/welcome', {status: true});
+                            }
+                        })
+                        .catch((ex) => {
+                            res.render('newsletter/welcome', {status: false, message: ex.toString()});
+                        });
+            } else {
+                res.render('newsletter/welcome', {status: false, message: 'Link Expired'});
+            }
+        } catch (ex) {
+            res.render('newsletter/welcome', {status: false, message: ex.toString()});
+        }
     }
 };

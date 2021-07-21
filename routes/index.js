@@ -21,7 +21,7 @@ router.use('/auth', authRouter);
 router.use('/faqs', FaqRouter);
 router.use('/cms', CmsRouter);
 
-router.use('/', NewsletterRouter);
+router.use('/newsletter', NewsletterRouter);
 
 /**
  * auth middleware starts

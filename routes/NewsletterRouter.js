@@ -4,6 +4,7 @@ const router = express.Router();
 const NewsletterController = new require('../controllers').NewsletterController;
 const NewsletterControllerObj = new NewsletterController();
 
-router.post('/newsletter/subscribe', [NewsletterControllerObj.subscribe]);
+router.post('/subscribe', [NewsletterControllerObj.subscribe]);
+router.get('/verify/:encrypted_string', [NewsletterControllerObj.verify]);
 
 module.exports = router;
