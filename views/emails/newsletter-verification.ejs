@@ -1,22 +1,39 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Verification Email</title>
-    </head>
-    <body>
-        <p>Dear Customer,</p>
-        <p>Please click on the given link to activate your supagrab newsletter subscription.</p>
-        <p>
-            <a href="<%-basePath-%>newsletter/verify/<%-encrypted_string-%>">
-                <%-basePath-%>newsletter/verify/<%-encrypted_string-%>
-            </a>
-        </p>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <p>Thanks and Regards,</p>
-        <p>Supagrab</p>
-    </body>
-</html>
+<table width="600" style="font-family: 'Segoe UI',sans-serif; border:1.5px solid #000; margin:0 auto; padding:0px 0px 0px; background-color:#fff; box-shadow:0px 0px 34px 0px #dddddd52;-webkit-box-shadow:0px 0px 34px 0px #dddddd52;  border-top: 4px solid #000">
+    <tbody>
+        <tr>
+            <td style="text-align:center;padding: 30px 0px;">
+                <img src="<%-basePath-%>images/supagrab-logo.png" style="width:260px; margin:0 auto;">
+                <hr style="margin-top: 30px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px; font-size:16px;">
+                <p style="text-align:justify;">
+                    Hello There,
+                    <br>
+                    <br>
+                    We are excited to have you get started. First, you need to confirm your account.<br>
+                    Just press the below button.
+                </p>
+                <p style="text-align:center;">
+                    <a href="<%-basePath-%>newsletter/verify/<%-encrypted_string-%>" style="background-color: #4AAB4A;color: #fff; padding: 10px 20px 13px;display: inline-block; text-decoration: none;font-weight: 600;line-height: 20px;border: 2px solid #0D920D;">Verify</a>
+                </p>
+                <p>
+                    <strong>Note:</strong> If that doesn't work, copy and paste the following link in your browser:<br>
+                    <br>
+                    <%-basePath-%>newsletter/verify/<%-encrypted_string-%>
+                    <br>
+                    <br>
+                    If you have any questions, just reply to this email - we're always happy to help you out.
+                    <br>
+                    <br>
+                    Cheers,<br>
+                    Supagrab Team
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center; font-size:14px; font-weight:600; background: #000; color: #fff;padding: 10px;">&copy; Copyright - Supagrab 2021 All Rights Reserved</td>
+        </tr>
+    </tbody>
+</table>
