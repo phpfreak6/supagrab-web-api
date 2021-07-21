@@ -21,7 +21,6 @@ module.exports = class AuthController {
         try {
 
             let in_data = req.body;
-            console.log('in_data', in_data);
             let rules = {
                 email: 'required|email',
                 password: 'required|min:6'
