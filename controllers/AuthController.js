@@ -46,7 +46,29 @@ module.exports = class AuthController {
                             return result;
                         }
                     })
+                    .then( async (result) => {
+
+                        if( result.status == 'PENDING' ) {                            
+                            throw 'Account status must be active to login. Current account status is pending.'
+
+                        } else if( result.status == 'BLOCK' ) {
+                            throw 'Your account is blocked.'
+
+                        } else if( result.status == 'DELETED' ) {
+                            throw 'Your account is deleted.'
+
+                        } else if( result.status == 'ACTIVE' ) {
+                            return result;
+
+                        } else {
+                            throw 'Unknown account status returned from the database.'
+                        }
+                    } )
                     .then(async (result) => {
+
+                        if( !result.password ) {
+                            throw 'Undefined password';
+                        } 
 
                         const match = await bcrypt.compare(password, result.password);
                         if (!match) {
@@ -72,6 +94,7 @@ module.exports = class AuthController {
                         });
                     })
                     .catch(async (ex) => {
+                        
                         return await responseServiceObj.sendException(res, {
                             msg: ex.toString()
                         });
@@ -114,7 +137,7 @@ module.exports = class AuthController {
                                 email: socialUserObj.email,
                                 social_user_detail: socialUserObj,
                                 social_flag: in_data.social_flag,
-                                password: '12345678',
+                                password: '123456',
                                 status: 'ACTIVE'
                             };
                             let userObj = await UserServiceObj.insertUser(insertObj);
