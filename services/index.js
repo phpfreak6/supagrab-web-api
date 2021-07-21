@@ -4,5 +4,8 @@ module.exports = {
     UserAddressService: require('./UserAddressService'),
     WishlistService: require('./WishlistService'),
     FaqService: require('./FaqService'),
-    CmsService: require('./CmsService')
+    CmsService: require('./CmsService'),
+    NewsLetterSubscriptionService: require('./NewsLetterSubscriptionService'),
+    MailService: require('./MailService'),
+    FailedMailService: require('./FailedMailService')
 };

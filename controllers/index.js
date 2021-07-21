@@ -4,5 +4,6 @@ module.exports = {
     UserAddressController: require('./UserAddressController'),
     WishlistController: require('./WishlistController'),
     FaqController: require('./FaqController'),
-    CmsController: require('./CmsController')
+    CmsController: require('./CmsController'),
+    NewsletterController: require('./NewsletterController')
 };
