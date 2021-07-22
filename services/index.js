@@ -7,5 +7,6 @@ module.exports = {
     CmsService: require('./CmsService'),
     NewsLetterSubscriptionService: require('./NewsLetterSubscriptionService'),
     MailService: require('./MailService'),
-    FailedMailService: require('./FailedMailService')
+    FailedMailService: require('./FailedMailService'),
+    SiteSettingService: require('./SiteSettingService')
 };

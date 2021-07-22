@@ -8,6 +8,7 @@ const userAddressRouter = require('./userAddressRouter');
 const WishlistRouter = require('./WishlistRouter');
 const FaqRouter = require('./FaqRouter');
 const CmsRouter = require('./CmsRouter');
+const SiteSettingRouter = require('./SiteSettingRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -34,5 +35,7 @@ router.use(AuthControllerObj.verifyToken);
 router.use('/users', userRouter);
 router.use('/users', userAddressRouter);
 router.use('/users', WishlistRouter);
+
+router.use('/site-settings', SiteSettingRouter);
 
 module.exports = router;
