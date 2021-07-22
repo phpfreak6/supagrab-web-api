@@ -8,6 +8,14 @@ const CmsControllerObj = new CmsController();
  * Cms ROUTING STARTS
  */
 
+router.get('/:cms_key/exists/:cms_id?', [
+    CmsControllerObj.isCmsExists
+]);
+
+router.get('/key/:cms_key', [
+    CmsControllerObj.getCmsByKey
+]);
+
 router.patch('/:id', [
     CmsControllerObj.updateCms
 ]);

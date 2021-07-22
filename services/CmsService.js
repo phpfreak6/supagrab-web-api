@@ -82,6 +82,17 @@ module.exports = class FaqService {
         }
     }
 
+    async getCmsByKey(in_cms_key) {
+        try {
+
+            let result = await CmsModel.findOne({ key: in_cms_key, status: {$ne: 'DELETED'}});
+            return result;
+        } catch (ex) {
+
+            throw ex;
+        }
+    }
+
     async insertCms(in_data) {
         try {
 
@@ -125,7 +136,7 @@ module.exports = class FaqService {
         }
     }
 
-    async isFaqkeyExists(in_key, in_id = false) {
+    async isCmsExists(in_key, in_id = false) {
         try {
             if (in_id) {
 
@@ -133,6 +144,7 @@ module.exports = class FaqService {
                     key: in_key,
                     _id: {$ne: in_id}
                 });
+                console.log('result', result);
                 let isExists = result > 0 ? true : false;
                 return isExists;
             } else {
@@ -143,6 +155,6 @@ module.exports = class FaqService {
             }
         } catch (ex) {
             throw ex;
-    }
+        }
     }
 }

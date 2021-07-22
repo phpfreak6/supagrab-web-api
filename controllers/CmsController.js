@@ -28,8 +28,9 @@ module.exports = class CmsController {
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            
-            CmsServiceObj.isFaqkeyExists( in_data.key )
+
+            in_data.key = in_data.key.replace(/ /g,"-");
+            CmsServiceObj.isCmsExists( in_data.key )
             .then( async ( isExists ) => {
                 if (isExists) {
                     throw `${in_data.key} Key already exists.`
@@ -79,7 +80,8 @@ module.exports = class CmsController {
                 });
             }
 
-            CmsServiceObj.isFaqkeyExists( in_data.key, id )
+            in_data.key = in_data.key.replace(/ /g,"-");
+            CmsServiceObj.isCmsExists( in_data.key, id )
             .then( async ( isExists ) => {
                 if (isExists) {
                     throw `${in_data.key} Key already exists.`
@@ -113,7 +115,7 @@ module.exports = class CmsController {
         try {
             
             let id = ObjectId( req.params.id );
-            CmsServiceObj.isFaqIdExists( id )
+            CmsServiceObj.isCmsExists( id )
             .then( async (isExists) => {
                 if( !isExists ) {
                     throw 'Invalid faq id.'
@@ -151,6 +153,35 @@ module.exports = class CmsController {
             }
             id = ObjectId( id );
             CmsServiceObj.getCmsById( id )
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse( res, {
+                    msg : 'Record found',
+                    data : {
+                        cms: result
+                    }
+                } );
+            } )
+            .catch( async (ex) => {
+                return await responseServiceObj.sendException( res, {
+                    msg : ex.toString()
+                } );
+            } );
+
+        } catch(ex) {
+    
+            return responseServiceObj.sendException( res, {
+                msg : ex.toString()
+            } );
+        }
+    }
+
+    getCmsByKey(req, res, next) {
+        console.log('inside getCmsByKey');
+        try {
+            let cms_key = req.params.cms_key;
+            cms_key = cms_key.replace(/ /g,"-");
+
+            CmsServiceObj.getCmsByKey( cms_key )
             .then( async (result) => {
                 return await responseServiceObj.sendResponse( res, {
                     msg : 'Record found',
@@ -216,7 +247,7 @@ module.exports = class CmsController {
                 });
             }
 
-            CmsServiceObj.isFaqIdExists(id)
+            CmsServiceObj.isCmsExists(id)
                 .then(async (isExists) => {
                     if (!isExists) {
                         throw 'Invalid faq id.'
@@ -243,6 +274,48 @@ module.exports = class CmsController {
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
             });
+        }
+    }
+
+    isCmsExists( req, res, next ) {
+        
+        try {
+
+            let in_data = req.params;
+            let rules = {
+                cms_key: 'required',
+            };
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+            let cms_id = in_data.cms_id ? in_data.cms_id : false;
+            let cms_key = in_data.cms_key;
+            cms_key = cms_key.replace(/ /g,"-");
+            
+            CmsServiceObj.isCmsExists( cms_key, cms_id )
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse( res, {
+                    msg : 'Record found',
+                    data : {
+                        cms: result
+                    }
+                } );
+            } )
+            .catch( async (ex) => {
+                return await responseServiceObj.sendException( res, {
+                    msg : ex.toString()
+                } );
+            } );
+
+        } catch(ex) {
+    
+            return responseServiceObj.sendException( res, {
+                msg : ex.toString()
+            } );
         }
     }
 }
