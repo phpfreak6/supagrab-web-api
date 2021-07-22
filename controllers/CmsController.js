@@ -249,7 +249,7 @@ module.exports = class CmsController {
     isCmsExists( req, res, next ) {
         
         try {
-
+console.log('req.params', req.params);
             let in_data = req.params;
             let rules = {
                 cms_key: 'required',
