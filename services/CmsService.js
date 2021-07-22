@@ -82,6 +82,17 @@ module.exports = class FaqService {
         }
     }
 
+    async getCmsByKey(in_cms_key) {
+        try {
+
+            let result = await CmsModel.findOne({ key: in_cms_key, status: {$ne: 'DELETED'}});
+            return result;
+        } catch (ex) {
+
+            throw ex;
+        }
+    }
+
     async insertCms(in_data) {
         try {
 

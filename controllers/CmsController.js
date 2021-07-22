@@ -28,7 +28,8 @@ module.exports = class CmsController {
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            
+
+            in_data.key = in_data.key.replace(/ /g,"-");
             CmsServiceObj.isCmsExists( in_data.key )
             .then( async ( isExists ) => {
                 if (isExists) {
@@ -79,6 +80,7 @@ module.exports = class CmsController {
                 });
             }
 
+            in_data.key = in_data.key.replace(/ /g,"-");
             CmsServiceObj.isCmsExists( in_data.key, id )
             .then( async ( isExists ) => {
                 if (isExists) {
@@ -151,6 +153,35 @@ module.exports = class CmsController {
             }
             id = ObjectId( id );
             CmsServiceObj.getCmsById( id )
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse( res, {
+                    msg : 'Record found',
+                    data : {
+                        cms: result
+                    }
+                } );
+            } )
+            .catch( async (ex) => {
+                return await responseServiceObj.sendException( res, {
+                    msg : ex.toString()
+                } );
+            } );
+
+        } catch(ex) {
+    
+            return responseServiceObj.sendException( res, {
+                msg : ex.toString()
+            } );
+        }
+    }
+
+    getCmsByKey(req, res, next) {
+        console.log('inside getCmsByKey');
+        try {
+            let cms_key = req.params.cms_key;
+            cms_key = cms_key.replace(/ /g,"-");
+
+            CmsServiceObj.getCmsByKey( cms_key )
             .then( async (result) => {
                 return await responseServiceObj.sendResponse( res, {
                     msg : 'Record found',
@@ -249,7 +280,7 @@ module.exports = class CmsController {
     isCmsExists( req, res, next ) {
         
         try {
-console.log('req.params', req.params);
+
             let in_data = req.params;
             let rules = {
                 cms_key: 'required',
@@ -261,8 +292,10 @@ console.log('req.params', req.params);
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            let cms_key = in_data.cms_key;
             let cms_id = in_data.cms_id ? in_data.cms_id : false;
+            let cms_key = in_data.cms_key;
+            cms_key = cms_key.replace(/ /g,"-");
+            
             CmsServiceObj.isCmsExists( cms_key, cms_id )
             .then( async (result) => {
                 return await responseServiceObj.sendResponse( res, {
