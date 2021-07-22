@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a83913d8-cacb-4ad6-8f4a-a2a9a01c9937",
+		"_postman_id": "fb5ce54f-c17c-4bcb-921c-fecd3b3e4518",
 		"name": "supagrab-local",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -445,9 +445,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": ""
-						}
+						"url": null
 					},
 					"response": []
 				},
@@ -1624,18 +1622,8 @@
 			"name": "11. cms",
 			"item": [
 				{
-					"name": "1101. Insert CMS",
+					"name": "Insert CMS",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1643,12 +1631,12 @@
 							"urlencoded": [
 								{
 									"key": "key",
-									"value": "about-usss",
+									"value": "",
 									"type": "text"
 								},
 								{
 									"key": "value",
-									"value": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
+									"value": "",
 									"type": "text"
 								}
 							]
@@ -1666,18 +1654,8 @@
 					"response": []
 				},
 				{
-					"name": "1102. Get All CMS",
+					"name": "Get CMS",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1687,24 +1665,6 @@
 							],
 							"path": [
 								"cms"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "1103. Get CMS By Id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/cms/{{cms_id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"cms",
-								"{{cms_id}}"
 							]
 						}
 					},
@@ -1720,12 +1680,12 @@
 							"urlencoded": [
 								{
 									"key": "key",
-									"value": "about-us",
+									"value": "",
 									"type": "text"
 								},
 								{
 									"key": "value",
-									"value": "sSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
+									"value": "",
 									"type": "text"
 								}
 							]
@@ -1762,18 +1722,26 @@
 					"response": []
 				},
 				{
+					"name": "Get CMS By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cms/{{cms_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cms",
+								"{{cms_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "CMS Exist",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1805,18 +1773,8 @@
 			"name": "12. faq",
 			"item": [
 				{
-					"name": "1201. Insert Faq",
+					"name": "Insert Faq",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1824,12 +1782,12 @@
 							"urlencoded": [
 								{
 									"key": "question",
-									"value": "question",
+									"value": "",
 									"type": "text"
 								},
 								{
 									"key": "answer",
-									"value": "answer",
+									"value": "",
 									"type": "text"
 								}
 							]
@@ -1847,18 +1805,8 @@
 					"response": []
 				},
 				{
-					"name": "1202. Get All Faqs",
+					"name": "Get Faqs",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1874,9 +1822,9 @@
 					"response": []
 				},
 				{
-					"name": "1203. Get Faqs By Id",
+					"name": "Delete Faq",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "{{url}}/faqs/{{faq_id}}",
@@ -1892,7 +1840,7 @@
 					"response": []
 				},
 				{
-					"name": "1204. Update Faq",
+					"name": "Update Faq",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -1901,17 +1849,12 @@
 							"urlencoded": [
 								{
 									"key": "question",
-									"value": "question1",
+									"value": "",
 									"type": "text"
 								},
 								{
 									"key": "answer",
-									"value": "answer1",
-									"type": "text"
-								},
-								{
-									"key": "status",
-									"value": "OPEN",
+									"value": "",
 									"type": "text"
 								}
 							]
@@ -1930,10 +1873,20 @@
 					"response": []
 				},
 				{
-					"name": "1205. Delete Faq",
+					"name": "Faq Exists",
 					"request": {
-						"method": "DELETE",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "faq_title",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "{{url}}/faqs/{{faq_id}}",
 							"host": [
@@ -1951,7 +1904,78 @@
 		},
 		{
 			"name": "13. site settings",
-			"item": []
+			"item": [
+				{
+					"name": "1301. Update Site Settings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "value",
+									"value": "instagram.net",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "CLOSE",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/site-settings/{{site_setting_key}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"site-settings",
+								"{{site_setting_key}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1302. Get Site Settings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/site-settings",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"site-settings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "14. banners",
