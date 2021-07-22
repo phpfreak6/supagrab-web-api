@@ -4,6 +4,7 @@ const ObjectId = Schema.ObjectId;
 const STATUSES = ['OPEN', 'CLOSE'];
 const dated = new Date();
 
+
 const NewsletterSubscriptionSchema = new Schema({
 
     user_id: {type: ObjectId, default: null},
