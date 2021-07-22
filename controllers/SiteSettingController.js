@@ -40,7 +40,7 @@ module.exports = class SiteSettingController {
             let value = req.body.value;
             let status = req.body.status;
             let dataObj = {site_setting_key: site_setting_key, value: value, status: status};
-            let validation = new Validator(dataObj, {site_setting_key: 'required', value: 'required', status: 'required'});
+            let validation = new Validator(dataObj, {site_setting_key: 'required', value: 'required', status: 'required|in:OPEN,CLOSE,DELETED'});
             if (validation.fails()) {
                 return responseServiceObj.sendException(res, {
                     msg: responseServiceObj.getFirstError(validation)
@@ -50,7 +50,10 @@ module.exports = class SiteSettingController {
                     .then(async(result) => {
                         if (result) {
                             return await responseServiceObj.sendResponse(res, {
-                                msg: 'Site Setting Saved Successfully'
+                                msg: 'Site Setting Saved Successfully',
+                                data: {
+                                    site_settings: await SiteSettingServiceObj.getSiteSettings()
+                                }
                             });
                         } else {
                             throw 'Site Setting Updation Failed';

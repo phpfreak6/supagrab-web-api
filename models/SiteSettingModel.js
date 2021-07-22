@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
-const STATUSES = ['OPEN', 'CLOSE'];
+const STATUSES = ['OPEN', 'CLOSE', 'DELETED'];
 const dated = new Date();
 
 const SiteSettingSchema = new Schema({

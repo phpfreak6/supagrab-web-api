@@ -9,7 +9,7 @@ module.exports = class SiteSettingService {
 
     async getSiteSettings() {
         try {
-            return await SiteSettingModel.find({});
+            return await SiteSettingModel.find({status: {$ne: 'DELETED'}});
         } catch (ex) {
             throw ex;
         }
