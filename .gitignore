@@ -102,6 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+.htaccess
 /nbproject/private/
 nbproject/project.properties
 nbproject/project.xml
