@@ -29,7 +29,7 @@ module.exports = class CmsController {
                 });
             }
             
-            CmsServiceObj.isFaqkeyExists( in_data.key )
+            CmsServiceObj.isCmsExists( in_data.key )
             .then( async ( isExists ) => {
                 if (isExists) {
                     throw `${in_data.key} Key already exists.`
@@ -79,7 +79,7 @@ module.exports = class CmsController {
                 });
             }
 
-            CmsServiceObj.isFaqkeyExists( in_data.key, id )
+            CmsServiceObj.isCmsExists( in_data.key, id )
             .then( async ( isExists ) => {
                 if (isExists) {
                     throw `${in_data.key} Key already exists.`
@@ -113,7 +113,7 @@ module.exports = class CmsController {
         try {
             
             let id = ObjectId( req.params.id );
-            CmsServiceObj.isFaqIdExists( id )
+            CmsServiceObj.isCmsExists( id )
             .then( async (isExists) => {
                 if( !isExists ) {
                     throw 'Invalid faq id.'
@@ -216,7 +216,7 @@ module.exports = class CmsController {
                 });
             }
 
-            CmsServiceObj.isFaqIdExists(id)
+            CmsServiceObj.isCmsExists(id)
                 .then(async (isExists) => {
                     if (!isExists) {
                         throw 'Invalid faq id.'
