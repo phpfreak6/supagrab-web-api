@@ -8,5 +8,6 @@ module.exports = {
     NewsLetterSubscriptionService: require('./NewsLetterSubscriptionService'),
     MailService: require('./MailService'),
     FailedMailService: require('./FailedMailService'),
-    SiteSettingService: require('./SiteSettingService')
+    SiteSettingService: require('./SiteSettingService'),
+    DepartmentService: require('./DepartmentService')
 };
