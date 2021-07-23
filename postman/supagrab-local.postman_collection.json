@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "fb5ce54f-c17c-4bcb-921c-fecd3b3e4518",
+		"_postman_id": "6aff6932-caff-4726-9437-6a03d1282ced",
 		"name": "supagrab-local",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -28,22 +28,22 @@
 								},
 								{
 									"key": "email",
-									"value": "abhishektyagi@whizkraft.net",
+									"value": "bawa_d@ymail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "12345678",
+									"value": "123456",
 									"type": "text"
 								},
 								{
 									"key": "contact_number",
-									"value": "7618666966",
+									"value": "7508498581",
 									"type": "text"
 								},
 								{
 									"key": "role",
-									"value": "CUSTOMER",
+									"value": "ADMIN",
 									"type": "text"
 								}
 							]
@@ -71,12 +71,12 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "abhishektyagi@whizkraft.net",
+									"value": "bawa_d@ymail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "12345678",
+									"value": "123456",
 									"type": "text"
 								}
 							]
@@ -414,6 +414,16 @@
 				{
 					"name": "205. Upload User Profile Pic",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -422,19 +432,19 @@
 								{
 									"key": "profile_pic",
 									"type": "file",
-									"src": "/C:/Users/immi/Pictures/Screenshots/Screenshot (1).png"
+									"src": "/C:/Users/win/Downloads/SampleJPGImage_500kbmb.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}/users/changePic/60dc1900059e651c942bef73",
+							"raw": "{{url}}/users/changePic/60f17e864cb9c400227e946f",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"users",
 								"changePic",
-								"60dc1900059e651c942bef73"
+								"60f17e864cb9c400227e946f"
 							]
 						}
 					},
@@ -445,7 +455,9 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": null
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				},
@@ -740,34 +752,125 @@
 			]
 		},
 		{
-			"name": "4. Departments",
+			"name": "4. Departments*",
 			"item": [
 				{
-					"name": "401. Get Departments",
+					"name": "401. Insert Departments",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "shoes",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "{{url}}/departments/get-departments",
+							"raw": "{{url}}/departments",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"departments",
-								"get-departments"
+								"departments"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "402. Get Department By Id",
+					"name": "402. Get Departments",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "{{url}}/departments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "403. Get Department By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/departments/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"departments",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404. Update Department",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Shoes",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "{{url}}/departments/{{department_id}}",
 							"host": [
@@ -782,36 +885,7 @@
 					"response": []
 				},
 				{
-					"name": "403. Update Department",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "department_title",
-									"value": "Bracelets",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/departments/update-department/{{department_id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"departments",
-								"update-department",
-								"{{department_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "404. Delete Department",
+					"name": "405. Delete Department",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -829,7 +903,7 @@
 					"response": []
 				},
 				{
-					"name": "405. Check Department Exists",
+					"name": "406. Check Department Exists",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -859,11 +933,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "407. upload department image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "408. delete department image",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "5. Categories",
+			"name": "5. Categories*",
 			"item": [
 				{
 					"name": "501. Insert Category",
@@ -992,11 +1088,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "506. Check Category Exists",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "507. upload categories image",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "409. delete department image",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "6. Products",
+			"name": "6. Products*",
 			"item": [
 				{
 					"name": "601. Insert Product",
@@ -1278,6 +1407,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "610. Set product status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "611. Get products by department",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "612. Get products by category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1386,11 +1548,22 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "704. Move wishlist to cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "8. cart",
+			"name": "8. cart*",
 			"item": [
 				{
 					"name": "801. Insert Cart Item",
@@ -1487,7 +1660,7 @@
 			]
 		},
 		{
-			"name": "9. orders",
+			"name": "9. orders*",
 			"item": [
 				{
 					"name": "901. Get Orders",
@@ -1611,19 +1784,85 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "905. get orders by user id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "10. payments",
-			"item": []
+			"name": "10. payments*",
+			"item": [
+				{
+					"name": "1001. GET TOKEN FOR ORDER PAYMENT-BACKEND",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1002. SAVE ORDER PAYMENT DETAILS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1003. GET TOKEN FOR ORDER PAYMENT-FRONTEND",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1004. GET PAYMENT STATUS RAZORPAY WEBHOOK",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "11. cms",
 			"item": [
 				{
-					"name": "Insert CMS",
+					"name": "1101. Insert CMS",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1631,12 +1870,12 @@
 							"urlencoded": [
 								{
 									"key": "key",
-									"value": "",
+									"value": "about us",
 									"type": "text"
 								},
 								{
 									"key": "value",
-									"value": "",
+									"value": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
 									"type": "text"
 								}
 							]
@@ -1654,8 +1893,18 @@
 					"response": []
 				},
 				{
-					"name": "Get CMS",
+					"name": "1102. Get All CMS",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1671,7 +1920,25 @@
 					"response": []
 				},
 				{
-					"name": "Update CMS",
+					"name": "1103. Get CMS By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cms/{{cms_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cms",
+								"{{cms_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1104. Update CMS",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -1680,12 +1947,12 @@
 							"urlencoded": [
 								{
 									"key": "key",
-									"value": "",
+									"value": "privacy-policy",
 									"type": "text"
 								},
 								{
 									"key": "value",
-									"value": "",
+									"value": "sSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
 									"type": "text"
 								}
 							]
@@ -1704,7 +1971,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete CMS",
+					"name": "1105. Delete CMS",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1722,27 +1989,22 @@
 					"response": []
 				},
 				{
-					"name": "Get CMS By Id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/cms/{{cms_id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"cms",
-								"{{cms_id}}"
-							]
-						}
+					"name": "1106. Check CMS Exist",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
 					},
-					"response": []
-				},
-				{
-					"name": "CMS Exist",
 					"request": {
-						"method": "POST",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "urlencoded",
@@ -1755,13 +2017,44 @@
 							]
 						},
 						"url": {
-							"raw": "{{url}}/cms/{{cms_id}}",
+							"raw": "{{url}}/cms/{{cms_key}}/exists/{{cms_id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"cms",
+								"{{cms_key}}",
+								"exists",
 								"{{cms_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1107. Get CMS by key",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cms/key/{{cms_key}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cms",
+								"key",
+								"{{cms_key}}"
 							]
 						}
 					},
@@ -1773,8 +2066,18 @@
 			"name": "12. faq",
 			"item": [
 				{
-					"name": "Insert Faq",
+					"name": "1201. Insert Faq",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1782,12 +2085,12 @@
 							"urlencoded": [
 								{
 									"key": "question",
-									"value": "",
+									"value": "question",
 									"type": "text"
 								},
 								{
 									"key": "answer",
-									"value": "",
+									"value": "answer",
 									"type": "text"
 								}
 							]
@@ -1805,8 +2108,18 @@
 					"response": []
 				},
 				{
-					"name": "Get Faqs",
+					"name": "1202. Get All Faqs",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1822,9 +2135,9 @@
 					"response": []
 				},
 				{
-					"name": "Delete Faq",
+					"name": "1203. Get Faqs By Id",
 					"request": {
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{url}}/faqs/{{faq_id}}",
@@ -1840,7 +2153,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Faq",
+					"name": "1204. Update Faq",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -1849,12 +2162,17 @@
 							"urlencoded": [
 								{
 									"key": "question",
-									"value": "",
+									"value": "question1",
 									"type": "text"
 								},
 								{
 									"key": "answer",
-									"value": "",
+									"value": "answer1",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "OPEN",
 									"type": "text"
 								}
 							]
@@ -1873,20 +2191,10 @@
 					"response": []
 				},
 				{
-					"name": "Faq Exists",
+					"name": "1205. Delete Faq",
 					"request": {
-						"method": "POST",
+						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "faq_title",
-									"value": "",
-									"type": "text"
-								}
-							]
-						},
 						"url": {
 							"raw": "{{url}}/faqs/{{faq_id}}",
 							"host": [
@@ -1906,7 +2214,7 @@
 			"name": "13. site settings",
 			"item": [
 				{
-					"name": "1301. Update Site Settings",
+					"name": "1301. Update site settings",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1925,12 +2233,12 @@
 							"urlencoded": [
 								{
 									"key": "value",
-									"value": "instagram.net",
+									"value": "https://twitter.com/supagrab",
 									"type": "text"
 								},
 								{
 									"key": "status",
-									"value": "CLOSE",
+									"value": "OPEN",
 									"type": "text"
 								}
 							]
@@ -1949,7 +2257,7 @@
 					"response": []
 				},
 				{
-					"name": "1302. Get Site Settings",
+					"name": "1302. Get site settings",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1974,11 +2282,143 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "1303. Get site settings by key",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/site-settings/{{site_setting_key}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"site-settings",
+								"{{site_setting_key}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "14. banners",
+			"name": "14. banners*",
+			"item": [
+				{
+					"name": "1401. INSERT BANNER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1402. GET BANNERS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1403. GET BANNER BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1404. DELETE BANNER",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1405. UPDATE BANNER",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1406. CHECK BANNER TITLE EXISTS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "15. NewsLetter",
+			"item": [
+				{
+					"name": "1501. Subscribe Newsletter",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "abhishektyagi@whizkraft.net",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/newsletter/subscribe",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"newsletter",
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "16. Homepage",
 			"item": []
 		},
 		{
@@ -2008,42 +2448,6 @@
 									"key": "LOCAL_MONGO_URL",
 									"value": "mongodb://localhost:27017/supagrab"
 								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "NewsLetter",
-			"item": [
-				{
-					"name": "Subscribe Newsletter",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "abhishektyagi@whizkraft.net",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/newsletter/subscribe",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"newsletter",
-								"subscribe"
 							]
 						}
 					},
