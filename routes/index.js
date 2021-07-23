@@ -9,6 +9,7 @@ const WishlistRouter = require('./WishlistRouter');
 const FaqRouter = require('./FaqRouter');
 const CmsRouter = require('./CmsRouter');
 const SiteSettingRouter = require('./SiteSettingRouter');
+const DepartmentRouter = require('./DepartmentRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -27,7 +28,7 @@ router.use('/newsletter', NewsletterRouter);
 /**
  * auth middleware starts
  */
-router.use(AuthControllerObj.verifyToken);
+//router.use(AuthControllerObj.verifyToken);
 /**
  * auth middleware ends
  */
@@ -37,5 +38,8 @@ router.use('/users', userAddressRouter);
 router.use('/users', WishlistRouter);
 
 router.use('/site-settings', SiteSettingRouter);
+
+router.use('/departments', DepartmentRouter);
+
 
 module.exports = router;

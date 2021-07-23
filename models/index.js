@@ -2,8 +2,8 @@ module.exports = {
     UserModel: require('./UserModel'),
     FaqModel: require('./FaqModel'),
     CmsModel: require('./CmsModel'),
-    UserModel: require('./UserModel'),
     NewsletterSubscriptionModel: require('./NewsletterSubscriptionModel'),
     FailedMailModel: require('./FailedMailModel'),
-    SiteSettingModel: require('./SiteSettingModel')
+    SiteSettingModel: require('./SiteSettingModel'),
+    DepartmentModel: require('./DepartmentModel')
 };
