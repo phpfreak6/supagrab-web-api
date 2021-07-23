@@ -59,7 +59,28 @@ module.exports = class DepartmentController {
     }
 
     exists(req, res, next) {
-
+        try {
+            let title = req.params.title;
+            let id = (req.params.id) ? ObjectId(req.params.id) : null;
+            DepartmentServiceObj.exists(title, id)
+                    .then(async (result) => {
+                        if (result) {
+                            return await responseServiceObj.sendResponse(res, {
+                                data: {msg: 'Department Already Exists', department: true}
+                            });
+                        } else {
+                            return await responseServiceObj.sendResponse(res, {
+                                data: {msg: 'Department Available', department: false}
+                            });
+                        }
+                    }).catch(async (ex) => {
+                return await responseServiceObj.sendException(res, {msg: ex.toString()});
+            });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
     }
 
     insert(req, res, next) {
