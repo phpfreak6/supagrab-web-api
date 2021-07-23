@@ -120,7 +120,9 @@ module.exports = class DepartmentController {
         try {
             let in_data = req.body;
             let id = ObjectId(req.params.id);
-            let rules = {title: 'required', id: id};
+            let rules = {id: id};
+            in_data.title ? rules.title = 'required' : '';
+            in_data.status ? rules.status = 'required' : '';
             let validation = new Validator(in_data, rules);
             if (validation.fails()) {
                 return responseServiceObj.sendException(res, {
@@ -175,6 +177,16 @@ module.exports = class DepartmentController {
                             msg: ex.toString()
                         });
                     });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    uploadImage(req, res, next) {
+        try {
+
         } catch (ex) {
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
