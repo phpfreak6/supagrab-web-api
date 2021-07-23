@@ -5,6 +5,7 @@ const SiteSettingController = new require('../controllers').SiteSettingControlle
 const SiteSettingControllerObj = new SiteSettingController();
 
 router.get('/', [SiteSettingControllerObj.getSiteSettings]);
+router.get('/:site_setting_key', [SiteSettingControllerObj.getSiteSettingByKey]);
 router.patch('/:site_setting_key', [SiteSettingControllerObj.updateSiteSetting]);
 
 module.exports = router;
