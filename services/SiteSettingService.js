@@ -7,6 +7,14 @@ module.exports = class SiteSettingService {
 
     }
 
+    async getSiteSettingByKey(site_setting_key) {
+        try {
+            return await SiteSettingModel.findOne({site_setting_key: site_setting_key, status: {$ne: 'DELETED'}});
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
     async getSiteSettings() {
         try {
             return await SiteSettingModel.find({status: {$ne: 'DELETED'}});

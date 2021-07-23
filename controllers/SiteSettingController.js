@@ -69,4 +69,26 @@ module.exports = class SiteSettingController {
         }
 
     }
+
+    getSiteSettingByKey(req, res, next) {
+        try {
+            let site_setting_key = req.params.site_setting_key;
+            SiteSettingServiceObj.getSiteSettingByKey(site_setting_key)
+                    .then(async(result) => {
+                        return await responseServiceObj.sendResponse(res, {
+                            msg: 'Site Setting Fetched Successfully',
+                            data: {
+                                site_setting: result
+                            }
+                        });
+                    })
+                    .catch(async (ex) => {
+                        return await responseServiceObj.sendException(res, {msg: ex.toString()});
+                    });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 };
