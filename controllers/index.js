@@ -7,5 +7,6 @@ module.exports = {
     CmsController: require('./CmsController'),
     NewsletterController: require('./NewsletterController'),
     SiteSettingController: require('./SiteSettingController'),
-    DepartmentController: require('./DepartmentController')
+    DepartmentController: require('./DepartmentController'),
+    ContactUsController: require('./ContactUsController')
 };

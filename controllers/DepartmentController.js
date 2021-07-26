@@ -14,7 +14,7 @@ let DEPARTMENT_IMAGE_UPLOAD_PATH = require('../config/config').DEPARTMENT_IMAGE_
 module.exports = class DepartmentController {
 
     constructor() {
-
+        
     }
 
     get(req, res, next) {

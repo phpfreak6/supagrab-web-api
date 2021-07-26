@@ -10,6 +10,7 @@ const FaqRouter = require('./FaqRouter');
 const CmsRouter = require('./CmsRouter');
 const SiteSettingRouter = require('./SiteSettingRouter');
 const DepartmentRouter = require('./DepartmentRouter');
+const ContactUsRouter = require('./ContactUsRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -19,6 +20,8 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
 });
 
+
+router.use('/', ContactUsRouter);
 router.use('/auth', authRouter);
 router.use('/faqs', FaqRouter);
 router.use('/cms', CmsRouter);
