@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
-const EMAIL_TYPE = ['NEWSLETTER'];
+const EMAIL_TYPE = ['NEWSLETTER', 'CONTACT_US_ADMIN','CONTACT_US_ENQUIRER'];
 const dated = new Date();
 
 const FailedEmailSchema = new Schema({
