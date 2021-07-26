@@ -19,6 +19,7 @@ const CategorySchema = new Schema({
 const DepartmentSchema = new Schema({
     title: {type: String, default: null},
     categories: [CategorySchema],
+    image: {type: String, default: null},
     status: {type: String, enum: STATUSES, default: 'OPEN'},
     created_at: {type: Date, default: dated},
     updated_at: {type: Date, default: dated},
