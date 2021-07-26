@@ -15,7 +15,18 @@ module.exports = class WishlistController {
 
     async getWishlistItems(req, res, next) {
         try {
-            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+
+            let user_id = null;
+            if( req?.authData?.id ) {
+                user_id = ObjectId(req.authData.id);
+
+            } else if( req?.params?.user_id ) {
+                user_id = ObjectId(req.params.user_id);
+
+            } else {
+                user_id = null;
+                throw 'User id is not defined';
+            }
             let wishlistItemsObj = await WishlistServiceObj.getWishlistItems(user_id);
             return await responseServiceObj.sendResponse(res, {
                 msg: 'Wishlist Items Fetched Successfully',
@@ -32,7 +43,18 @@ module.exports = class WishlistController {
 
     async insertWishlistItem(req, res, next) {
         try {
-            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            
+            let user_id = null;
+            if( req?.authData?.id ) {
+                user_id = ObjectId(req.authData.id);
+
+            } else if( req?.params?.user_id ) {
+                user_id = ObjectId(req.params.user_id);
+
+            } else {
+                user_id = null;
+                throw 'User id is not defined';
+            }
             let dataObj = req.body;
             let rules = {product_id: 'required|string'};
             let validation = new Validator(dataObj, rules);
@@ -71,7 +93,18 @@ module.exports = class WishlistController {
 
     async deleteWishlistItem(req, res, next) {
         try {
-            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            
+            let user_id = null;
+            if( req?.authData?.id ) {
+                user_id = ObjectId(req.authData.id);
+
+            } else if( req?.params?.user_id ) {
+                user_id = ObjectId(req.params.user_id);
+
+            } else {
+                user_id = null;
+                throw 'User id is not defined';
+            }
             let wishlist_item_id = ObjectId(req.params.wishlist_item_id);
             let result = await WishlistServiceObj.deleteWishlistItem(user_id, wishlist_item_id);
             return await responseServiceObj.sendResponse(res, {
