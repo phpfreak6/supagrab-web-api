@@ -1,3 +1,4 @@
+const fs = require('fs');
 const Validator = require('validatorjs');
 const {ObjectId} = require('mongodb');
 
@@ -6,6 +7,9 @@ const responseServiceObj = new ResponseService();
 
 const DepartmentService = require('../services').DepartmentService;
 const DepartmentServiceObj = new DepartmentService();
+
+let DEPARTMENT_IMAGE_PATH = require('../config/config').DEPARTMENT_IMAGE_PATH;
+let DEPARTMENT_IMAGE_UPLOAD_PATH = require('../config/config').DEPARTMENT_IMAGE_UPLOAD_PATH;
 
 module.exports = class DepartmentController {
 
@@ -186,7 +190,69 @@ module.exports = class DepartmentController {
 
     uploadImage(req, res, next) {
         try {
+            let id = ObjectId(req.params.id);
+            DepartmentServiceObj.isIdExists(id)
+                    .then(async (isExists) => {
+                        if (!isExists) {
+                            throw 'Invalid department id.'
+                        }
+                    })
+                    .then(async (isExists) => {
+                        let imageDetails = req.params.imageDetails;
+                        let result = await DepartmentServiceObj.update({image: imageDetails.fullFileName, updated_at: new Date()}, id);
+                        return await responseServiceObj.sendResponse(res, {
+                            msg: 'Department image uploaded successfully',
+                            data: {
+                                department: await DepartmentServiceObj.getById(id),
+                                department_image_path: DEPARTMENT_IMAGE_PATH
+                            }
+                        });
+                    })
+                    .catch(async (ex) => {
+                        return await responseServiceObj.sendException(res, {
+                            msg: ex.toString()
+                        });
+                    });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 
+    deleteImage(req, res, next) {
+        try {
+            let id = ObjectId(req.params.id);
+            let image_name = req.params.image;
+            DepartmentServiceObj.isIdExists(id)
+                    .then(async (isExists) => {
+                        if (!isExists) {
+                            throw 'Invalid department id';
+                        }
+                        return true;
+                    })
+                    .then(async(inResult) => {
+                        let file = DEPARTMENT_IMAGE_UPLOAD_PATH + '/' + image_name;
+                        if (!fs.existsSync(file)) {
+                            throw 'File not exists.';
+                        }
+                        fs.unlinkSync(file);
+                    })
+                    .then(async (inResult) => {
+                        let result = await DepartmentServiceObj.update({image: null}, id);
+                        return await responseServiceObj.sendResponse(res, {
+                            msg: 'Image deleted successfully',
+                            data: {
+                                department: await DepartmentServiceObj.getById(id),
+                                department_image_path: DEPARTMENT_IMAGE_PATH
+                            }
+                        });
+                    })
+                    .catch(async (ex) => {
+                        return await responseServiceObj.sendException(res, {
+                            msg: ex.toString()
+                        });
+                    });
         } catch (ex) {
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
