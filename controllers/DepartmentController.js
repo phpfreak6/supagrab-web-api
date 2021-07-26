@@ -243,8 +243,8 @@ module.exports = class DepartmentController {
                         return await responseServiceObj.sendResponse(res, {
                             msg: 'Image deleted successfully',
                             data: {
-                                user: await DepartmentServiceObj.getById(id),
-                                userImagePath: DEPARTMENT_IMAGE_PATH
+                                department: await DepartmentServiceObj.getById(id),
+                                department_image_path: DEPARTMENT_IMAGE_PATH
                             }
                         });
                     })
