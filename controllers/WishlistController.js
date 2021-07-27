@@ -17,10 +17,10 @@ module.exports = class WishlistController {
         try {
 
             let user_id = null;
-            if( req?.authData?.id ) {
+            if( req.hasOwnProperty('authData') && req.authData.id ) {
                 user_id = ObjectId(req.authData.id);
 
-            } else if( req?.params?.user_id ) {
+            } else if( req.params.user_id ) {
                 user_id = ObjectId(req.params.user_id);
 
             } else {
@@ -45,10 +45,10 @@ module.exports = class WishlistController {
         try {
             
             let user_id = null;
-            if( req?.authData?.id ) {
+            if( req.hasOwnProperty('authData') && req.authData.id ) {
                 user_id = ObjectId(req.authData.id);
 
-            } else if( req?.params?.user_id ) {
+            } else if( req.params.user_id ) {
                 user_id = ObjectId(req.params.user_id);
 
             } else {
@@ -95,10 +95,10 @@ module.exports = class WishlistController {
         try {
             
             let user_id = null;
-            if( req?.authData?.id ) {
+            if( req.hasOwnProperty('authData') && req.authData.id ) {
                 user_id = ObjectId(req.authData.id);
 
-            } else if( req?.params?.user_id ) {
+            } else if( req.params.user_id ) {
                 user_id = ObjectId(req.params.user_id);
 
             } else {
