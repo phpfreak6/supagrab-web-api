@@ -39,53 +39,6 @@ module.exports = class CategoryController {
         }
     }
 
-    getById(req, res, next) {
-        try {
-            let id = ObjectId(req.params.id);
-            CategoryServiceObj.getById(id)
-                    .then(async (result) => {
-                        return await responseServiceObj.sendResponse(res, {
-                            msg: 'Category Fetched Successfully',
-                            data: {category: result}
-                        });
-                    })
-                    .catch(async (ex) => {
-                        return await responseServiceObj.sendException(res, {
-                            msg: ex.toString()
-                        });
-                    });
-        } catch (ex) {
-            return responseServiceObj.sendException(res, {
-                msg: ex.toString()
-            });
-        }
-    }
-
-    exists(req, res, next) {
-        try {
-            let title = req.params.title;
-            let id = (req.params.id) ? ObjectId(req.params.id) : null;
-            CategoryServiceObj.exists(title, id)
-                    .then(async (result) => {
-                        if (result) {
-                            return await responseServiceObj.sendResponse(res, {
-                                data: {msg: 'Category Already Exists', category: true}
-                            });
-                        } else {
-                            return await responseServiceObj.sendResponse(res, {
-                                data: {msg: 'Category Available', category: false}
-                            });
-                        }
-                    }).catch(async (ex) => {
-                return await responseServiceObj.sendException(res, {msg: ex.toString()});
-            });
-        } catch (ex) {
-            return responseServiceObj.sendException(res, {
-                msg: ex.toString()
-            });
-        }
-    }
-
     insert(req, res, next) {
         try {
             let data = req.body;
@@ -120,35 +73,50 @@ module.exports = class CategoryController {
         }
     }
 
-    update(req, res, next) {
+    getById(req, res, next) {
         try {
-            let in_data = req.body;
+            let department_id = ObjectId(req.params.department_id);
             let id = ObjectId(req.params.id);
-            let rules = {id: id};
-            in_data.title ? rules.title = 'required' : '';
-            in_data.status ? rules.status = 'required' : '';
-            let validation = new Validator(in_data, rules);
-            if (validation.fails()) {
-                return responseServiceObj.sendException(res, {
-                    msg: responseServiceObj.getFirstError(validation)
-                });
-            }
-            CategoryServiceObj.exists(in_data.title, id)
-                    .then((result) => {
-                        if (result) {
-                            throw 'Title Already exists';
-                        }
-                    })
-                    .then(async(result) => {
-                        let category = await CategoryServiceObj.update(in_data, id);
+            CategoryServiceObj.getById(id, department_id)
+                    .then(async (result) => {
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Category Updated Successfully',
-                            data: {category: await CategoryServiceObj.getById(id)}
+                            msg: 'Category Fetched Successfully',
+                            data: {category: result}
                         });
                     })
                     .catch(async (ex) => {
-                        return await responseServiceObj.sendException(res, {msg: ex.toString()});
+                        return await responseServiceObj.sendException(res, {
+                            msg: ex.toString()
+                        });
                     });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    exists(req, res, next) {
+        try {
+            let department_id = ObjectId(req.params.department_id);
+            let title = req.params.title;
+            let id = (req.params.id) ? ObjectId(req.params.id) : null;
+            CategoryServiceObj.exists({title: title}, department_id, id)
+                    .then(async (result) => {
+                        if (result) {
+                            return await responseServiceObj.sendResponse(res, {
+                                msg: 'Category Already Exists',
+                                data: {category: true}
+                            });
+                        } else {
+                            return await responseServiceObj.sendResponse(res, {
+                                msg: 'Category Available',
+                                data: {category: false}
+                            });
+                        }
+                    }).catch(async (ex) => {
+                return await responseServiceObj.sendException(res, {msg: ex.toString()});
+            });
         } catch (ex) {
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
@@ -158,22 +126,19 @@ module.exports = class CategoryController {
 
     delete(req, res, next) {
         try {
-            let id = ObjectId(req.params.id);
-            CategoryServiceObj.isIdExists(id)
+            let id = req.params.id;
+            let department_id = req.params.department_id;
+            CategoryServiceObj.isIdExists(department_id, id)
                     .then(async (isExists) => {
                         if (!isExists) {
                             throw 'Invalid Id Provided';
                         }
-                        return true;
                     })
-                    .then(async (inResult) => {
-                        let in_data = {
-                            status: 'DELETED',
-                            deleted_at: new Date()
-                        };
-                        let result = await CategoryServiceObj.update(in_data, id);
+                    .then(async () => {
+                        let result = await CategoryServiceObj.delete(department_id, id);
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Category Deleted Successfully'
+                            msg: 'Category Deleted Successfully',
+                            data: {category: result}
                         });
                     })
                     .catch(async (ex) => {
@@ -188,70 +153,37 @@ module.exports = class CategoryController {
         }
     }
 
-    uploadImage(req, res, next) {
+    update(req, res, next) {
         try {
-            let id = ObjectId(req.params.id);
-            CategoryServiceObj.isIdExists(id)
-                    .then(async (isExists) => {
-                        if (!isExists) {
-                            throw 'Invalid category id.'
-                        }
-                    })
-                    .then(async (isExists) => {
-                        let imageDetails = req.params.imageDetails;
-                        let result = await CategoryServiceObj.update({image: imageDetails.fullFileName, updated_at: new Date()}, id);
-                        return await responseServiceObj.sendResponse(res, {
-                            msg: 'Category image uploaded successfully',
-                            data: {
-                                category: await CategoryServiceObj.getById(id),
-                                category_image_path: CATEGORY_IMAGE_PATH
-                            }
-                        });
-                    })
-                    .catch(async (ex) => {
-                        return await responseServiceObj.sendException(res, {
-                            msg: ex.toString()
-                        });
-                    });
-        } catch (ex) {
-            return responseServiceObj.sendException(res, {
-                msg: ex.toString()
-            });
-        }
-    }
+            let department_id = req.params.department_id;
+            let category_id = req.params.id;
+            let data = req.body;
 
-    deleteImage(req, res, next) {
-        try {
-            let id = ObjectId(req.params.id);
-            let image_name = req.params.image;
-            CategoryServiceObj.isIdExists(id)
+            let rules = {};
+            data.title ? rules.title = 'required' : '';
+            data.status ? rules.status = 'required' : '';
+            let validation = new Validator(data, rules);
+            if (validation.fails()) {
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+
+            CategoryServiceObj.isIdExists(department_id, category_id)
                     .then(async (isExists) => {
                         if (!isExists) {
-                            throw 'Invalid category id';
+                            throw 'Invalid Id Provided';
                         }
-                        return true;
                     })
-                    .then(async(inResult) => {
-                        let file = CATEGORY_IMAGE_UPLOAD_PATH + '/' + image_name;
-                        if (!fs.existsSync(file)) {
-                            throw 'File not exists.';
-                        }
-                        fs.unlinkSync(file);
-                    })
-                    .then(async (inResult) => {
-                        let result = await CategoryServiceObj.update({image: null}, id);
+                    .then(async(result) => {
+                        let category = await CategoryServiceObj.update(department_id, category_id, data);
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Image deleted successfully',
-                            data: {
-                                category: await CategoryServiceObj.getById(id),
-                                category_image_path: CATEGORY_IMAGE_PATH
-                            }
+                            msg: 'Category Updated Successfully',
+                            data: {category: await CategoryServiceObj.getById(category_id, department_id)}
                         });
                     })
                     .catch(async (ex) => {
-                        return await responseServiceObj.sendException(res, {
-                            msg: ex.toString()
-                        });
+                        return await responseServiceObj.sendException(res, {msg: ex.toString()});
                     });
         } catch (ex) {
             return responseServiceObj.sendException(res, {

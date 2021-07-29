@@ -36,12 +36,12 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage, limits: {fileSize: 1000000 * 10}});
 let cpUpload = upload.fields([{name: 'image', maxCount: 1}]);
 
-//router.get(':department_id/categories/exists/:title/:id?', [CategoryControllerObj.exists]);
+router.get('/:department_id/categories/exists/:title/:id?', [CategoryControllerObj.exists]);
 router.get('/:department_id/categories', [CategoryControllerObj.get]);
 router.post('/:department_id/categories', [CategoryControllerObj.insert]);
-//router.get(':department_id/categories/:id', [CategoryControllerObj.getById]);
-//router.patch(':department_id/categories/:id', [CategoryControllerObj.update]);
-//router.delete(':department_id/categories/:id', [CategoryControllerObj.delete]);
+router.get('/:department_id/categories/:id', [CategoryControllerObj.getById]);
+router.patch('/:department_id/categories/:id', [CategoryControllerObj.update]);
+router.delete('/:department_id/categories/:id', [CategoryControllerObj.delete]);
 //router.delete(':department_id/categories/:id/delete-image/:image', [CategoryControllerObj.deleteImage]);
 //router.post(':department_id/categories/:id/image', cpUpload, [CategoryControllerObj.uploadImage]);
 
