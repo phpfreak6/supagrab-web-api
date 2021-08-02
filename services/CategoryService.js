@@ -77,7 +77,7 @@ module.exports = class CategoryService {
             }).select({
                 categories: {$elemMatch: {_id: id}}
             });
-            return result.categories[0];
+            return result ? result.categories[0] : null;
         } catch (ex) {
             throw ex;
         }

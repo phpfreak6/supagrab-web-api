@@ -137,8 +137,7 @@ module.exports = class CategoryController {
                     .then(async () => {
                         let result = await CategoryServiceObj.delete(department_id, id);
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Category Deleted Successfully',
-                            data: {category: result}
+                            msg: 'Category Deleted Successfully'
                         });
                     })
                     .catch(async (ex) => {
