@@ -8,5 +8,6 @@ module.exports = {
     NewsletterController: require('./NewsletterController'),
     SiteSettingController: require('./SiteSettingController'),
     DepartmentController: require('./DepartmentController'),
-    ContactUsController: require('./ContactUsController')
+    ContactUsController: require('./ContactUsController'),
+    CategoryController: require('./CategoryController')
 };

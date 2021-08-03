@@ -11,6 +11,7 @@ const CmsRouter = require('./CmsRouter');
 const SiteSettingRouter = require('./SiteSettingRouter');
 const DepartmentRouter = require('./DepartmentRouter');
 const ContactUsRouter = require('./ContactUsRouter');
+const CategoryRouter = require('./CategoryRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -43,6 +44,7 @@ router.use('/users', WishlistRouter);
 router.use('/site-settings', SiteSettingRouter);
 
 router.use('/departments', DepartmentRouter);
+router.use('/departments', CategoryRouter);
 
 
 module.exports = router;
