@@ -16,9 +16,11 @@ const CategoryRouter = require('./CategoryRouter');
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
 
+var { basePath } = require('../config/config');
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', {title: 'Express'});
+    res.render('index', { base_path: basePath });
 });
 
 
