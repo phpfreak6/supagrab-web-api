@@ -5,5 +5,6 @@ module.exports = {
     NewsletterSubscriptionModel: require('./NewsletterSubscriptionModel'),
     FailedMailModel: require('./FailedMailModel'),
     SiteSettingModel: require('./SiteSettingModel'),
-    DepartmentModel: require('./DepartmentModel')
+    DepartmentModel: require('./DepartmentModel'),
+    ProductModel: require('./ProductModel')
 };

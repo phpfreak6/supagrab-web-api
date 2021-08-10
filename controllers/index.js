@@ -9,5 +9,6 @@ module.exports = {
     SiteSettingController: require('./SiteSettingController'),
     DepartmentController: require('./DepartmentController'),
     ContactUsController: require('./ContactUsController'),
-    CategoryController: require('./CategoryController')
+    CategoryController: require('./CategoryController'),
+    ProductController: require('./ProductController')
 };
