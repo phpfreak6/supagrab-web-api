@@ -62,17 +62,46 @@ module.exports = class ProductController {
 
     exists(req, res, next) {
         try {
-            let title = req.params.title;
+            let title = req.query.product_title;
             let id = (req.params.id) ? ObjectId(req.params.id) : null;
             ProductServiceObj.exists(title, id)
                     .then(async (result) => {
                         if (result) {
                             return await responseServiceObj.sendResponse(res, {
-                                data: {msg: 'Product Already Exists', product: true}
+                                msg: 'Product Title Already Exists',
+                                data: {msg: 'Product Title Already Exists', exists: true}
                             });
                         } else {
                             return await responseServiceObj.sendResponse(res, {
-                                data: {msg: 'Product Available', product: false}
+                                msg: 'Product Title Available',
+                                data: {msg: 'Product Title Available', exists: false}
+                            });
+                        }
+                    }).catch(async (ex) => {
+                return await responseServiceObj.sendException(res, {msg: ex.toString()});
+            });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    slugExists(req, res, next) {
+        try {
+            let slug = req.query.product_slug;
+            let id = (req.params.id) ? ObjectId(req.params.id) : null;
+            ProductServiceObj.slugExists(slug, id)
+                    .then(async (result) => {
+                        if (result) {
+                            return await responseServiceObj.sendResponse(res, {
+                                msg: 'Product Slug Already Exists',
+                                data: {msg: 'Product Slug Already Exists', exists: true}
+                            });
+                        } else {
+                            return await responseServiceObj.sendResponse(res, {
+                                msg: 'Product Slug Available',
+                                data: {msg: 'Product Slug Available', exists: false}
                             });
                         }
                     }).catch(async (ex) => {

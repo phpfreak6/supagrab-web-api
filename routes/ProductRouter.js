@@ -61,6 +61,14 @@ var cpUpload = upload.fields([
 //   ProductControllerObj.changeProfilePic
 // ]);
 
+router.get('/product-slug-exists', [
+    ProductControllerObj.slugExists
+]);
+
+router.get('/product-exists', [
+    ProductControllerObj.exists
+]);
+
 router.patch('/:id', [
   ProductControllerObj.update
 ]);
