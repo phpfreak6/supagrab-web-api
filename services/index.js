@@ -10,5 +10,6 @@ module.exports = {
     FailedMailService: require('./FailedMailService'),
     SiteSettingService: require('./SiteSettingService'),
     DepartmentService: require('./DepartmentService'), 
-    CategoryService: require('./CategoryService')
+    CategoryService: require('./CategoryService'),
+    ProductService: require('./ProductService')
 };

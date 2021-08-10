@@ -12,6 +12,7 @@ const SiteSettingRouter = require('./SiteSettingRouter');
 const DepartmentRouter = require('./DepartmentRouter');
 const ContactUsRouter = require('./ContactUsRouter');
 const CategoryRouter = require('./CategoryRouter');
+const ProductRouter = require('./ProductRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -47,6 +48,7 @@ router.use('/site-settings', SiteSettingRouter);
 
 router.use('/departments', DepartmentRouter);
 router.use('/departments', CategoryRouter);
+router.use('/products', ProductRouter);
 
 
 module.exports = router;

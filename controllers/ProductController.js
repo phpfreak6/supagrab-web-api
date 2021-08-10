@@ -5,27 +5,25 @@ const {ObjectId} = require('mongodb');
 const ResponseService = require('../services').ResponseService;
 const responseServiceObj = new ResponseService();
 
-const DepartmentService = require('../services').DepartmentService;
-const DepartmentServiceObj = new DepartmentService();
+const ProductService = require('../services').ProductService;
+const ProductServiceObj = new ProductService();
 
 let DEPARTMENT_IMAGE_PATH = require('../config/config').DEPARTMENT_IMAGE_PATH;
 let DEPARTMENT_IMAGE_UPLOAD_PATH = require('../config/config').DEPARTMENT_IMAGE_UPLOAD_PATH;
 
-module.exports = class DepartmentController {
+module.exports = class ProductController {
 
-    constructor() {
-        
-    }
+    constructor() {}
 
     get(req, res, next) {
         try {
             let searchTxt = req.query.searchTxt;
-            DepartmentServiceObj
+            ProductServiceObj
                     .get(searchTxt)
                     .then(async (result) => {
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Departments Fetched Successfully',
-                            data: {departments: result}
+                            msg: 'Products Fetched Successfully',
+                            data: {product: result}
                         });
                     })
                     .catch(async (ex) => {
@@ -43,11 +41,11 @@ module.exports = class DepartmentController {
     getById(req, res, next) {
         try {
             let id = ObjectId(req.params.id);
-            DepartmentServiceObj.getById(id)
+            ProductServiceObj.getById(id)
                     .then(async (result) => {
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Department Fetched Successfully',
-                            data: {department: result}
+                            msg: 'Product Fetched Successfully',
+                            data: {product: result}
                         });
                     })
                     .catch(async (ex) => {
@@ -66,15 +64,15 @@ module.exports = class DepartmentController {
         try {
             let title = req.params.title;
             let id = (req.params.id) ? ObjectId(req.params.id) : null;
-            DepartmentServiceObj.exists(title, id)
+            ProductServiceObj.exists(title, id)
                     .then(async (result) => {
                         if (result) {
                             return await responseServiceObj.sendResponse(res, {
-                                data: {msg: 'Department Already Exists', department: true}
+                                data: {msg: 'Product Already Exists', product: true}
                             });
                         } else {
                             return await responseServiceObj.sendResponse(res, {
-                                data: {msg: 'Department Available', department: false}
+                                data: {msg: 'Product Available', product: false}
                             });
                         }
                     }).catch(async (ex) => {
@@ -90,24 +88,36 @@ module.exports = class DepartmentController {
     insert(req, res, next) {
         try {
             let in_data = req.body;
-            let rules = {title: 'required'};
+            let rules = {
+                department_id: 'required',
+                category_id: 'required',
+                product_title: 'required',
+                product_slug: 'required',
+                // attributes: 'required',
+                // reviews: 'required',
+                status: 'required',
+                // quantity:
+                // purchase_price:
+                // selling_price:
+                // maximum_price:
+            };
             let validation = new Validator(in_data, rules);
             if (validation.fails()) {
                 return responseServiceObj.sendException(res, {
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            DepartmentServiceObj.exists(in_data.title)
+            ProductServiceObj.exists(in_data.product_title)
                     .then((result) => {
                         if (result) {
                             throw 'Title Already exists';
                         }
                     })
                     .then(async(result) => {
-                        let department = await DepartmentServiceObj.insert(in_data);
+                        let product = await ProductServiceObj.insert(in_data);
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Department Inserted Successfully',
-                            data: {department: department}
+                            msg: 'Product Inserted Successfully',
+                            data: {product: product}
                         });
                     })
                     .catch(async (ex) => {
@@ -125,25 +135,36 @@ module.exports = class DepartmentController {
             let in_data = req.body;
             let id = ObjectId(req.params.id);
             let rules = {id: id};
-            in_data.title ? rules.title = 'required' : '';
+
+            in_data.department_id ? rules.department_id = 'required' : '';
+            in_data.category_id ? rules.category_id = 'required' : '';
+            in_data.product_title ? rules.product_title = 'required' : '';
+            in_data.product_slug ? rules.product_slug = 'required' : '';
+            // attributes: 'required',
+            // reviews: 'required',
             in_data.status ? rules.status = 'required' : '';
+            // quantity:
+            // purchase_price:
+            // selling_price:
+            // maximum_price:
+            
             let validation = new Validator(in_data, rules);
             if (validation.fails()) {
                 return responseServiceObj.sendException(res, {
                     msg: responseServiceObj.getFirstError(validation)
                 });
             }
-            DepartmentServiceObj.exists(in_data.title, id)
+            ProductServiceObj.exists(in_data.product_title, id)
                     .then((result) => {
                         if (result) {
                             throw 'Title Already exists';
                         }
                     })
                     .then(async(result) => {
-                        let department = await DepartmentServiceObj.update(in_data, id);
+                        let Product = await ProductServiceObj.update(in_data, id);
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Department Updated Successfully',
-                            data: {department: await DepartmentServiceObj.getById(id)}
+                            msg: 'Product Updated Successfully',
+                            data: {product: await ProductServiceObj.getById(id)}
                         });
                     })
                     .catch(async (ex) => {
@@ -159,7 +180,7 @@ module.exports = class DepartmentController {
     delete(req, res, next) {
         try {
             let id = ObjectId(req.params.id);
-            DepartmentServiceObj.isIdExists(id)
+            ProductServiceObj.isIdExists(id)
                     .then(async (isExists) => {
                         if (!isExists) {
                             throw 'Invalid Id Provided';
@@ -171,9 +192,9 @@ module.exports = class DepartmentController {
                             status: 'DELETED',
                             deleted_at: new Date()
                         };
-                        let result = await DepartmentServiceObj.update(in_data, id);
+                        let result = await ProductServiceObj.update(in_data, id);
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Department Deleted Successfully'
+                            msg: 'Product Deleted Successfully'
                         });
                     })
                     .catch(async (ex) => {
@@ -191,19 +212,19 @@ module.exports = class DepartmentController {
     uploadImage(req, res, next) {
         try {
             let id = ObjectId(req.params.id);
-            DepartmentServiceObj.isIdExists(id)
+            ProductServiceObj.isIdExists(id)
                     .then(async (isExists) => {
                         if (!isExists) {
-                            throw 'Invalid department id.'
+                            throw 'Invalid Product id.'
                         }
                     })
                     .then(async (isExists) => {
                         let imageDetails = req.params.imageDetails;
-                        let result = await DepartmentServiceObj.update({image: imageDetails.fullFileName, updated_at: new Date()}, id);
+                        let result = await ProductServiceObj.update({image: imageDetails.fullFileName, updated_at: new Date()}, id);
                         return await responseServiceObj.sendResponse(res, {
-                            msg: 'Department image uploaded successfully',
+                            msg: 'Product image uploaded successfully',
                             data: {
-                                department: await DepartmentServiceObj.getById(id),
+                                product: await ProductServiceObj.getById(id),
                                 department_image_path: DEPARTMENT_IMAGE_PATH
                             }
                         });
@@ -224,10 +245,10 @@ module.exports = class DepartmentController {
         try {
             let id = ObjectId(req.params.id);
             let image_name = req.params.image;
-            DepartmentServiceObj.isIdExists(id)
+            ProductServiceObj.isIdExists(id)
                     .then(async (isExists) => {
                         if (!isExists) {
-                            throw 'Invalid department id';
+                            throw 'Invalid Product id';
                         }
                         return true;
                     })
@@ -239,11 +260,11 @@ module.exports = class DepartmentController {
                         fs.unlinkSync(file);
                     })
                     .then(async (inResult) => {
-                        let result = await DepartmentServiceObj.update({image: null}, id);
+                        let result = await ProductServiceObj.update({image: null}, id);
                         return await responseServiceObj.sendResponse(res, {
                             msg: 'Image deleted successfully',
                             data: {
-                                department: await DepartmentServiceObj.getById(id),
+                                product: await ProductServiceObj.getById(id),
                                 department_image_path: DEPARTMENT_IMAGE_PATH
                             }
                         });
