@@ -44,15 +44,26 @@ module.exports = class DepartmentService {
         }
     }
 
-    async exists(title, id = false) {
+    async exists(product_title, id = false) {
         try {
-            let condition = (id) ? {product_title: title.toLowerCase(), _id: {$ne: id}, status: {$ne: 'DELETED'}} : {title: title.toLowerCase(), status: {$ne: 'DELETED'}};
+            let condition = (id) ? {product_title: product_title.toLowerCase(), _id: {$ne: id}, status: {$ne: 'DELETED'}} : {product_title: product_title.toLowerCase(), status: {$ne: 'DELETED'}};
             let result = await ProductModel.countDocuments(condition);
             let isExists = result > 0 ? true : false;
             return isExists;
         } catch (ex) {
             throw ex;
+        }
     }
+
+    async slugExists(product_slug, id = false) {
+        try {
+            let condition = (id) ? {product_slug: product_slug.toLowerCase(), _id: {$ne: id}, status: {$ne: 'DELETED'}} : {product_slug: product_slug.toLowerCase(), status: {$ne: 'DELETED'}};
+            let result = await ProductModel.countDocuments(condition);
+            let isExists = result > 0 ? true : false;
+            return isExists;
+        } catch (ex) {
+            throw ex;
+        }
     }
 
     async getById(in_id) {
