@@ -36,6 +36,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage, limits: {fileSize: 1000000 * 10}});
 let cpUpload = upload.fields([{name: 'image', maxCount: 1}]);
 
+router.get('/slug-exists/:department_slug/:id?', [DepartmentControllerObj.slugExists]);
 router.get('/exists/:title/:id?', [DepartmentControllerObj.exists]);
 router.get('/', [DepartmentControllerObj.get]);
 router.get('/:id', [DepartmentControllerObj.getById]);

@@ -12,9 +12,7 @@ var {userImageBasePath, JWT_SECRET} = require('../config/config');
 
 module.exports = class AuthController {
 
-    constructor() {
-        console.log('inside AuthController controller constructor');
-    }
+    constructor() {}
 
     signIn(req, res, next) {
 

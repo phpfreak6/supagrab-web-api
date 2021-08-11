@@ -61,6 +61,10 @@ var cpUpload = upload.fields([
 //   ProductControllerObj.changeProfilePic
 // ]);
 
+// router.get('/byCategory', [
+//   ProductControllerObj.productByCategory
+// ]);
+
 router.get('/product-slug-exists', [
     ProductControllerObj.slugExists
 ]);

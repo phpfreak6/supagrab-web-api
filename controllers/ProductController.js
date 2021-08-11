@@ -92,19 +92,19 @@ module.exports = class ProductController {
             let slug = req.query.product_slug;
             let id = (req.params.id) ? ObjectId(req.params.id) : null;
             ProductServiceObj.slugExists(slug, id)
-                    .then(async (result) => {
-                        if (result) {
-                            return await responseServiceObj.sendResponse(res, {
-                                msg: 'Product Slug Already Exists',
-                                data: {msg: 'Product Slug Already Exists', exists: true}
-                            });
-                        } else {
-                            return await responseServiceObj.sendResponse(res, {
-                                msg: 'Product Slug Available',
-                                data: {msg: 'Product Slug Available', exists: false}
-                            });
-                        }
-                    }).catch(async (ex) => {
+            .then(async (result) => {
+                if (result) {
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Product Slug Already Exists',
+                        data: {msg: 'Product Slug Already Exists', exists: true}
+                    });
+                } else {
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Product Slug Available',
+                        data: {msg: 'Product Slug Available', exists: false}
+                    });
+                }
+            }).catch(async (ex) => {
                 return await responseServiceObj.sendException(res, {msg: ex.toString()});
             });
         } catch (ex) {
@@ -308,5 +308,9 @@ module.exports = class ProductController {
                 msg: ex.toString()
             });
         }
+    }
+
+    getByCategory( req, res, next ) {
+        
     }
 };

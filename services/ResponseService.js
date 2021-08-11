@@ -3,7 +3,6 @@ let $this;
 module.exports = class ResponseService {
 
     constructor() {
-        console.log('inside ResponseService constructor');
         $this = this;
     }
 
