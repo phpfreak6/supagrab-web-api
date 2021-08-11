@@ -155,4 +155,19 @@ module.exports = class CategoryService {
         }
     }
 
+    async getBySlug(category_slug) {
+        try {
+            let result = await DepartmentModel.aggregate([
+                {
+                    $match: {
+                        'categories.category_slug': category_slug.toLowerCase(), 
+                        'categories.status': { $ne: 'DELETED' } 
+                    }
+                }
+            ]);
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
 };

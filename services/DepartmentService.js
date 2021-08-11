@@ -72,6 +72,16 @@ module.exports = class DepartmentService {
         }
     }
 
+    async getBySlug(department_slug) {
+        try {
+            let condition = { department_slug: department_slug.toLowerCase(), status: { $ne: 'DELETED' } };
+            let result = await DepartmentModel.findOne(condition);
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
     async getById(in_id) {
         try {
             let id = ObjectId(in_id);
@@ -91,5 +101,4 @@ module.exports = class DepartmentService {
             throw ex;
         }
     }
-
 };

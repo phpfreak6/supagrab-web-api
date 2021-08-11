@@ -113,4 +113,30 @@ module.exports = class DepartmentService {
             throw ex;
         }
     }
+
+    async getByDepartment(in_id) {
+        try {
+            let id = ObjectId(in_id);
+            let result = await ProductModel.find({ 
+                department_id: id, 
+                status: { $ne: 'DELETED' } 
+            });
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async getByCategory(in_id) {
+        try {
+            let id = ObjectId(in_id);
+            let result = await ProductModel.find({ 
+                category_id: id, 
+                status: { $ne: 'DELETED' } 
+            });
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
 };
