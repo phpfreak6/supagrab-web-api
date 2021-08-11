@@ -176,7 +176,6 @@ module.exports = class CmsController {
     }
 
     getCmsByKey(req, res, next) {
-        console.log('inside getCmsByKey');
         try {
             let cms_key = req.params.cms_key;
             cms_key = cms_key.replace(/ /g,"-");

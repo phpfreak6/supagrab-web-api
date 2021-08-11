@@ -1,5 +1,5 @@
 const DepartmentModel = require('../models').DepartmentModel;
-const {ObjectId} = require('mongodb');
+const { ObjectId } = require('mongodb');
 
 module.exports = class DepartmentService {
 
@@ -11,16 +11,17 @@ module.exports = class DepartmentService {
         try {
             if (!searchTxt) {
                 let result = await DepartmentModel.find(
-                        {status: {$ne: 'DELETED'}},
-                        ['_id', 'title', 'categories', 'status', 'created_at', 'updated_at', 'deleted_at'],
-                        {sort: {created_at: -1}});
+                    { status: { $ne: 'DELETED' } },
+                    ['_id', 'department_title', 'department_slug', 'categories', 'status', 'created_at', 'updated_at', 'deleted_at'],
+                    { sort: { created_at: -1 } });
                 return result;
             } else {
                 let result = await DepartmentModel.find(
-                        {$and: [{$or: [{title: new RegExp(searchTxt, 'i')}], status: {$ne: 'DELETED'}}]},
-                        ['_id', 'title', 'categories', 'status', 'created_at', 'updated_at', 'deleted_at'],
-                        {sort: {created_at: -1}
-                        });
+                    { $and: [{ $or: [{ title: new RegExp(searchTxt, 'i') }], status: { $ne: 'DELETED' } }] },
+                    ['_id', 'department_title', 'department_slug', 'categories', 'status', 'created_at', 'updated_at', 'deleted_at'],
+                    {
+                        sort: { created_at: -1 }
+                    });
                 return result;
             }
         } catch (ex) {
@@ -30,29 +31,9 @@ module.exports = class DepartmentService {
 
     async insert(in_data) {
         try {
-            in_data.title = in_data.title.toLowerCase();
+            in_data.department_title = in_data.department_title.toLowerCase();
+            in_data.department_slug = in_data.department_slug.toLowerCase();
             let result = await DepartmentModel.create(in_data);
-            return result;
-        } catch (ex) {
-            throw ex;
-        }
-    }
-
-    async exists(title, id = false) {
-        try {
-            let condition = (id) ? {title: title.toLowerCase(), _id: {$ne: id}, status: {$ne: 'DELETED'}} : {title: title.toLowerCase(), status: {$ne: 'DELETED'}};
-            let result = await DepartmentModel.countDocuments(condition);
-            let isExists = result > 0 ? true : false;
-            return isExists;
-        } catch (ex) {
-            throw ex;
-    }
-    }
-
-    async getById(in_id) {
-        try {
-            let id = ObjectId(in_id);
-            let result = await DepartmentModel.findOne({_id: id, status: {$ne: 'DELETED'}});
             return result;
         } catch (ex) {
             throw ex;
@@ -62,7 +43,49 @@ module.exports = class DepartmentService {
     async update(in_data, in_id) {
         try {
             let id = ObjectId(in_id);
-            let result = await DepartmentModel.updateOne({_id: id}, in_data);
+            let result = await DepartmentModel.updateOne({ _id: id }, in_data);
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async exists(department_title, id = false) {
+        try {
+            let condition = (id) ? { department_title: department_title.toLowerCase(), _id: { $ne: id }, status: { $ne: 'DELETED' } } : { department_title: department_title.toLowerCase(), status: { $ne: 'DELETED' } };
+            let result = await DepartmentModel.countDocuments(condition);
+            let isExists = result > 0 ? true : false;
+            return isExists;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async slugExists(department_slug, id = false) {
+        try {
+            let condition = (id) ? { department_slug: department_slug.toLowerCase(), _id: { $ne: id }, status: { $ne: 'DELETED' } } : { department_slug: department_slug.toLowerCase(), status: { $ne: 'DELETED' } };
+            let result = await DepartmentModel.countDocuments(condition);
+            let isExists = result > 0 ? true : false;
+            return isExists;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async getBySlug(department_slug) {
+        try {
+            let condition = { department_slug: department_slug.toLowerCase(), status: { $ne: 'DELETED' } };
+            let result = await DepartmentModel.findOne(condition);
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async getById(in_id) {
+        try {
+            let id = ObjectId(in_id);
+            let result = await DepartmentModel.findOne({ _id: id, status: { $ne: 'DELETED' } });
             return result;
         } catch (ex) {
             throw ex;
@@ -71,12 +94,11 @@ module.exports = class DepartmentService {
 
     async isIdExists(id) {
         try {
-            let result = await DepartmentModel.countDocuments({_id: id});
+            let result = await DepartmentModel.countDocuments({ _id: id });
             let isExists = result > 0 ? true : false;
             return isExists;
         } catch (ex) {
             throw ex;
         }
     }
-
 };
