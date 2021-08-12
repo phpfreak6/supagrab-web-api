@@ -53,9 +53,9 @@ var cpUpload = upload.fields([
 //   ProductControllerObj.deleteProfilePic
 // ]);
 
-// router.patch('/setStatus/:id', [
-//   ProductControllerObj.setStatus
-// ]);
+router.patch('/setStatus/:id', [
+  ProductControllerObj.setStatus
+]);
 
 // router.post('/changePic/:id', cpUpload, [
 //   ProductControllerObj.changeProfilePic

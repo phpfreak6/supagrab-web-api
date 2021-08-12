@@ -403,4 +403,52 @@ module.exports = class ProductController {
             });
         }
     }
+
+    setStatus(req, res, next) {
+        try {
+
+            let in_id = req.params.id;
+            let id = ObjectId(in_id);
+            let in_data = req.body;
+            let rules = {
+                status: 'required|in:OPEN,CLOSE'
+            };
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+
+            ProductServiceObj.isIdExists(id)
+                .then(async (isExists) => {
+                    if (!isExists) {
+                        throw 'Invalid product id.'
+                    }
+                    return true;
+                })
+                .then(async (inResult) => {
+                    let result = await ProductServiceObj.setStatus(in_data, id);
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Product status updated successfully.',
+                        data: {
+                            user: await ProductServiceObj.getById(id),
+                            // userImagePath: userImagePath
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+
+        } catch (ex) {
+
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 };

@@ -80,10 +80,10 @@ module.exports = class DepartmentService {
         try {
             let id = ObjectId(in_id);
 
-            if( in_data.product_title ) {
+            if( !in_data.product_title ) {
                 in_data.product_title = in_data.product_title.toLowerCase();
             }
-            if( in_data.product_slug ) {
+            if( !in_data.product_slug ) {
                 in_data.product_slug = in_data.product_slug.toLowerCase();
             }
 
@@ -134,6 +134,16 @@ module.exports = class DepartmentService {
                 category_id: id, 
                 status: { $ne: 'DELETED' } 
             });
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async setStatus(in_data, in_id) {
+        try {
+            let id = ObjectId(in_id);
+            let result = await ProductModel.updateOne({_id: id}, in_data);
             return result;
         } catch (ex) {
             throw ex;
