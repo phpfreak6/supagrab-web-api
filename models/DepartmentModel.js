@@ -7,8 +7,8 @@ const dated = new Date();
 const CategorySchema = new Schema({
     _id: {type: ObjectId, default: null},
     department_id: {type: ObjectId},
-    category_title: {type: String, unique: true},
-    category_slug: {type: String, unique: true},
+    category_title: {type: String},
+    category_slug: {type: String},
     category_image: {type: String, default: null},
     status: {type: String, enum: STATUSES, default: 'OPEN'},
     created_at: {type: Date, default: dated},

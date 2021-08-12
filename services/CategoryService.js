@@ -114,7 +114,7 @@ module.exports = class CategoryService {
                 { _id: department_id, "categories._id": id },
                 {
                     $set: {
-                        'categories.$.title': data.title.toLowerCase(),
+                        'categories.$.category_title': data.category_title.toLowerCase(),
                         'categories.$.category_slug': data.category_slug.toLowerCase(),
                         'categories.$.status': data.status,
                         'categories.$.updated_at': new Date()
