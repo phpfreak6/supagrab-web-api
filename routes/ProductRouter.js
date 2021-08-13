@@ -4,31 +4,46 @@ const router = express.Router();
 const ProductController = require('../controllers').ProductController;
 const ProductControllerObj = new ProductController();
 
-var ImagePath = require('../config/config').ImageUploadPath;
+var ImagePath = require('../config/config').PRODUCT_IMAGE_UPLOAD_PATH;
 /**
  * IMAGE UPLOAD STARTS
  */
 const path = require('path');
 const multer = require('multer');
 
+let filesArr = [];
+let cntr = 0;
+
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, ImagePath)
 	},
 	filename: function (req, file, cb) {
+		cntr++;
 		let id = req.params.id;
 		let originalname = file.originalname;
 		let newFileName = id;
 		let extention = path.extname(originalname);
-		let fullFileName = newFileName + extention;
+		let fullFileName = newFileName +'-'+ cntr + extention;
 		let fullFileNameWithPath = ImagePath + '/' + fullFileName;
-		req.params.imageDetails = {
+
+		// req.params.imageDetails = {
+		// 	fileOriginalname: originalname,
+		// 	newFileName: newFileName,
+		// 	fileExtention: extention,
+		// 	fullFileName: fullFileName,
+		// 	fullFileNameWithPath: fullFileNameWithPath
+		// };
+		
+		filesArr.push({
 			fileOriginalname: originalname,
 			newFileName: newFileName,
 			fileExtention: extention,
 			fullFileName: fullFileName,
 			fullFileNameWithPath: fullFileNameWithPath
-		};
+		});
+
+		req.params.imageDetails = filesArr;
 		cb(null, fullFileName);
 	}
 });
@@ -38,9 +53,12 @@ const upload = multer({
 	limits: { fileSize: 1000000 } // (1000000 bytes = 1MB)
 });
 
-var cpUpload = upload.fields([
-	{ name: 'profile_pic', maxCount: 1 }
-]);
+// var cpUpload = upload.fields([
+// 	{ name: 'profile_pic', maxCount: 1 }
+// ]);
+
+var arrUpload = upload.array( 'profile_pic', 3 );
+
 /**
  * IMAGE UPLOAD ENDS
  */
@@ -57,9 +75,13 @@ router.patch('/setStatus/:id', [
 	ProductControllerObj.setStatus
 ]);
 
-// router.post('/changePic/:id', cpUpload, [
-//   ProductControllerObj.changeProfilePic
-// ]);
+router.post('/upload-images/:id', arrUpload, [
+  ProductControllerObj.uploadImage
+]);
+
+router.delete('/delete-uploaded-image/:productId/:imageId', arrUpload, [
+	ProductControllerObj.deleteImage
+]);
 
 router.get('/byDepartment/:department_slug', [
 	ProductControllerObj.productByDepartment

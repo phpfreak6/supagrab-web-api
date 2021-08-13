@@ -49,16 +49,12 @@ const ReviewsSchema = new Schema({
     updatedAt: {type: Date, default: dated},
 });
 
-const ImagesSchema = new Schema({
-    url: {type: String},
-    default: {type: Boolean}
-});
-
 const ProductImageSchema = new Schema({
     _id: {type: ObjectId, default: null},
     
     product_id: {type: ObjectId, default: null},
-    urls: [ImagesSchema],
+    url: {type: String},
+    default: {type: Boolean},
     
     status: {type: String, enum: STATUSES, default: 'OPEN'},
 

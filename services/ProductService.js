@@ -70,6 +70,7 @@ module.exports = class DepartmentService {
         try {
             let id = ObjectId(in_id);
             let result = await ProductModel.findOne({_id: id, status: {$ne: 'DELETED'}});
+            console.log('result', result);
             return result;
         } catch (ex) {
             throw ex;
@@ -94,8 +95,9 @@ module.exports = class DepartmentService {
         }
     }
 
-    async isIdExists(id) {
+    async isIdExists(in_id) {
         try {
+            let id = ObjectId(in_id);
             let result = await ProductModel.countDocuments({_id: id});
             let isExists = result > 0 ? true : false;
             return isExists;

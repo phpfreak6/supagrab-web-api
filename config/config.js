@@ -11,5 +11,8 @@ module.exports = {
     JWT_SECRET: process.env.JWT_SECRET_KEY,
     VIEW_PATH: path.join(__dirname, '../views'),
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
-    NEWSLETTER_LINK_EXPIRY_DAYS: 10 // DAYS
+    NEWSLETTER_LINK_EXPIRY_DAYS: 10, // DAYS
+
+    PRODUCT_IMAGE_UPLOAD_PATH: process.env.PRODUCT_IMAGE_UPLOAD_PATH,
+    PRODUCT_IMAGE_PATH: process.env.BASE_URL + process.env.PRODUCT_IMAGE_PATH,
 };

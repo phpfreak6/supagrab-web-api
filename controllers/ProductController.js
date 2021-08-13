@@ -14,8 +14,8 @@ const departmentServiceObj = new DepartmentService();
 const CategoryService = require('../services').CategoryService;
 const categoryServiceObj = new CategoryService();
 
-let DEPARTMENT_IMAGE_PATH = require('../config/config').DEPARTMENT_IMAGE_PATH;
-let DEPARTMENT_IMAGE_UPLOAD_PATH = require('../config/config').DEPARTMENT_IMAGE_UPLOAD_PATH;
+let PRODUCT_IMAGE_PATH = require('../config/config').PRODUCT_IMAGE_PATH;
+let PRODUCT_IMAGE_UPLOAD_PATH = require('../config/config').PRODUCT_IMAGE_UPLOAD_PATH;
 
 module.exports = class ProductController {
 
@@ -249,18 +249,39 @@ module.exports = class ProductController {
             let id = ObjectId(req.params.id);
             ProductServiceObj.isIdExists(id)
                 .then(async (isExists) => {
+                    console.log('isExists', isExists);
                     if (!isExists) {
                         throw 'Invalid Product id.'
                     }
                 })
                 .then(async (isExists) => {
                     let imageDetails = req.params.imageDetails;
-                    let result = await ProductServiceObj.update({ image: imageDetails.fullFileName, updated_at: new Date() }, id);
+                    let images = [];
+    
+                    if( imageDetails.length > 0 ) {
+    
+                    } else {
+                        throw 'Upload atleast one image';
+                    }
+    
+                    imageDetails.forEach(image => {
+                        images.push({
+                            _id: new ObjectId(),
+                            product_id: id,
+                            url: image.fullFileName,
+                            default: 0
+                        });
+                    });
+    
+                    let obj = {
+                        images: images
+                    };
+                    let result = await ProductServiceObj.setStatus( obj, id);
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Product image uploaded successfully',
                         data: {
                             product: await ProductServiceObj.getById(id),
-                            department_image_path: DEPARTMENT_IMAGE_PATH
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
                         }
                     });
                 })
@@ -280,27 +301,42 @@ module.exports = class ProductController {
         try {
             let id = ObjectId(req.params.id);
             let image_name = req.params.image;
+            let imagesArr = [];
+            let product;
             ProductServiceObj.isIdExists(id)
                 .then(async (isExists) => {
                     if (!isExists) {
                         throw 'Invalid Product id';
-                    }
+                    } 
                     return true;
+
+                })
+                .then(async (isExists) => {
+                    product = ProductServiceObj.getById(id);
+                    imagesArr = product.images.filter( image => image.url !== image_name );
+                    console.log(imagesArr);
+                    return true
+
                 })
                 .then(async (inResult) => {
-                    let file = DEPARTMENT_IMAGE_UPLOAD_PATH + '/' + image_name;
+                    let file = PRODUCT_IMAGE_UPLOAD_PATH + '/' + image_name;
                     if (!fs.existsSync(file)) {
                         throw 'File not exists.';
                     }
                     fs.unlinkSync(file);
+                    
                 })
                 .then(async (inResult) => {
-                    let result = await ProductServiceObj.update({ image: null }, id);
+                    // let result = await ProductServiceObj.update({ image: null }, id);
+                    let obj = {
+                        images: imagesArr
+                    };
+                    let result = await ProductServiceObj.setStatus( obj, id);
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Image deleted successfully',
                         data: {
                             product: await ProductServiceObj.getById(id),
-                            department_image_path: DEPARTMENT_IMAGE_PATH
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
                         }
                     });
                 })
@@ -337,7 +373,7 @@ module.exports = class ProductController {
                         msg: 'products found',
                         data: {
                             product: result,
-                            department_image_path: DEPARTMENT_IMAGE_PATH
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
                         }
                     });
                 })
@@ -388,7 +424,7 @@ module.exports = class ProductController {
                         msg: 'products found',
                         data: {
                             product: result,
-                            department_image_path: DEPARTMENT_IMAGE_PATH
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
                         }
                     });
                 })
