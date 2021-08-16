@@ -34,7 +34,6 @@ module.exports = class DepartmentService {
 
     async insert(in_data) {
         try {
-            console.log('in_data', in_data);
             in_data.product_title = in_data.product_title.toLowerCase();
             in_data.product_slug = in_data.product_slug.toLowerCase();
             let result = await ProductModel.create(in_data);
@@ -70,7 +69,6 @@ module.exports = class DepartmentService {
         try {
             let id = ObjectId(in_id);
             let result = await ProductModel.findOne({_id: id, status: {$ne: 'DELETED'}});
-            console.log('result', result);
             return result;
         } catch (ex) {
             throw ex;
@@ -146,6 +144,25 @@ module.exports = class DepartmentService {
         try {
             let id = ObjectId(in_id);
             let result = await ProductModel.updateOne({_id: id}, in_data);
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async setImagePrimary( productId, imageId, data ) {
+        try {
+
+            let result = await ProductModel.findOneAndUpdate(
+                { _id: productId, "images._id": imageId },
+                {
+                    $set: {
+                        'images.$.default': data.default,
+                        'images.$.updated_at': new Date()
+                    }
+                },
+                { new: true }
+            );
             return result;
         } catch (ex) {
             throw ex;

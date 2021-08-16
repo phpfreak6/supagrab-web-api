@@ -336,7 +336,6 @@ module.exports = class UserController {
             .then( async( inResult ) => {
 
                 let file = userImageUploadPath +'/'+ path;
-                console.log('file', file);
                 if (!fs.existsSync(file)) {
                     throw 'File not exists.';
                 }

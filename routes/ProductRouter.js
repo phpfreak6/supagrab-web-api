@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { ObjectId } = require('mongodb');
+
 const ProductController = require('../controllers').ProductController;
 const ProductControllerObj = new ProductController();
 
@@ -22,7 +24,8 @@ const storage = multer.diskStorage({
 		cntr++;
 		let id = req.params.id;
 		let originalname = file.originalname;
-		let newFileName = id;
+		// let newFileName = id;
+		let newFileName = new ObjectId();
 		let extention = path.extname(originalname);
 		let fullFileName = newFileName +'-'+ cntr + extention;
 		let fullFileNameWithPath = ImagePath + '/' + fullFileName;
@@ -57,7 +60,7 @@ const upload = multer({
 // 	{ name: 'profile_pic', maxCount: 1 }
 // ]);
 
-var arrUpload = upload.array( 'profile_pic', 3 );
+var arrUpload = upload.array( 'profile_pic', 1 );
 
 /**
  * IMAGE UPLOAD ENDS
@@ -79,7 +82,15 @@ router.post('/upload-images/:id', arrUpload, [
   ProductControllerObj.uploadImage
 ]);
 
-router.delete('/delete-uploaded-image/:productId/:imageId', arrUpload, [
+// router.delete('/delete-uploaded-image/:productId/:imageId', arrUpload, [
+// 	ProductControllerObj.deleteImage
+// ]);
+
+router.patch('/set-image-primary/:productId/:imageId', [
+	ProductControllerObj.setImagePrimary
+]);
+
+router.patch('/delete-uploaded-image/:productId/:image', arrUpload, [
 	ProductControllerObj.deleteImage
 ]);
 
