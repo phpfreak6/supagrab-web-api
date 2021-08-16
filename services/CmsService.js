@@ -144,7 +144,6 @@ module.exports = class FaqService {
                     key: in_key,
                     _id: {$ne: in_id}
                 });
-                console.log('result', result);
                 let isExists = result > 0 ? true : false;
                 return isExists;
             } else {

@@ -29,7 +29,10 @@ module.exports = class ProductController {
                 .then(async (result) => {
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Products Fetched Successfully',
-                        data: { product: result }
+                        data: { 
+                            product: result,
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
                     });
                 })
                 .catch(async (ex) => {
@@ -51,7 +54,10 @@ module.exports = class ProductController {
                 .then(async (result) => {
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Product Fetched Successfully',
-                        data: { product: result }
+                        data: { 
+                            product: result,
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
                     });
                 })
                 .catch(async (ex) => {
@@ -249,7 +255,6 @@ module.exports = class ProductController {
             let id = ObjectId(req.params.id);
             ProductServiceObj.isIdExists(id)
                 .then(async (isExists) => {
-                    console.log('isExists', isExists);
                     if (!isExists) {
                         throw 'Invalid Product id.'
                     }
@@ -299,22 +304,22 @@ module.exports = class ProductController {
 
     deleteImage(req, res, next) {
         try {
-            let id = ObjectId(req.params.id);
+            let id = req.params.productId;
             let image_name = req.params.image;
             let imagesArr = [];
             let product;
+
+            id = ObjectId(id);
             ProductServiceObj.isIdExists(id)
                 .then(async (isExists) => {
                     if (!isExists) {
                         throw 'Invalid Product id';
                     } 
                     return true;
-
                 })
                 .then(async (isExists) => {
-                    product = ProductServiceObj.getById(id);
+                    product = await ProductServiceObj.getById(id);
                     imagesArr = product.images.filter( image => image.url !== image_name );
-                    console.log(imagesArr);
                     return true
 
                 })
@@ -418,7 +423,6 @@ module.exports = class ProductController {
                     return category._id;
                 })
                 .then(async (category_id) => {
-                    console.log('category_id', category_id);
                     let result = await ProductServiceObj.getByCategory(category_id);
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'products found',
@@ -482,6 +486,54 @@ module.exports = class ProductController {
 
         } catch (ex) {
 
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    setImagePrimary( req, res, next ) {
+        try {
+
+            let in_id = req.params.productId;
+            let id = ObjectId(in_id);
+
+            let in_image_id = req.params.imageId;
+            let imageId = ObjectId(in_image_id);
+
+            let in_data = req.body;
+            let rules = {
+                default: 'required|boolean'
+            };
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+
+            ProductServiceObj.getById(id)
+                .then(async (result) => {
+                    return result;
+                })
+                .then(async (result) => {
+                    let product = await ProductServiceObj.setImagePrimary( id, imageId, in_data);
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Category Updated Successfully',
+                        data: {
+                            product: await ProductServiceObj.getById(id),
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+
+        } catch( ex ) {
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
             });
