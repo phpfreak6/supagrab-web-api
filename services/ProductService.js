@@ -1,7 +1,7 @@
 const ProductModel = require('../models').ProductModel;
 const {ObjectId} = require('mongodb');
 
-module.exports = class DepartmentService {
+module.exports = class ProductService {
 
     attributes;
 

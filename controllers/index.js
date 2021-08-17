@@ -10,5 +10,6 @@ module.exports = {
     DepartmentController: require('./DepartmentController'),
     ContactUsController: require('./ContactUsController'),
     CategoryController: require('./CategoryController'),
-    ProductController: require('./ProductController')
+    ProductController: require('./ProductController'),
+    ProductReviewController: require('./ProductReviewController')
 };

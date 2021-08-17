@@ -145,6 +145,7 @@ module.exports = class UserService {
 
             let id = ObjectId(in_id);
             let result = await UserModel.findOne({_id: id, status: {$ne: 'DELETED'}});
+            console.log('inside user service', in_id);
             return result;
         } catch (ex) {
 
@@ -273,8 +274,22 @@ module.exports = class UserService {
 
     async createJwtToken(userData) {
         try {
-            let tokenParamObj = {id: userData._id, email: userData.email, contact_number: userData.contact_number, role: userData.role, status: userData.status};
-            let result = await jwt.sign({tokenParamObj}, JWT_SECRET, {expiresIn: 60 * 60});
+            let result = await jwt.sign(
+                {
+                    "id": userData.id,
+                    "first_name": userData.first_name,
+                    "last_name": userData.last_name,
+                    "email": userData.email,
+                    "dob": userData.dob,
+                    "role": userData.role,
+                    "status": userData.status,
+                    "deletedAt": userData.deletedAt,
+                    "createdAt": userData.createdAt,
+                    "updatedAt": userData.updatedAt
+                },
+                JWT_SECRET, 
+                {expiresIn: 60 * 60}
+            );
             return result;
         } catch (ex) {
             throw ex;

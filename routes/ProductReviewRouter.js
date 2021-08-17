@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router({
-	mergeParams: true
+    mergeParams: true
 });
 
 const { ObjectId } = require('mongodb');
 
-const ProductController = require('../controllers').ProductController;
-const ProductControllerObj = new ProductController();
+const ProductReviewController = require('../controllers').ProductReviewController;
+const ProductReviewControllerObj = new ProductReviewController();
 
 var ImagePath = require('../config/config').PRODUCT_IMAGE_UPLOAD_PATH;
 /**
@@ -72,64 +72,36 @@ var arrUpload = upload.array( 'profile_pic', 1 );
  *  ROUTING STARTS
  */
 
-// router.delete('/:id/deletePic/:profilePic', [
-//   ProductControllerObj.deleteProfilePic
+// router.patch('/setStatus/:id', [
+// 	ProductReviewControllerObj.setStatus
 // ]);
 
-router.patch('/setStatus/:id', [
-	ProductControllerObj.setStatus
-]);
-
-router.post('/upload-images/:id', arrUpload, [
-  ProductControllerObj.uploadImage
-]);
-
-// router.delete('/delete-uploaded-image/:productId/:imageId', arrUpload, [
-// 	ProductControllerObj.deleteImage
+// router.get('/product-exists', [
+// 	ProductReviewControllerObj.exists
 // ]);
 
-router.patch('/set-image-primary/:productId/:imageId', [
-	ProductControllerObj.setImagePrimary
+// router.patch('/:productId/review/:id', [
+// 	ProductReviewControllerObj.update
+// ]);
+
+router.delete('/', [
+	ProductReviewControllerObj.delete
 ]);
 
-router.patch('/delete-uploaded-image/:productId/:image', arrUpload, [
-	ProductControllerObj.deleteImage
-]);
-
-router.get('/byDepartment/:department_slug', [
-	ProductControllerObj.productByDepartment
-]);
-
-router.get('/byCategory/:category_slug', [
-	ProductControllerObj.productByCategory
-]);
-
-router.get('/product-slug-exists', [
-	ProductControllerObj.slugExists
-]);
-
-router.get('/product-exists', [
-	ProductControllerObj.exists
-]);
-
-router.patch('/:id', [
-	ProductControllerObj.update
-]);
-
-router.delete('/:id', [
-	ProductControllerObj.delete
-]);
-
-router.get('/:id', [
-	ProductControllerObj.getById
-]);
+// router.get('/:id', [
+// 	ProductReviewControllerObj.getById
+// ]);
 
 router.post('/', [
-	ProductControllerObj.insert
+	ProductReviewControllerObj.insert
 ]);
 
+// router.get('/', [
+// 	ProductReviewControllerObj.getById
+// ]);
+
 router.get('/', [
-	ProductControllerObj.get
+	ProductReviewControllerObj.getByUser
 ]);
 
 /**

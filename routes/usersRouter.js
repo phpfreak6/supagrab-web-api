@@ -1,5 +1,7 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({
+  mergeParams: true
+});
 
 const UsersController = require('../controllers').UserController;
 const UserControllerObj = new UsersController();
