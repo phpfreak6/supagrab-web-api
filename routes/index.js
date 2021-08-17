@@ -16,6 +16,7 @@ const ContactUsRouter = require('./ContactUsRouter');
 const CategoryRouter = require('./CategoryRouter');
 const ProductRouter = require('./ProductRouter');
 const ProductReviewRouter = require('./ProductReviewRouter');
+const ProductRatingRouter = require('./ProductRatingRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -52,6 +53,7 @@ router.use('/site-settings', SiteSettingRouter);
 router.use('/departments', DepartmentRouter);
 router.use('/departments', CategoryRouter);
 router.use('/products/:productId/reviews', ProductReviewRouter);
+router.use('/products/:productId/ratings', ProductRatingRouter);
 router.use('/products', ProductRouter);
 
 

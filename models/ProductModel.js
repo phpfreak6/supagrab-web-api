@@ -19,10 +19,13 @@ const AttributeSchema = new Schema({
 });
 
 const RatingsSchema = new Schema({
-    _id: {type: ObjectId, default: null},
     
     product_id: {type: ObjectId, default: null},
     user_id: {type: ObjectId, default: null},
+    first_name: {type: String},
+    last_name: {type: String},
+    profile_pic: {type: String},
+
     rating: {type: Number},
 
     status: {type: String, enum: STATUSES, default: 'OPEN'},
@@ -33,13 +36,11 @@ const RatingsSchema = new Schema({
 });
 
 const ReviewsSchema = new Schema({
-    _id: {type: ObjectId, default: null},
     
     product_id: {type: ObjectId, default: null},
     user_id: {type: ObjectId, default: null},
     first_name: {type: String},
     last_name: {type: String},
-
     profile_pic: {type: String},
 
     comment: {type: String},
@@ -55,7 +56,6 @@ const ReviewsSchema = new Schema({
 });
 
 const ProductImageSchema = new Schema({
-    _id: {type: ObjectId, default: null},
     
     product_id: {type: ObjectId, default: null},
     url: {type: String},
@@ -80,7 +80,8 @@ const ProductSchema = new Schema({
 
     reviews: [ReviewsSchema],
     ratings: [RatingsSchema],
-    ratings_avg: {type: Number},
+    ratings_avg: {type: Number, default: null},
+    ratings_cnt: {type: Number, default: null},
 
     images: [ProductImageSchema],
 
