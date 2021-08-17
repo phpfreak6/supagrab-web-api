@@ -11,5 +11,6 @@ module.exports = {
     ContactUsController: require('./ContactUsController'),
     CategoryController: require('./CategoryController'),
     ProductController: require('./ProductController'),
-    ProductReviewController: require('./ProductReviewController')
+    ProductReviewController: require('./ProductReviewController'),
+    ProductRatingController: require('./ProductRatingController')
 };
