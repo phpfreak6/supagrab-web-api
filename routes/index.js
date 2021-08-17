@@ -1,5 +1,7 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({
+    mergeParams: true
+});
 
 const authRouter = require('./authRouter');
 const NewsletterRouter = require('./NewsletterRouter');
@@ -13,6 +15,7 @@ const DepartmentRouter = require('./DepartmentRouter');
 const ContactUsRouter = require('./ContactUsRouter');
 const CategoryRouter = require('./CategoryRouter');
 const ProductRouter = require('./ProductRouter');
+const ProductReviewRouter = require('./ProductReviewRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -35,7 +38,7 @@ router.use('/newsletter', NewsletterRouter);
 /**
  * auth middleware starts
  */
-//router.use(AuthControllerObj.verifyToken);
+router.use(AuthControllerObj.verifyToken);
 /**
  * auth middleware ends
  */
@@ -48,6 +51,7 @@ router.use('/site-settings', SiteSettingRouter);
 
 router.use('/departments', DepartmentRouter);
 router.use('/departments', CategoryRouter);
+router.use('/products/:productId/reviews', ProductReviewRouter);
 router.use('/products', ProductRouter);
 
 

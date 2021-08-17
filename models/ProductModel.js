@@ -4,9 +4,10 @@ const ObjectId = Schema.ObjectId;
 const STATUSES = ['OPEN', 'CLOSE', 'DELETED'];
 const dated = new Date();
 
-const TabSchema = new Schema({
+const AttributeSchema = new Schema({
     _id: {type: ObjectId, default: null},
-
+    
+    product_id: {type: ObjectId, default: null},
     tab_name: { type:String },
     tab_value: { type: String },
 
@@ -17,10 +18,12 @@ const TabSchema = new Schema({
     updatedAt: {type: Date, default: dated},
 });
 
-const AttributeSchema = new Schema({
+const RatingsSchema = new Schema({
     _id: {type: ObjectId, default: null},
     
-    tabs: [TabSchema],
+    product_id: {type: ObjectId, default: null},
+    user_id: {type: ObjectId, default: null},
+    rating: {type: Number},
 
     status: {type: String, enum: STATUSES, default: 'OPEN'},
 
@@ -32,6 +35,8 @@ const AttributeSchema = new Schema({
 const ReviewsSchema = new Schema({
     _id: {type: ObjectId, default: null},
     
+    product_id: {type: ObjectId, default: null},
+    user_id: {type: ObjectId, default: null},
     first_name: {type: String},
     last_name: {type: String},
 
@@ -74,6 +79,8 @@ const ProductSchema = new Schema({
     attributes: [AttributeSchema],
 
     reviews: [ReviewsSchema],
+    ratings: [RatingsSchema],
+    ratings_avg: {type: Number},
 
     images: [ProductImageSchema],
 

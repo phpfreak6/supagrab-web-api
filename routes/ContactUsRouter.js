@@ -1,5 +1,7 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({
+    mergeParams: true
+});
 
 const ContactUsController = new require('../controllers').ContactUsController;
 const ContactUsControllerObj = new ContactUsController();

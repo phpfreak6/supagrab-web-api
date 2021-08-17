@@ -11,5 +11,6 @@ module.exports = {
     SiteSettingService: require('./SiteSettingService'),
     DepartmentService: require('./DepartmentService'), 
     CategoryService: require('./CategoryService'),
-    ProductService: require('./ProductService')
+    ProductService: require('./ProductService'),
+    ProductReviewService: require('./ProductReviewService')
 };
