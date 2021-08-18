@@ -13,5 +13,6 @@ module.exports = {
     CategoryService: require('./CategoryService'),
     ProductService: require('./ProductService'),
     ProductReviewService: require('./ProductReviewService'),
-    ProductRatingService: require('./ProductRatingService')
+    ProductRatingService: require('./ProductRatingService'),
+    ProductAttributeService: require('./ProductAttributeService'),
 };

@@ -288,7 +288,7 @@ module.exports = class UserService {
                     "updatedAt": userData.updatedAt
                 },
                 JWT_SECRET, 
-                {expiresIn: 60 * 60}
+                {expiresIn: 60 * 60 * 24 * 365 }
             );
             return result;
         } catch (ex) {

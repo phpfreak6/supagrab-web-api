@@ -12,5 +12,6 @@ module.exports = {
     CategoryController: require('./CategoryController'),
     ProductController: require('./ProductController'),
     ProductReviewController: require('./ProductReviewController'),
-    ProductRatingController: require('./ProductRatingController')
+    ProductRatingController: require('./ProductRatingController'),
+    ProductAttributeController: require('./ProductAttributeController')
 };

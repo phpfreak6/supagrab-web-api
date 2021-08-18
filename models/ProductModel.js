@@ -5,7 +5,6 @@ const STATUSES = ['OPEN', 'CLOSE', 'DELETED'];
 const dated = new Date();
 
 const AttributeSchema = new Schema({
-    _id: {type: ObjectId, default: null},
     
     product_id: {type: ObjectId, default: null},
     tab_name: { type:String },
