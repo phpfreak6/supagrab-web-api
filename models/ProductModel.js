@@ -58,7 +58,7 @@ const ProductImageSchema = new Schema({
     
     product_id: {type: ObjectId, default: null},
     url: {type: String},
-    default: {type: Boolean},
+    default: {type: Boolean, default: false},
     
     status: {type: String, enum: STATUSES, default: 'OPEN'},
 

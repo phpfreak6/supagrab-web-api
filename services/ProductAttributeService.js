@@ -14,7 +14,7 @@ module.exports = class ProductAttributeService {
             let result = await ProductModel.find(
                 { _id: productId, "attributes.status": { $ne: 'DELETED' } },
                 this.attributes,
-                {sort: {created_at: -1}}
+                {sort: {"attributes.created_at": -1}}
             );
             return result;
         } catch (ex) {
@@ -41,7 +41,22 @@ module.exports = class ProductAttributeService {
 
     async insert(productId, in_data) {
         try {
-            let result = await ProductModel.findOneAndUpdate({ _id: productId }, { $push: { attributes: in_data } }, { new: true });
+            console.log('inside service');
+            console.log('inside service productId',productId);
+            console.log('inside service in_data',in_data);
+            let result = await ProductModel.findOneAndUpdate(
+                {
+                    _id: productId 
+                }, 
+                { 
+                    $push: {
+                        attributes: in_data 
+                    } 
+                }, 
+                { 
+                    new: true 
+                }
+            );
             return result;
         } catch (ex) {
             throw ex;
