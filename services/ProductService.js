@@ -1,5 +1,5 @@
 const ProductModel = require('../models').ProductModel;
-const {ObjectId} = require('mongodb');
+const { ObjectId } = require('mongodb');
 
 module.exports = class ProductService {
 
@@ -13,18 +13,19 @@ module.exports = class ProductService {
         try {
             if (!searchTxt) {
                 let result = await ProductModel.find(
-                        {status: {$ne: 'DELETED'}},
-                        // ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'],
-                        this.attributes,
-                        {sort: {created_at: -1}});
+                    { status: { $ne: 'DELETED' } },
+                    // ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'],
+                    this.attributes,
+                    { sort: { created_at: -1 } });
                 return result;
             } else {
                 let result = await ProductModel.find(
-                        {$and: [{$or: [{title: new RegExp(searchTxt, 'i')}], status: {$ne: 'DELETED'}}]},
-                        // ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'],
-                        this.attributes,
-                        {sort: {created_at: -1}
-                        });
+                    { $and: [{ $or: [{ title: new RegExp(searchTxt, 'i') }], status: { $ne: 'DELETED' } }] },
+                    // ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'],
+                    this.attributes,
+                    {
+                        sort: { created_at: -1 }
+                    });
                 return result;
             }
         } catch (ex) {
@@ -45,7 +46,7 @@ module.exports = class ProductService {
 
     async exists(product_title, id = false) {
         try {
-            let condition = (id) ? {product_title: product_title.toLowerCase(), _id: {$ne: id}, status: {$ne: 'DELETED'}} : {product_title: product_title.toLowerCase(), status: {$ne: 'DELETED'}};
+            let condition = (id) ? { product_title: product_title.toLowerCase(), _id: { $ne: id }, status: { $ne: 'DELETED' } } : { product_title: product_title.toLowerCase(), status: { $ne: 'DELETED' } };
             let result = await ProductModel.countDocuments(condition);
             let isExists = result > 0 ? true : false;
             return isExists;
@@ -56,7 +57,7 @@ module.exports = class ProductService {
 
     async slugExists(product_slug, id = false) {
         try {
-            let condition = (id) ? {product_slug: product_slug.toLowerCase(), _id: {$ne: id}, status: {$ne: 'DELETED'}} : {product_slug: product_slug.toLowerCase(), status: {$ne: 'DELETED'}};
+            let condition = (id) ? { product_slug: product_slug.toLowerCase(), _id: { $ne: id }, status: { $ne: 'DELETED' } } : { product_slug: product_slug.toLowerCase(), status: { $ne: 'DELETED' } };
             let result = await ProductModel.countDocuments(condition);
             let isExists = result > 0 ? true : false;
             return isExists;
@@ -68,7 +69,7 @@ module.exports = class ProductService {
     async getById(in_id) {
         try {
             let id = ObjectId(in_id);
-            let result = await ProductModel.findOne({_id: id, status: {$ne: 'DELETED'}});
+            let result = await ProductModel.findOne({ _id: id, status: { $ne: 'DELETED' } });
             return result;
         } catch (ex) {
             throw ex;
@@ -79,14 +80,14 @@ module.exports = class ProductService {
         try {
             let id = ObjectId(in_id);
 
-            if( !in_data.product_title ) {
+            if (in_data.product_title) {
                 in_data.product_title = in_data.product_title.toLowerCase();
             }
-            if( !in_data.product_slug ) {
+            if (in_data.product_slug) {
                 in_data.product_slug = in_data.product_slug.toLowerCase();
             }
 
-            let result = await ProductModel.updateOne({_id: id}, in_data);
+            let result = await ProductModel.updateOne({ _id: id }, in_data);
             return result;
         } catch (ex) {
             throw ex;
@@ -96,7 +97,7 @@ module.exports = class ProductService {
     async isIdExists(in_id) {
         try {
             let id = ObjectId(in_id);
-            let result = await ProductModel.countDocuments({_id: id});
+            let result = await ProductModel.countDocuments({ _id: id });
             let isExists = result > 0 ? true : false;
             return isExists;
         } catch (ex) {
@@ -106,7 +107,7 @@ module.exports = class ProductService {
 
     async isSlugExists(slug) {
         try {
-            let result = await ProductModel.countDocuments({slug: slug});
+            let result = await ProductModel.countDocuments({ slug: slug });
             let isExists = result > 0 ? true : false;
             return isExists;
         } catch (ex) {
@@ -117,9 +118,9 @@ module.exports = class ProductService {
     async getByDepartment(in_id) {
         try {
             let id = ObjectId(in_id);
-            let result = await ProductModel.find({ 
-                department_id: id, 
-                status: { $ne: 'DELETED' } 
+            let result = await ProductModel.find({
+                department_id: id,
+                status: { $ne: 'DELETED' }
             });
             return result;
         } catch (ex) {
@@ -130,9 +131,9 @@ module.exports = class ProductService {
     async getByCategory(in_id) {
         try {
             let id = ObjectId(in_id);
-            let result = await ProductModel.find({ 
-                category_id: id, 
-                status: { $ne: 'DELETED' } 
+            let result = await ProductModel.find({
+                category_id: id,
+                status: { $ne: 'DELETED' }
             });
             return result;
         } catch (ex) {
@@ -143,16 +144,89 @@ module.exports = class ProductService {
     async setStatus(in_data, in_id) {
         try {
             let id = ObjectId(in_id);
-            let result = await ProductModel.updateOne({_id: id}, in_data);
+            let result = await ProductModel.updateOne({ _id: id }, in_data);
             return result;
         } catch (ex) {
             throw ex;
         }
     }
 
-    async setImagePrimary( productId, imageId, data ) {
+    async insertImage(in_productId, in_data) {
+        try {
+            console.log('inside service insertImage');
+            let productId = in_productId;
+            let result = await ProductModel.findOneAndUpdate(
+                {
+                    _id: productId
+                },
+                {
+                    $push: {
+                        images: in_data
+                    }
+                },
+                {
+                    new: true
+                }
+            );
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async deleteImage(in_productId, in_imageId) {
+        try {
+            let imageId = ObjectId(in_imageId);
+            let productId = ObjectId(in_productId);
+            let result = await ProductModel.findOneAndUpdate(
+                {
+                    _id: productId
+                },
+                {
+                    $pull: {
+                        images: {
+                            _id: imageId
+                        }
+                    }
+                },
+                {
+                    new: true
+                }
+            );
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async setAllImagePrimaryFalse(productId) {
+        try {
+            let result = await ProductModel.updateMany(
+                { _id: productId },
+                {
+                    $set: {
+                        "images.$[elem].default": false,
+                        "images.$[elem].updated_at": new Date()
+                    }
+                },
+                {
+                    arrayFilters: [{ "elem.default": true }],
+                    multi: true
+                }
+            );
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async setImagePrimary(productId, imageId, data) {
         try {
 
+            // set all images primary as false
+            let qry = await this.setAllImagePrimaryFalse(productId);
+
+            // set selected image as primary
             let result = await ProductModel.findOneAndUpdate(
                 { _id: productId, "images._id": imageId },
                 {

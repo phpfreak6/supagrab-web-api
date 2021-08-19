@@ -250,113 +250,6 @@ module.exports = class ProductController {
         }
     }
 
-    uploadImage(req, res, next) {
-        try {
-            let id = ObjectId(req.params.id);
-            ProductServiceObj.isIdExists(id)
-                .then(async (isExists) => {
-                    if (!isExists) {
-                        throw 'Invalid Product id.'
-                    }
-                })
-                .then(async (isExists) => {
-                    let imageDetails = req.params.imageDetails;
-                    let images = [];
-    
-                    if( imageDetails.length > 0 ) {
-    
-                    } else {
-                        throw 'Upload atleast one image';
-                    }
-    
-                    imageDetails.forEach(image => {
-                        images.push({
-                            _id: new ObjectId(),
-                            product_id: id,
-                            url: image.fullFileName,
-                            default: 0
-                        });
-                    });
-    
-                    let obj = {
-                        images: images
-                    };
-                    let result = await ProductServiceObj.setStatus( obj, id);
-                    return await responseServiceObj.sendResponse(res, {
-                        msg: 'Product image uploaded successfully',
-                        data: {
-                            product: await ProductServiceObj.getById(id),
-                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
-                        }
-                    });
-                })
-                .catch(async (ex) => {
-                    return await responseServiceObj.sendException(res, {
-                        msg: ex.toString()
-                    });
-                });
-        } catch (ex) {
-            return responseServiceObj.sendException(res, {
-                msg: ex.toString()
-            });
-        }
-    }
-
-    deleteImage(req, res, next) {
-        try {
-            let id = req.params.productId;
-            let image_name = req.params.image;
-            let imagesArr = [];
-            let product;
-
-            id = ObjectId(id);
-            ProductServiceObj.isIdExists(id)
-                .then(async (isExists) => {
-                    if (!isExists) {
-                        throw 'Invalid Product id';
-                    } 
-                    return true;
-                })
-                .then(async (isExists) => {
-                    product = await ProductServiceObj.getById(id);
-                    imagesArr = product.images.filter( image => image.url !== image_name );
-                    return true
-
-                })
-                .then(async (inResult) => {
-                    let file = PRODUCT_IMAGE_UPLOAD_PATH + '/' + image_name;
-                    if (!fs.existsSync(file)) {
-                        throw 'File not exists.';
-                    }
-                    fs.unlinkSync(file);
-                    
-                })
-                .then(async (inResult) => {
-                    // let result = await ProductServiceObj.update({ image: null }, id);
-                    let obj = {
-                        images: imagesArr
-                    };
-                    let result = await ProductServiceObj.setStatus( obj, id);
-                    return await responseServiceObj.sendResponse(res, {
-                        msg: 'Image deleted successfully',
-                        data: {
-                            product: await ProductServiceObj.getById(id),
-                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
-                        }
-                    });
-                })
-                .catch(async (ex) => {
-                    return await responseServiceObj.sendException(res, {
-                        msg: ex.toString()
-                    });
-                });
-        } catch (ex) {
-            return responseServiceObj.sendException(res, {
-                msg: ex.toString()
-            });
-        }
-    }
-
     productByDepartment(req, res, next) {
         try {
             let department_slug = req.params.department_slug;
@@ -444,6 +337,147 @@ module.exports = class ProductController {
         }
     }
 
+    uploadImage(req, res, next) {
+        try {
+            let productId = ObjectId(req.params.id);
+            console.log('productId', productId);
+            ProductServiceObj.isIdExists(productId)
+                .then(async (isExists) => {
+                    if (!isExists) {
+                        throw 'Invalid Product id.'
+                    }
+                })
+                .then(async (in_result) => {
+                    let imageDetails = req.params.imageDetails;    
+                    let obj = {
+                        product_id: productId,
+                        url: imageDetails.fullFileName,
+                        default: 0
+                    };
+                    let result = await ProductServiceObj.insertImage( productId, obj );
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Product image uploaded successfully',
+                        data: {
+                            product: await ProductServiceObj.getById(productId),
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    deleteImage(req, res, next) {
+        try {
+            let productId = req.params.productId;
+            let image_name = req.params.image;
+            let imageId = req.params.imageId;
+            let imagesArr = [];
+            let imagesNameArr = [];
+            let product;
+
+            productId = ObjectId(productId);
+            ProductServiceObj.isIdExists(productId)
+                .then(async (isExists) => {
+                    if (!isExists) {
+                        throw 'Invalid Product id';
+                    } 
+                    return true;
+                })
+                .then(async (result) => {
+                    product = await ProductServiceObj.getById(productId);
+                    // imagesArr = product.images.filter( image => image.url !== image_name );
+                    imagesNameArr = product.images.filter( image => image._id !== imageId );
+                    if( imagesNameArr.length > 0 ) {
+                        image_name = imagesNameArr[0].url;
+                    } else {}
+                    return true;
+                })
+                .then(async (inResult) => {
+                    let file = PRODUCT_IMAGE_UPLOAD_PATH + '/' + image_name;
+                    if (fs.existsSync(file)) {
+                        fs.unlinkSync(file);
+                    }
+                    return true;
+                })
+                .then(async (inResult) => {
+                    let result = await ProductServiceObj.deleteImage( productId, imageId);
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Image deleted successfully',
+                        data: {
+                            product: await ProductServiceObj.getById(productId),
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    setImagePrimary( req, res, next ) {
+        try {
+
+            let in_id = req.params.productId;
+            let productId = ObjectId(in_id);
+
+            let in_image_id = req.params.imageId;
+            let imageId = ObjectId(in_image_id);
+
+            let in_data = req.body;
+            let rules = {
+                default: 'required|boolean'
+            };
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+
+            ProductServiceObj.getById(productId)
+                .then(async (result) => {
+                    return result;
+                })
+                .then(async (result) => {
+                    let product = await ProductServiceObj.setImagePrimary( productId, imageId, in_data);
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Image Set As Primary',
+                        data: {
+                            product: await ProductServiceObj.getById(productId),
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+
+        } catch( ex ) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
     setStatus(req, res, next) {
         try {
 
@@ -486,54 +520,6 @@ module.exports = class ProductController {
 
         } catch (ex) {
 
-            return responseServiceObj.sendException(res, {
-                msg: ex.toString()
-            });
-        }
-    }
-
-    setImagePrimary( req, res, next ) {
-        try {
-
-            let in_id = req.params.productId;
-            let id = ObjectId(in_id);
-
-            let in_image_id = req.params.imageId;
-            let imageId = ObjectId(in_image_id);
-
-            let in_data = req.body;
-            let rules = {
-                default: 'required|boolean'
-            };
-            let validation = new Validator(in_data, rules);
-            if (validation.fails()) {
-
-                return responseServiceObj.sendException(res, {
-                    msg: responseServiceObj.getFirstError(validation)
-                });
-            }
-
-            ProductServiceObj.getById(id)
-                .then(async (result) => {
-                    return result;
-                })
-                .then(async (result) => {
-                    let product = await ProductServiceObj.setImagePrimary( id, imageId, in_data);
-                    return await responseServiceObj.sendResponse(res, {
-                        msg: 'Category Updated Successfully',
-                        data: {
-                            product: await ProductServiceObj.getById(id),
-                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
-                        }
-                    });
-                })
-                .catch(async (ex) => {
-                    return await responseServiceObj.sendException(res, {
-                        msg: ex.toString()
-                    });
-                });
-
-        } catch( ex ) {
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
             });

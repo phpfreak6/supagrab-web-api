@@ -22,6 +22,7 @@ module.exports = class ProductAttributeController {
 
         try {
             let productId = ObjectId(req.params.productId);
+            console.log('productId', productId);
             ProductAttributeServiceObj.get(productId)
             .then(async (result) => {
                 return await responseServiceObj.sendResponse(res, {
@@ -49,6 +50,7 @@ module.exports = class ProductAttributeController {
         try {
 
             let productId = ObjectId(req.params.productId);
+            console.log('inside insert productId', productId);
             let in_data = req.body;
             let rules = {
                 tab_name: 'required',
@@ -62,21 +64,14 @@ module.exports = class ProductAttributeController {
                 });
             }
 
-            // ProductAttributeServiceObj.exists( in_data.key )
-            // .then( async ( isExists ) => {
-            //     if (isExists) {
-            //         throw `${in_data.key} Key already exists.`
-            //     }
-            //     return true;
-            // } )
-
             in_data.product_id = productId;
+            console.log('prod insert in_data', in_data);
             ProductAttributeServiceObj.insert(productId, in_data)
             .then(async (result) => {
                 return await responseServiceObj.sendResponse(res, {
                     msg: 'Record inserted successfully',
                     data: {
-                        product: result,
+                        product: await ProductServiceObj.getById(productId),
                         PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
                     }
                 });

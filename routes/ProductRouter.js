@@ -16,39 +16,40 @@ const path = require('path');
 const multer = require('multer');
 
 let filesArr = [];
-let cntr = 0;
+// let cntr = 0;
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, ImagePath)
 	},
 	filename: function (req, file, cb) {
-		cntr++;
+		// cntr++;
+		let randObj = new ObjectId();
 		let id = req.params.id;
 		let originalname = file.originalname;
-		// let newFileName = id;
-		let newFileName = new ObjectId();
 		let extention = path.extname(originalname);
-		let fullFileName = newFileName +'-'+ cntr + extention;
+		let newFileName = id;
+		newFileName = newFileName +'-'+ randObj;
+		let fullFileName = newFileName + extention;
 		let fullFileNameWithPath = ImagePath + '/' + fullFileName;
 
-		// req.params.imageDetails = {
-		// 	fileOriginalname: originalname,
-		// 	newFileName: newFileName,
-		// 	fileExtention: extention,
-		// 	fullFileName: fullFileName,
-		// 	fullFileNameWithPath: fullFileNameWithPath
-		// };
-		
-		filesArr.push({
+		req.params.imageDetails = {
 			fileOriginalname: originalname,
 			newFileName: newFileName,
 			fileExtention: extention,
 			fullFileName: fullFileName,
 			fullFileNameWithPath: fullFileNameWithPath
-		});
+		};
+		
+		// filesArr.push({
+		// 	fileOriginalname: originalname,
+		// 	newFileName: newFileName,
+		// 	fileExtention: extention,
+		// 	fullFileName: fullFileName,
+		// 	fullFileNameWithPath: fullFileNameWithPath
+		// });
 
-		req.params.imageDetails = filesArr;
+		// req.params.imageDetails = filesArr;
 		cb(null, fullFileName);
 	}
 });
@@ -72,10 +73,6 @@ var arrUpload = upload.array( 'profile_pic', 1 );
  *  ROUTING STARTS
  */
 
-// router.delete('/:id/deletePic/:profilePic', [
-//   ProductControllerObj.deleteProfilePic
-// ]);
-
 router.patch('/setStatus/:id', [
 	ProductControllerObj.setStatus
 ]);
@@ -84,15 +81,11 @@ router.post('/upload-images/:id', arrUpload, [
   ProductControllerObj.uploadImage
 ]);
 
-// router.delete('/delete-uploaded-image/:productId/:imageId', arrUpload, [
-// 	ProductControllerObj.deleteImage
-// ]);
-
 router.patch('/set-image-primary/:productId/:imageId', [
 	ProductControllerObj.setImagePrimary
 ]);
 
-router.patch('/delete-uploaded-image/:productId/:image', arrUpload, [
+router.delete('/delete-uploaded-image/:productId/:imageId', arrUpload, [
 	ProductControllerObj.deleteImage
 ]);
 
