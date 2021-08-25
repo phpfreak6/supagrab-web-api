@@ -40,7 +40,7 @@ router.use('/newsletter', NewsletterRouter);
 /**
  * auth middleware starts
  */
-router.use(AuthControllerObj.verifyToken);
+// router.use(AuthControllerObj.verifyToken);
 /**
  * auth middleware ends
  */

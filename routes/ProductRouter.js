@@ -73,6 +73,10 @@ var arrUpload = upload.array( 'profile_pic', 1 );
  *  ROUTING STARTS
  */
 
+router.get('/slug/:product_slug', [
+	ProductControllerObj.productBySlug
+]);
+
 router.patch('/setStatus/:id', [
 	ProductControllerObj.setStatus
 ]);

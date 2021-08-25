@@ -525,4 +525,29 @@ module.exports = class ProductController {
             });
         }
     }
+
+    productBySlug(req, res, next) {
+        try {
+            let product_slug = req.params.product_slug;
+            ProductServiceObj.getByProductSlug(product_slug)
+                .then(async (result) => {
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Product Fetched Successfully',
+                        data: { 
+                            product: result,
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 };

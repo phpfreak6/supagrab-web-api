@@ -242,4 +242,14 @@ module.exports = class ProductService {
             throw ex;
         }
     }
+
+    async getByProductSlug( in_product_slug ) {
+        try {
+            let product_slug = in_product_slug;
+            let result = await ProductModel.findOne({ product_slug: product_slug, status: { $ne: 'DELETED' } });
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
 };
