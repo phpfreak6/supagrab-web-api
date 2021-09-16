@@ -14,7 +14,7 @@ const ProductServiceObj = new ProductService();
 const UserService = require('../services').UserService;
 const UserServiceObj = new UserService();
 
-module.exports = class FaqController {
+module.exports = class CartController {
 
     constructor() { }
 
@@ -109,7 +109,7 @@ module.exports = class FaqController {
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Record updated successfully',
                         data: {
-                            faq: await CartServiceObj.getCartById(id)
+                            cart: await CartServiceObj.getCartById(id)
                         }
                     });
                 })
@@ -260,7 +260,7 @@ module.exports = class FaqController {
                 return await responseServiceObj.sendResponse( res, {
                     msg : 'Record found',
                     data : {
-                        faq: result
+                        cart: result
                     }
                 } );
             } )
@@ -293,19 +293,19 @@ module.exports = class FaqController {
                 });
             }
 
-            CartServiceObj.isFaqIdExists(id)
+            CartServiceObj.isCartIdExists(id)
                 .then(async (isExists) => {
                     if (!isExists) {
-                        throw 'Invalid faq id.'
+                        throw 'Invalid cart id.'
                     }
                     return true;
                 })
                 .then(async (inResult) => {
                     let result = await CartServiceObj.updateCart(in_data, id);
                     return await responseServiceObj.sendResponse(res, {
-                        msg: 'Faq status updated successfully.',
+                        msg: 'Cart status updated successfully.',
                         data: {
-                            faq: await CartServiceObj.getFaqById(id)
+                            cart: await CartServiceObj.getCartById(id)
                         }
                     });
                 })
