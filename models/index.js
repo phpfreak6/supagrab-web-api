@@ -6,5 +6,6 @@ module.exports = {
     FailedMailModel: require('./FailedMailModel'),
     SiteSettingModel: require('./SiteSettingModel'),
     DepartmentModel: require('./DepartmentModel'),
-    ProductModel: require('./ProductModel')
+    ProductModel: require('./ProductModel'),
+    CartModel: require('./CartModel'),
 };

@@ -18,6 +18,7 @@ const ProductRouter = require('./ProductRouter');
 const ProductReviewRouter = require('./ProductReviewRouter');
 const ProductRatingRouter = require('./ProductRatingRouter');
 const ProductAttributeRouter = require('./ProductAttributeRouter');
+const CartRouter = require('./CartRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -48,6 +49,7 @@ router.use('/newsletter', NewsletterRouter);
 router.use('/users', userRouter);
 router.use('/users', userAddressRouter);
 router.use('/users', WishlistRouter);
+router.use('/users', CartRouter);
 
 router.use('/site-settings', SiteSettingRouter);
 
