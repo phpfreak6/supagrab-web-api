@@ -70,7 +70,7 @@ module.exports = class CartController {
 
                     let result = await CartServiceObj.insertCart(in_data);
                     return await responseServiceObj.sendResponse(res, {
-                        msg: 'Record inserted successfully',
+                        msg: 'Item added to the cart successfully',
                         data: {
                             cart: result
                         }
