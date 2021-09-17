@@ -62,6 +62,12 @@ module.exports = class CartController {
                     return true;
                 } )
                 .then( async (out) => {
+
+                    let isExists = await CartServiceObj.isItemExistsInCart( userId, productId );
+                    if( isExists ) {
+                        throw 'Item already exists in the cart';
+                    }
+
                     let result = await CartServiceObj.insertCart(in_data);
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Record inserted successfully',

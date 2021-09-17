@@ -101,4 +101,18 @@ module.exports = class FaqService {
             throw ex;
         }
     }
+
+    async isItemExistsInCart( userId, productId ) {
+        try {
+
+            let result = await CartModel.countDocuments({ 
+                user_id: userId,
+                product_id: productId
+            });
+            let isExists = result > 0 ? true : false;
+            return isExists;
+        } catch (ex) {
+            throw ex;
+        }
+    }
 }
