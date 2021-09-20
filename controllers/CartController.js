@@ -72,7 +72,7 @@ module.exports = class CartController {
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Item added to the cart successfully',
                         data: {
-                            cart: result
+                            cart: await CartServiceObj.getCartByUser( userId )
                         }
                     });
                 })
