@@ -75,6 +75,8 @@ const ProductSchema = new Schema({
     product_title: {type: String},
     product_slug: {type: String, unique: true},
 
+    product_price:{type: Number, default: 0}, 
+
     attributes: [AttributeSchema],
 
     reviews: [ReviewsSchema],

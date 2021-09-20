@@ -6,7 +6,7 @@ module.exports = class ProductService {
     attributes;
 
     constructor() {
-        this.attributes = ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'];
+        this.attributes = ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'product_price', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'];
     }
 
     async get(searchTxt) {
@@ -153,7 +153,7 @@ module.exports = class ProductService {
 
     async insertImage(in_productId, in_data) {
         try {
-            console.log('inside service insertImage');
+            
             let productId = in_productId;
             let result = await ProductModel.findOneAndUpdate(
                 {

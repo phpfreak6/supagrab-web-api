@@ -134,6 +134,7 @@ module.exports = class ProductController {
                 category_id: 'required',
                 product_title: 'required',
                 product_slug: 'required',
+                product_price: 'required|numeric',
                 // attributes: 'required',
                 // reviews: 'required',
                 status: 'required',
@@ -181,6 +182,7 @@ module.exports = class ProductController {
             in_data.category_id ? rules.category_id = 'required' : '';
             in_data.product_title ? rules.product_title = 'required' : '';
             in_data.product_slug ? rules.product_slug = 'required' : '';
+            in_data.product_price ? in_data.product_price = 'required|numeric' : '',
             // attributes: 'required',
             // reviews: 'required',
             in_data.status ? rules.status = 'required' : '';
