@@ -99,8 +99,7 @@ module.exports = class CartController {
             let in_data = req.body;
             let rules = {};
 			
-			in_data.question ? rules.question = 'required' : '';
-			in_data.answer ? rules.answer = 'required' : '';			
+			in_data.qty ? rules.qty = 'required|numeric' : '';
 			
             let validation = new Validator(in_data, rules);
             if (validation.fails()) {
@@ -113,7 +112,7 @@ module.exports = class CartController {
             CartServiceObj.updateCart(in_data, id)
                 .then(async (result) => {
                     return await responseServiceObj.sendResponse(res, {
-                        msg: 'Record updated successfully',
+                        msg: 'Cart updated successfully',
                         data: {
                             cart: await CartServiceObj.getCartById(id)
                         }

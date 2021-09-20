@@ -14,6 +14,10 @@ const CartControllerObj = new CartController();
 //     CartControllerObj.updateCart
 // ]);
 
+router.patch('/:user_id/cart/:id/update-quantity', [
+    CartControllerObj.updateCart
+]);
+
 router.delete('/:user_id/cart/clear-cart', [
     CartControllerObj.clearCartByUser
 ]);
