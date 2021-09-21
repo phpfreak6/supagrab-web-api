@@ -8,4 +8,5 @@ module.exports = {
     DepartmentModel: require('./DepartmentModel'),
     ProductModel: require('./ProductModel'),
     CartModel: require('./CartModel'),
+    OrderModel: require('./OrderModel'),
 };
