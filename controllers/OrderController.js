@@ -25,6 +25,9 @@ module.exports = class OrderController {
 
         try {
 
+            let products = [];
+            let sub_total = parseFloat(0);
+            let total = parseFloat(0);
             let in_data = req.body;
             let rules = {
                 // customer_id: 'required',
@@ -75,19 +78,18 @@ module.exports = class OrderController {
             CartServiceObj.getCartByUser( userId )
                 .then( async (cartDetails) => {
                     
-                    let data = [];
                     cartDetails.forEach(element => {
-                        data.push({
+                        products.push({
                             user_id: element.user_id,
                             product_id: element.product_id,
                             product_detail: element.product_detail,
                             qty: element.qty,
-                            product_price:element.product_price,
+                            product_price:element.product_detail.product_price,
                             status: 'OPEN'
                         });
                     });
 
-                    in_data['products'] = data;
+                    in_data['products'] = products;
                     return true;
                 } )
                 .then( async(out) => {
@@ -119,17 +121,40 @@ module.exports = class OrderController {
                     return true;
                 } )
                 .then( async(out) => {
+                    let cnt = products.length;
+                    let i = 0;
+                    sub_total = parseFloat(0);
+                    products.forEach(element => {
 
-                    
-                    return true;
+                        let new_sub_total = parseFloat(element.product_price) * parseFloat(element.qty)
+                        sub_total = sub_total + new_sub_total;
+                        i++;
+                    });
+
+                    if( cnt == i ) {
+                        in_data.sub_total = sub_total;
+                        return true;
+                    }
                 } )
                 .then( async(out) => {
 
-                    // transaction_id: { type: String, default: null },
-                    // payment_mode: { type: String, enum: PAYMENT_MODE, default: 'COD' },
-                    // amount: { type: Number, default: 0 },
-                    // transaction_status: { type: Number, enum: TRANSACTION_STATUS, default: 'PENDING' },
+                    // COUPON CODE BLOCK
+                    // COUPON MUST BE APPLIED ON THE CART AMOUNT
 
+                    // coupon_applied: 'required|numeric',
+                    // coupon_code: 'required|numeric',
+                    // coupon_discount_percent: 'required|numeric',
+                    // coupon_discount_amount: 'required|numeric', 
+
+                    // if( coupon_applied ) {
+                    //     sub_total = 
+                    // }
+
+                    // below check Must be executed 
+                    // if( parseFloat( total ) != parseFloat( in_data['amount'] ) ) {
+                    //     throw 'Amount calculations are not matched correctly.';
+                    // }
+                    
                     return true;
                 } )
                 .then( async (out) => {

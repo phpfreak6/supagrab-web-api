@@ -69,9 +69,8 @@ const OrderSchema = new Schema({
     sub_total: { type: Number, default: 0 },
 
     shipping_charge: { type: Number, default: 0 },
-    shipping_amount: { type: Number, default: 0 },
 
-    tax_charge: { type: Number, default: 0 },
+    tax_percentage: { type: Number, default: 0 },
     tax_amount: { type: Number, default: 0 },
 
     coupon_applied: { type: Boolean, default: false },
