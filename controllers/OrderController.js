@@ -172,7 +172,6 @@ module.exports = class OrderController {
                         msg: ex.toString()
                     });
                 } );
-
         } catch (ex) {
 
             return responseServiceObj.sendException(res, {
