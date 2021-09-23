@@ -8,7 +8,7 @@ const responseServiceObj = new ResponseService();
 const CouponService = require('../services').CouponService;
 const CouponServiceObj = new CouponService();
 
-module.exports = class CmsController {
+module.exports = class CouponController {
 
     constructor() { }
 
