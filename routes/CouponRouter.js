@@ -22,6 +22,10 @@ router.get('/:id/exists', [
     CouponControllerObj.isExists
 ]);
 
+router.patch('/:id/setStatus', [
+    CouponControllerObj.setStatus
+]);
+
 router.patch('/:id', [
     CouponControllerObj.update
 ]);

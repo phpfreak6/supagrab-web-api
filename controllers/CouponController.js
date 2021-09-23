@@ -36,7 +36,9 @@ module.exports = class CmsController {
                 });
             }
 
-            CouponServiceObj.isCodeExists(in_data.coupon_code)
+            let coupon_code = in_data.coupon_code;
+            coupon_code = coupon_code.replace(/\s+/g, '-').toUpperCase();
+            CouponServiceObj.isCodeExists(coupon_code)
             .then( async ( isExists ) => {
 
                 if( isExists ) {
@@ -340,6 +342,52 @@ module.exports = class CmsController {
                     return await responseServiceObj.sendException(res, { msg: ex.toString() });
                 });
         } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    setStatus(req, res, next) {
+        try {
+
+            let in_id = req.params.id;
+            let id = ObjectId(in_id);
+            let in_data = req.body;
+            let rules = {
+                status: 'required|in:OPEN,CLOSE'
+            };
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+
+            CouponServiceObj.isIdExists(id)
+                .then(async (isExists) => {
+                    if (!isExists) {
+                        throw 'Invalid coupon id.'
+                    }
+                    return true;
+                })
+                .then(async (inResult) => {
+                    let result = await CouponServiceObj.update(in_data, id);
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Coupon status updated successfully.',
+                        data: {
+                            user: await CouponServiceObj.getById(id)
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+        } catch (ex) {
+
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
             });

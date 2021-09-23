@@ -135,6 +135,10 @@ module.exports = class CouponService {
     async insert(in_data) {
         try {
 
+            let coupon_code = in_data.coupon_code;
+            coupon_code = coupon_code.replace(/\s+/g, '-').toUpperCase();
+            in_data.coupon_code = coupon_code;
+
             let result = await CouponModel.create(in_data);
             return result;
         } catch (ex) {
@@ -146,6 +150,13 @@ module.exports = class CouponService {
         try {
 
             let id = ObjectId(in_id);
+            
+            if( in_data.coupon_code ) {
+                let coupon_code = in_data.coupon_code;
+                coupon_code = coupon_code.replace(/\s+/g, '-').toUpperCase();
+                in_data.coupon_code = coupon_code;
+            }
+
             let result = await CouponModel.updateOne({_id: id}, in_data, {multi: false});
             return result;
         } catch (ex) {
