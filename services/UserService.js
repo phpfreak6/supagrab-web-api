@@ -145,7 +145,6 @@ module.exports = class UserService {
 
             let id = ObjectId(in_id);
             let result = await UserModel.findOne({_id: id, status: {$ne: 'DELETED'}});
-            console.log('inside user service', in_id);
             return result;
         } catch (ex) {
 

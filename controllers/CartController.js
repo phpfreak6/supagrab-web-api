@@ -59,6 +59,7 @@ module.exports = class CartController {
             ProductServiceObj.getById( productId )
                 .then( async (productDetails) => {
                     in_data['product_detail'] = productDetails ? productDetails : [];
+                    in_data['product_price'] = productDetails.product_price ? productDetails.product_price : 0;
                     return true;
                 } )
                 .then( async (out) => {

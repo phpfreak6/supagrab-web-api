@@ -11,6 +11,7 @@ const CartSchema = new Schema({
     product_id: {type: ObjectId, default: null},
     product_detail: {type: Object, default: null},
 
+    product_price:{type: Number, default: 0},
     qty: {type: Number, default: 1},
 
     status: {type: String, enum: STATUSES, default: 'OPEN'},
