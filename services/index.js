@@ -17,4 +17,5 @@ module.exports = {
     ProductAttributeService: require('./ProductAttributeService'),
     CartService: require('./CartService'),
     OrderService: require('./OrderService'),
+    CouponService: require('./CouponService'),
 };

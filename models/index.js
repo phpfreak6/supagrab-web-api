@@ -9,4 +9,5 @@ module.exports = {
     ProductModel: require('./ProductModel'),
     CartModel: require('./CartModel'),
     OrderModel: require('./OrderModel'),
+    CouponModel: require('./CouponModel'),
 };
