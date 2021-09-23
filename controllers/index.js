@@ -16,4 +16,5 @@ module.exports = {
     ProductAttributeController: require('./ProductAttributeController'),
     CartController: require('./CartController'),
     OrderController: require('./OrderController'),
+    CouponController: require('./CouponController'),
 };
