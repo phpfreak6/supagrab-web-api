@@ -86,10 +86,13 @@ module.exports = class CouponService {
 
                             $or: [
                                 {
-                                    key: new RegExp(searchTxt, 'i')
+                                    coupon_title: new RegExp(searchTxt, 'i')
                                 },
                                 {
-                                    value: new RegExp(searchTxt, 'i')
+                                    coupon_code: new RegExp(searchTxt, 'i')
+                                },
+                                {
+                                    coupon_description: new RegExp(searchTxt, 'i')
                                 }
                             ],
                             status: {$ne: 'DELETED'}
