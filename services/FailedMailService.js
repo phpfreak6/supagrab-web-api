@@ -3,9 +3,7 @@ const {ObjectId} = require('mongodb');
 
 module.exports = class FailedMailService {
 
-    constructor() {
-
-    }
+    constructor() {}
 
     async insertFailedMail(dataObj) {
         try {

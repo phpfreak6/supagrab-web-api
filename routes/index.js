@@ -37,13 +37,22 @@ router.use('/', ContactUsRouter);
 router.use('/auth', authRouter);
 router.use('/faqs', FaqRouter);
 router.use('/cms', CmsRouter);
-
 router.use('/newsletter', NewsletterRouter);
+
+router.use('/site-settings', SiteSettingRouter);
+router.use('/departments', DepartmentRouter);
+router.use('/departments', CategoryRouter);
+
+router.use('/products/:productId/attributes', ProductAttributeRouter);
+router.use('/products/:productId/reviews', ProductReviewRouter);
+router.use('/products/:productId/ratings', ProductRatingRouter);
+router.use('/products', ProductRouter);
+router.use('/coupons', CouponRouter);
 
 /**
  * auth middleware starts
  */
-// router.use(AuthControllerObj.verifyToken);
+router.use(AuthControllerObj.verifyToken);
 /**
  * auth middleware ends
  */
@@ -53,15 +62,5 @@ router.use('/users', userAddressRouter);
 router.use('/users', WishlistRouter);
 router.use('/users', CartRouter);
 router.use('/users', OrderRouter);
-
-router.use('/site-settings', SiteSettingRouter);
-
-router.use('/departments', DepartmentRouter);
-router.use('/departments', CategoryRouter);
-router.use('/products/:productId/attributes', ProductAttributeRouter);
-router.use('/products/:productId/reviews', ProductReviewRouter);
-router.use('/products/:productId/ratings', ProductRatingRouter);
-router.use('/products', ProductRouter);
-router.use('/coupons', CouponRouter);
 
 module.exports = router;
