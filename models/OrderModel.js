@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 const STATUSES = ['OPEN', 'CLOSE', 'DELETED'];
 const PAYMENT_MODE = ['COD', 'CARD', 'UPI'];
-const TRANSACTION_STATUS = ['SUCCESS', 'FAILED', 'PENDING'];
+const TRANSACTION_STATUS = ['SUCCESS', 'FAILED', 'PENDING', 'CANCELLED_BY_USER'];
 const GENDER = ['MALE', 'FEMALE'];
 const dated = new Date();
 
@@ -20,9 +20,20 @@ const ProductSchema = new Schema({
 });
 
 const PaymentSchema = new Schema({
+
+    razorpay_order_id: { type: String, default: null },
+    razorpay_payment_id: { type: String, default: null },
+    razorpay_signature: { type: String, default: null },
+    razorpay_options: { type: Object, default: null },
+    razorpay_response: { type: Object, default: null },
+    
     transaction_id: { type: String, default: null },
-    payment_mode: { type: String, enum: PAYMENT_MODE, default: 'COD' },
+    payment_mode: { type: String, enum: PAYMENT_MODE, default: 'CARD' },
     amount: { type: Number, default: 0 },
+    currency: { type: String, default: 'INR' },
+
+    order_id: {type: ObjectId, default: null},
+
     transaction_status: { type: Number, enum: TRANSACTION_STATUS, default: 'PENDING' },
     created_at: {type: Date, default: dated},
     updated_at: {type: Date, default: dated},
