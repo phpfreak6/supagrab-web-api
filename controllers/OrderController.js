@@ -33,6 +33,7 @@ module.exports = class OrderController {
             let grandTotal = parseFloat(0);
             let in_data = req.body;
 
+            let couponApplied = false;
             let couponCode = undefined;
             let couponType = undefined;
             let  discountAmount = 0;
@@ -57,11 +58,11 @@ module.exports = class OrderController {
                 shipping_charge: 'required|numeric',
                 // shipping_amount: 'required|numeric',
 
-                tax_charge: 'required|numeric',
+                // tax_charge: 'required|numeric',
                 // tax_amount: 'required|numeric',
 
-                // coupon_applied: 'required|numeric',
-                coupon_code: 'required',
+                coupon_applied: 'required',
+                // coupon_code: 'required',
                 // coupon_discount_percent: 'required|numeric',
                 // coupon_discount_amount: 'required|numeric',
 
@@ -77,7 +78,7 @@ module.exports = class OrderController {
 
             userId = req.params.user_id;
             couponCode = in_data.coupon_code;
-            console.log('couponCode', couponCode);
+            couponApplied = in_data.coupon_applied;
             let is_valid;
 
             is_valid = ObjectId.isValid(userId);
@@ -133,22 +134,47 @@ module.exports = class OrderController {
                     return true;
                 } )
                 .then( async(out) => {
+                    let cnt = products.length;
+                    let i = 0;
+                    subTotal = parseFloat(0);
+                    await products.forEach(element => {
 
-                    if( couponCode ) {
-                        subTotal = 0;
+                        let new_sub_total = parseFloat(element.product_price) * parseFloat(element.qty)
+                        subTotal = subTotal + new_sub_total;
+                        i++;
+                    });
 
+                    if( cnt == i ) {
+                        in_data.sub_total = subTotal;
+                        return true;
+                    }
+                } )
+                .then( async(out) => {
+
+                    if( couponApplied ) {
+
+                        in_data.coupon_applied = couponApplied;
+                        in_data.coupon_code = couponCode;
+                        
                         // get coupon details by coupon code
                         let couponDetails = await CouponServiceObj.getByCode( couponCode );
                         couponType = couponDetails.coupon_type;
                         discountAmount = couponDetails.discount_amount;
+                        in_data.coupon_type = couponType;
 
                         if( couponType == 'FLAT' ) {
                             grandTotal = subTotal - discountAmount;
 				            discountAmt = discountAmount;
 
+                            in_data.coupon_discount_percent = 0;
+                            in_data.coupon_discount_amount = discountAmount;
+
                         } else if( couponType == 'PERCENTAGE' ) {
                             discountAmt = ((subTotal * discountAmount)/100);
-				            grandTotal = subTotal - ( discountAmt );
+				            grandTotal = subTotal - discountAmt;
+
+                            in_data.coupon_discount_percent = discountAmount;
+                            in_data.coupon_discount_amount = discountAmt;
 
                         } else {
                             discountAmt = 0;
@@ -162,29 +188,15 @@ module.exports = class OrderController {
                             shippingCost = 50;
                         }
                         grandTotal = grandTotal + shippingCost;
+                        in_data.grand_total = grandTotal;
 
-                        // below check Must be executed 
+                        // below check Must be executed
                         if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
                             throw 'Amount calculations are not matched correctly.';
                         }
-                    }         
-                    return true;
-                } )
-                .then( async(out) => {
-                    let cnt = products.length;
-                    let i = 0;
-                    subTotal = parseFloat(0);
-                    products.forEach(element => {
-
-                        let new_sub_total = parseFloat(element.product_price) * parseFloat(element.qty)
-                        subTotal = subTotal + new_sub_total;
-                        i++;
-                    });
-
-                    if( cnt == i ) {
-                        in_data.sub_total = subTotal;
-                        return true;
                     }
+
+                    return true;
                 } )
                 .then( async (out) => {
 

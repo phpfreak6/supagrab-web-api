@@ -5,6 +5,7 @@ const STATUSES = ['OPEN', 'CLOSE', 'DELETED'];
 const PAYMENT_MODE = ['COD', 'CARD', 'UPI'];
 const TRANSACTION_STATUS = ['SUCCESS', 'FAILED', 'PENDING', 'CANCELLED_BY_USER'];
 const GENDER = ['MALE', 'FEMALE'];
+const COUPON_TYPE = ['FLAT', 'PERCENTAGE'];
 const dated = new Date();
 
 const ProductSchema = new Schema({
@@ -86,10 +87,11 @@ const OrderSchema = new Schema({
 
     coupon_applied: { type: Boolean, default: false },
     coupon_code: { type: String, default: null },
+    coupon_type: { type: String, enum: COUPON_TYPE },
     coupon_discount_percent: { type: Number, default: null },
     coupon_discount_amount: { type: Number, default: 0 },
 
-    total: { type: Number, default: 0 },
+    grand_total: { type: Number, default: 0 },
 
     status: {type: String, enum: STATUSES, default: 'OPEN'},
     created_at: {type: Date, default: dated},
