@@ -17,6 +17,9 @@ const UserServiceObj = new UserService();
 const OrderService = require('../services').OrderService;
 const OrderServiceObj = new OrderService();
 
+const CouponService = require('../services').CouponService;
+const CouponServiceObj = new CouponService();
+
 module.exports = class OrderController {
 
     constructor() { }
@@ -26,9 +29,17 @@ module.exports = class OrderController {
         try {
 
             let products = [];
-            let sub_total = parseFloat(0);
-            let total = parseFloat(0);
+            let subTotal = parseFloat(0);
+            let grandTotal = parseFloat(0);
             let in_data = req.body;
+
+            let couponCode = undefined;
+            let couponType = undefined;
+            let  discountAmount = 0;
+            let shippingCost = 0;
+            let discountAmt = 0;
+            
+            let userId = undefined;
             let rules = {
                 // customer_id: 'required',
                 // customer_details: 'required|numeric',
@@ -50,7 +61,7 @@ module.exports = class OrderController {
                 // tax_amount: 'required|numeric',
 
                 // coupon_applied: 'required|numeric',
-                // coupon_code: 'required|numeric',
+                coupon_code: 'required',
                 // coupon_discount_percent: 'required|numeric',
                 // coupon_discount_amount: 'required|numeric',
 
@@ -64,8 +75,9 @@ module.exports = class OrderController {
                 });
             }
 
-            let userId = req.params.user_id;
-
+            userId = req.params.user_id;
+            couponCode = in_data.coupon_code;
+            console.log('couponCode', couponCode);
             let is_valid;
 
             is_valid = ObjectId.isValid(userId);
@@ -121,41 +133,58 @@ module.exports = class OrderController {
                     return true;
                 } )
                 .then( async(out) => {
+
+                    if( couponCode ) {
+                        subTotal = 0;
+
+                        // get coupon details by coupon code
+                        let couponDetails = await CouponServiceObj.getByCode( couponCode );
+                        couponType = couponDetails.coupon_type;
+                        discountAmount = couponDetails.discount_amount;
+
+                        if( couponType == 'FLAT' ) {
+                            grandTotal = subTotal - discountAmount;
+				            discountAmt = discountAmount;
+
+                        } else if( couponType == 'PERCENTAGE' ) {
+                            discountAmt = ((subTotal * discountAmount)/100);
+				            grandTotal = subTotal - ( discountAmt );
+
+                        } else {
+                            discountAmt = 0;
+				            grandTotal = subTotal - ( discountAmt );
+                        }
+
+                        if( subTotal >= 700 ) {
+                            shippingCost = 0;
+                        
+                        } else {
+                            shippingCost = 50;
+                        }
+                        grandTotal = grandTotal + shippingCost;
+
+                        // below check Must be executed 
+                        if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
+                            throw 'Amount calculations are not matched correctly.';
+                        }
+                    }         
+                    return true;
+                } )
+                .then( async(out) => {
                     let cnt = products.length;
                     let i = 0;
-                    sub_total = parseFloat(0);
+                    subTotal = parseFloat(0);
                     products.forEach(element => {
 
                         let new_sub_total = parseFloat(element.product_price) * parseFloat(element.qty)
-                        sub_total = sub_total + new_sub_total;
+                        subTotal = subTotal + new_sub_total;
                         i++;
                     });
 
                     if( cnt == i ) {
-                        in_data.sub_total = sub_total;
+                        in_data.sub_total = subTotal;
                         return true;
                     }
-                } )
-                .then( async(out) => {
-
-                    // COUPON CODE BLOCK
-                    // COUPON MUST BE APPLIED ON THE CART AMOUNT
-
-                    // coupon_applied: 'required|numeric',
-                    // coupon_code: 'required|numeric',
-                    // coupon_discount_percent: 'required|numeric',
-                    // coupon_discount_amount: 'required|numeric', 
-
-                    // if( coupon_applied ) {
-                    //     sub_total = 
-                    // }
-
-                    // below check Must be executed 
-                    // if( parseFloat( total ) != parseFloat( in_data['amount'] ) ) {
-                    //     throw 'Amount calculations are not matched correctly.';
-                    // }
-                    
-                    return true;
                 } )
                 .then( async (out) => {
 

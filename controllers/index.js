@@ -17,4 +17,5 @@ module.exports = {
     CartController: require('./CartController'),
     OrderController: require('./OrderController'),
     CouponController: require('./CouponController'),
+	RazorPayController : require('./RazorPayController')
 };
