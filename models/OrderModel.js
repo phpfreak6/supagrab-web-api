@@ -35,7 +35,7 @@ const PaymentSchema = new Schema({
 
     order_id: {type: ObjectId, default: null},
 
-    transaction_status: { type: Number, enum: TRANSACTION_STATUS, default: 'PENDING' },
+    transaction_status: { type: String, enum: TRANSACTION_STATUS, default: 'PENDING' },
     created_at: {type: Date, default: dated},
     updated_at: {type: Date, default: dated},
     deleted_at: {type: Date, default: null}

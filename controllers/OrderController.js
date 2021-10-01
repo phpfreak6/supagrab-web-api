@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Validator = require('validatorjs');
 const { ObjectId } = require('mongodb');
+const Razorpay = require('razorpay');
 
 const ResponseService = require('../services').ResponseService;
 const responseServiceObj = new ResponseService();
@@ -20,9 +21,17 @@ const OrderServiceObj = new OrderService();
 const CouponService = require('../services').CouponService;
 const CouponServiceObj = new CouponService();
 
+let $this;
 module.exports = class OrderController {
 
-    constructor() { }
+    RazorpayObj = new Razorpay({
+        key_id: 'rzp_test_48cTOMEXh9OIUO',
+        key_secret: '0nUMDEz7Rxo4egwn9gZMHGPe',
+    });
+
+    constructor() {
+        $this = this;
+    }
 
     insert(req, res, next) {
 
@@ -39,6 +48,7 @@ module.exports = class OrderController {
             let  discountAmount = 0;
             let shippingCost = 0;
             let discountAmt = 0;
+            let orderResult;
             
             let userId = undefined;
             let rules = {
@@ -178,7 +188,7 @@ module.exports = class OrderController {
 
                         } else {
                             discountAmt = 0;
-				            grandTotal = subTotal - ( discountAmt );
+				            grandTotal = subTotal - discountAmt;
                         }
 
                         if( subTotal >= 700 ) {
@@ -190,10 +200,13 @@ module.exports = class OrderController {
                         grandTotal = grandTotal + shippingCost;
                         in_data.grand_total = grandTotal;
 
-                        // below check Must be executed
-                        if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
-                            throw 'Amount calculations are not matched correctly.';
-                        }
+                        console.log('****************************************************');
+                        console.log('in_data', in_data);
+                        console.log('****************************************************');
+                    }
+                    // below check Must be executed
+                    if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
+                        throw 'Amount calculations are not matched correctly.';
                     }
 
                     return true;
@@ -201,13 +214,46 @@ module.exports = class OrderController {
                 .then( async (out) => {
 
                     let result = await OrderServiceObj.insert(in_data);
-                    return await responseServiceObj.sendResponse(res, {
-                        msg: 'Order Placed successfully',
-                        // data: {
-                        //     cart: await CartServiceObj.getCartByUser( userId )
-                        // }
-                    });
+                    orderResult = result;
+                    return result;
                 })
+                .then( async (result) => {
+
+                    let options = {
+                        amount: grandTotal * 100,
+                        currency: 'INR',
+                        receipt: result._id.toString()
+                    };
+
+                    $this.RazorpayObj.orders.create(
+                        options, 
+                        async (err, order) => {
+                            console.log(order);
+                            
+                            if( err ) {
+                                return await responseServiceObj.sendException(res, {
+                                    msg: "error occured",
+                                    data: err
+                                });
+
+                            } else {
+
+                                let orderDetailsInData = {
+                                    razorpay_order_id: order.id,
+                                    razorpay_options: order
+                                };
+
+                                let result = OrderServiceObj.update( orderResult._id, orderDetailsInData );
+                                return await responseServiceObj.sendResponse(res, {
+                                    msg: 'Order Placed successfully',
+                                    data: {
+                                        order: result
+                                    }
+                                });
+                            }
+                        }
+                    );
+                } )
                 .catch( async ( ex ) => {
                     return await responseServiceObj.sendException(res, {
                         msg: ex.toString()
