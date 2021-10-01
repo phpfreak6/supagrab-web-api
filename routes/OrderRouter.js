@@ -10,9 +10,9 @@ const OrderControllerObj = new OrderController();
  * ORDER ROUTING STARTS
  */
 
-// router.patch('/:user_id/cart/:id', [
-//     OrderControllerObj.updateCart
-// ]);
+router.patch('/:user_id/cart/:id', [
+    OrderControllerObj.update
+]);
 
 // router.patch('/:user_id/cart/:id/update-quantity', [
 //     OrderControllerObj.updateCart

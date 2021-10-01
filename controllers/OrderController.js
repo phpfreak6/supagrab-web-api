@@ -266,4 +266,65 @@ module.exports = class OrderController {
             });
         }
     }
+
+    update( req, res, next ) {
+
+        try {
+
+            let in_data = req.body;
+            let rules = {
+                order_id: 'required',
+                razorpay_payment_id: 'required',
+                // razorpay_signature: 'required',
+                // razorpay_response: 'required'
+            };
+
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+
+            $this.RazorpayObj.payments
+            .fetch( req.body.razorpay_payment_id )
+            .then( async (paymentDocument) => {
+                console.log('paymentDocument', paymentDocument);
+                if( paymentDocument.status == 'captured' ) {
+
+                    let orderDetailsInData = {
+                        razorpay_payment_id: in_data.razorpay_payment_id,
+                        razorpay_signature: in_data.razorpay_signature,
+                        razorpay_response: in_data.razorpay_response
+                    };
+
+                    let result = OrderServiceObj.update( in_data.order_id, orderDetailsInData );
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Payment Successfull',
+                        data: {
+                            paymentDocument: paymentDocument,
+                            result: result
+                        }
+                    });
+                } else {
+                    return responseServiceObj.sendException(res, {
+                        msg: 'Payment un-successfull',
+                        data: paymentDocument
+                    });
+                }
+            } )
+            .catch( (ex) => {
+                return responseServiceObj.sendException(res, {
+                    msg: ex.toString()
+                });
+            } );
+
+        } catch (ex) {
+
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
 }
