@@ -199,10 +199,6 @@ module.exports = class OrderController {
                         }
                         grandTotal = grandTotal + shippingCost;
                         in_data.grand_total = grandTotal;
-
-                        console.log('****************************************************');
-                        console.log('in_data', in_data);
-                        console.log('****************************************************');
                     }
                     // below check Must be executed
                     if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
@@ -240,14 +236,18 @@ module.exports = class OrderController {
 
                                 let orderDetailsInData = {
                                     razorpay_order_id: order.id,
-                                    razorpay_options: order
+                                    razorpay_options: order,
+                                    order_id: ObjectId(order.receipt),
+                                    amount: (parseFloat(order.amount)/100)
                                 };
 
                                 let result = OrderServiceObj.update( orderResult._id, orderDetailsInData );
                                 return await responseServiceObj.sendResponse(res, {
                                     msg: 'Order Placed successfully',
                                     data: {
-                                        order: result
+                                        // order: result
+                                        order: await OrderServiceObj.getById(orderResult._id),
+                                        razorpay_order_id: order.id
                                     }
                                 });
                             }
@@ -271,12 +271,15 @@ module.exports = class OrderController {
 
         try {
 
+            let user_id = ObjectId(req.params.user_id);
             let in_data = req.body;
             let rules = {
                 order_id: 'required',
                 razorpay_payment_id: 'required',
-                // razorpay_signature: 'required',
-                // razorpay_response: 'required'
+                razorpay_order_id: 'required',
+                razorpay_signature: 'required',
+                razorpay_response: 'required',
+                razorpay_options: 'required',
             };
 
             let validation = new Validator(in_data, rules);
@@ -290,16 +293,14 @@ module.exports = class OrderController {
             $this.RazorpayObj.payments
             .fetch( req.body.razorpay_payment_id )
             .then( async (paymentDocument) => {
-                console.log('paymentDocument', paymentDocument);
+
                 if( paymentDocument.status == 'captured' ) {
+                    in_data['payment_document'] = paymentDocument;
+                    in_data['amount'] = paymentDocument.amount;
+                    in_data['transaction_status'] = 'SUCCESS';
 
-                    let orderDetailsInData = {
-                        razorpay_payment_id: in_data.razorpay_payment_id,
-                        razorpay_signature: in_data.razorpay_signature,
-                        razorpay_response: in_data.razorpay_response
-                    };
+                    let result = OrderServiceObj.update( in_data.order_id, in_data );
 
-                    let result = OrderServiceObj.update( in_data.order_id, orderDetailsInData );
                     return await responseServiceObj.sendResponse(res, {
                         msg: 'Payment Successfull',
                         data: {
@@ -308,6 +309,10 @@ module.exports = class OrderController {
                         }
                     });
                 } else {
+
+                    in_data['transaction_status'] = 'FAILED';
+                    let result = OrderServiceObj.update( in_data.order_id, in_data );
+
                     return responseServiceObj.sendException(res, {
                         msg: 'Payment un-successfull',
                         data: paymentDocument
@@ -315,6 +320,35 @@ module.exports = class OrderController {
                 }
             } )
             .catch( (ex) => {
+                return responseServiceObj.sendException(res, {
+                    msg: ex.toString()
+                });
+            } );
+
+        } catch (ex) {
+
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    paymentFailed( req, res, next ) {
+
+        try {
+
+            let order_id = req.params.order_id;
+            
+            OrderServiceObj.paymentFailed( order_id, 'FAILED' )
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse(res, {
+                    msg: 'Payment Failed',
+                    data: {
+                        order: await OrderServiceObj.getById(order_id)
+                    }
+                });
+            } )
+            .catch( async (ex) => {
                 return responseServiceObj.sendException(res, {
                     msg: ex.toString()
                 });

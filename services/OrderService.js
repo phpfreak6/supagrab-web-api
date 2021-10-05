@@ -15,12 +15,52 @@ module.exports = class OrderService {
         }
     }
 
-    async update( order_id, in_data ) {
+    async update( in_order_id, in_data ) {
         try {
 
-            let result = await OrderModel.findOneAndUpdate({ _id: order_id }, {"payment": in_data}, { new: true });
+            let order_id = ObjectId(in_order_id);
+            let result = await OrderModel.findOneAndUpdate(
+                { _id: order_id }, 
+                { 
+                    $set:{
+                        "payment": in_data 
+                    }
+                }, 
+                { new: true }
+            );
             return result;
         } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async paymentFailed(in_order_id, status) {
+        try {
+
+            let order_id = ObjectId(in_order_id);
+            let result = await OrderModel.findOneAndUpdate(
+                { _id: order_id }, 
+                { 
+                    $set:{
+                        "payment.transaction_status": status
+                    }
+                }, 
+                { new: true }
+            );
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async getById(in_id) {
+        try {
+
+            let id = ObjectId(in_id);
+            let result = await OrderModel.findOne({_id: id, status: {$ne: 'DELETED'}});
+            return result;
+        } catch (ex) {
+
             throw ex;
         }
     }

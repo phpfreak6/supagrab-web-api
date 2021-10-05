@@ -10,6 +10,10 @@ const OrderControllerObj = new OrderController();
  * ORDER ROUTING STARTS
  */
 
+router.patch('/:user_id/order/:order_id/status', [
+    OrderControllerObj.paymentFailed
+]);
+
 router.patch('/:user_id/order', [
     OrderControllerObj.update
 ]);

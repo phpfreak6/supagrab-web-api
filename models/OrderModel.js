@@ -25,8 +25,11 @@ const PaymentSchema = new Schema({
     razorpay_order_id: { type: String, default: null },
     razorpay_payment_id: { type: String, default: null },
     razorpay_signature: { type: String, default: null },
+    
     razorpay_options: { type: Object, default: null },
     razorpay_response: { type: Object, default: null },
+
+    payment_document: { type: Object, default: null },
     
     transaction_id: { type: String, default: null },
     payment_mode: { type: String, enum: PAYMENT_MODE, default: 'CARD' },
