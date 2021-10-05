@@ -15,7 +15,8 @@ module.exports = class UserAddressController {
 
     async getUserAddresses(req, res, next) {
         try {
-            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            // let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            let user_id = ObjectId(req.params.user_id);
             let userAddressesObj = await UserAddressServiceObj.getUserAddresses(user_id);
             return await responseServiceObj.sendResponse(res, {
                 msg: 'User Addresses Fetched Successfully',
@@ -32,7 +33,11 @@ module.exports = class UserAddressController {
 
     async insertUserAddress(req, res, next) {
         try {
-            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            console.log('inside insertUserAddress');
+            // console.log('req.authData.id',req.authData.id);
+            // console.log('req.params.user_id',req.params.user_id);
+            // let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            let user_id = ObjectId(req.params.user_id);
             let dataObj = req.body;
             let rules = {
                 full_name: 'required',
@@ -88,7 +93,8 @@ module.exports = class UserAddressController {
 
     async updateUserAddress(req, res, next) {
         try {
-            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            // let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            let user_id = ObjectId(req.params.user_id);
             let address_id = ObjectId(req.params.address_id);
             let dataObj = req.body;
             let rules = {
@@ -126,7 +132,8 @@ module.exports = class UserAddressController {
 
     async getUserAddressByAddressId(req, res, next) {
         try {
-            let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            // let user_id = ObjectId(req.authData.id ? req.authData.id : req.params.user_id);
+            let user_id = ObjectId(req.params.user_id);
             let address_id = ObjectId(req.params.address_id);
             let result = await UserAddressServiceObj.getUserAddressByAddressId(user_id, address_id);
             return await responseServiceObj.sendResponse(res, {

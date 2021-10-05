@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Validator = require('validatorjs');
 const { ObjectId } = require('mongodb');
+const Razorpay = require('razorpay');
 
 const ResponseService = require('../services').ResponseService;
 const responseServiceObj = new ResponseService();
@@ -17,18 +18,39 @@ const UserServiceObj = new UserService();
 const OrderService = require('../services').OrderService;
 const OrderServiceObj = new OrderService();
 
+const CouponService = require('../services').CouponService;
+const CouponServiceObj = new CouponService();
+
+let $this;
 module.exports = class OrderController {
 
-    constructor() { }
+    RazorpayObj = new Razorpay({
+        key_id: 'rzp_test_48cTOMEXh9OIUO',
+        key_secret: '0nUMDEz7Rxo4egwn9gZMHGPe',
+    });
+
+    constructor() {
+        $this = this;
+    }
 
     insert(req, res, next) {
 
         try {
 
             let products = [];
-            let sub_total = parseFloat(0);
-            let total = parseFloat(0);
+            let subTotal = parseFloat(0);
+            let grandTotal = parseFloat(0);
             let in_data = req.body;
+
+            let couponApplied = false;
+            let couponCode = undefined;
+            let couponType = undefined;
+            let  discountAmount = 0;
+            let shippingCost = 0;
+            let discountAmt = 0;
+            let orderResult;
+            
+            let userId = undefined;
             let rules = {
                 // customer_id: 'required',
                 // customer_details: 'required|numeric',
@@ -46,11 +68,11 @@ module.exports = class OrderController {
                 shipping_charge: 'required|numeric',
                 // shipping_amount: 'required|numeric',
 
-                tax_charge: 'required|numeric',
+                // tax_charge: 'required|numeric',
                 // tax_amount: 'required|numeric',
 
-                // coupon_applied: 'required|numeric',
-                // coupon_code: 'required|numeric',
+                coupon_applied: 'required',
+                // coupon_code: 'required',
                 // coupon_discount_percent: 'required|numeric',
                 // coupon_discount_amount: 'required|numeric',
 
@@ -64,8 +86,9 @@ module.exports = class OrderController {
                 });
             }
 
-            let userId = req.params.user_id;
-
+            userId = req.params.user_id;
+            couponCode = in_data.coupon_code;
+            couponApplied = in_data.coupon_applied;
             let is_valid;
 
             is_valid = ObjectId.isValid(userId);
@@ -123,55 +146,214 @@ module.exports = class OrderController {
                 .then( async(out) => {
                     let cnt = products.length;
                     let i = 0;
-                    sub_total = parseFloat(0);
-                    products.forEach(element => {
+                    subTotal = parseFloat(0);
+                    await products.forEach(element => {
 
                         let new_sub_total = parseFloat(element.product_price) * parseFloat(element.qty)
-                        sub_total = sub_total + new_sub_total;
+                        subTotal = subTotal + new_sub_total;
                         i++;
                     });
 
                     if( cnt == i ) {
-                        in_data.sub_total = sub_total;
+                        in_data.sub_total = subTotal;
                         return true;
                     }
                 } )
                 .then( async(out) => {
 
-                    // COUPON CODE BLOCK
-                    // COUPON MUST BE APPLIED ON THE CART AMOUNT
+                    if( couponApplied ) {
 
-                    // coupon_applied: 'required|numeric',
-                    // coupon_code: 'required|numeric',
-                    // coupon_discount_percent: 'required|numeric',
-                    // coupon_discount_amount: 'required|numeric', 
+                        in_data.coupon_applied = couponApplied;
+                        in_data.coupon_code = couponCode;
+                        
+                        // get coupon details by coupon code
+                        let couponDetails = await CouponServiceObj.getByCode( couponCode );
+                        couponType = couponDetails.coupon_type;
+                        discountAmount = couponDetails.discount_amount;
+                        in_data.coupon_type = couponType;
 
-                    // if( coupon_applied ) {
-                    //     sub_total = 
-                    // }
+                        if( couponType == 'FLAT' ) {
+                            grandTotal = subTotal - discountAmount;
+				            discountAmt = discountAmount;
 
-                    // below check Must be executed 
-                    // if( parseFloat( total ) != parseFloat( in_data['amount'] ) ) {
-                    //     throw 'Amount calculations are not matched correctly.';
-                    // }
-                    
+                            in_data.coupon_discount_percent = 0;
+                            in_data.coupon_discount_amount = discountAmount;
+
+                        } else if( couponType == 'PERCENTAGE' ) {
+                            discountAmt = ((subTotal * discountAmount)/100);
+				            grandTotal = subTotal - discountAmt;
+
+                            in_data.coupon_discount_percent = discountAmount;
+                            in_data.coupon_discount_amount = discountAmt;
+
+                        } else {
+                            discountAmt = 0;
+				            grandTotal = subTotal - discountAmt;
+                        }
+
+                        if( subTotal >= 700 ) {
+                            shippingCost = 0;
+                        
+                        } else {
+                            shippingCost = 50;
+                        }
+                        grandTotal = grandTotal + shippingCost;
+                        in_data.grand_total = grandTotal;
+                    }
+                    // below check Must be executed
+                    if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
+                        throw 'Amount calculations are not matched correctly.';
+                    }
+
                     return true;
                 } )
                 .then( async (out) => {
 
                     let result = await OrderServiceObj.insert(in_data);
-                    return await responseServiceObj.sendResponse(res, {
-                        msg: 'Order Placed successfully',
-                        // data: {
-                        //     cart: await CartServiceObj.getCartByUser( userId )
-                        // }
-                    });
+                    orderResult = result;
+                    return result;
                 })
+                .then( async (result) => {
+
+                    let options = {
+                        amount: grandTotal * 100,
+                        currency: 'INR',
+                        receipt: result._id.toString()
+                    };
+
+                    $this.RazorpayObj.orders.create(
+                        options, 
+                        async (err, order) => {
+                            console.log(order);
+                            
+                            if( err ) {
+                                return await responseServiceObj.sendException(res, {
+                                    msg: "error occured",
+                                    data: err
+                                });
+
+                            } else {
+
+                                let orderDetailsInData = {
+                                    razorpay_order_id: order.id,
+                                    razorpay_options: order,
+                                    order_id: ObjectId(order.receipt),
+                                    amount: (parseFloat(order.amount)/100)
+                                };
+
+                                let result = OrderServiceObj.update( orderResult._id, orderDetailsInData );
+                                return await responseServiceObj.sendResponse(res, {
+                                    msg: 'Order Placed successfully',
+                                    data: {
+                                        // order: result
+                                        order: await OrderServiceObj.getById(orderResult._id),
+                                        razorpay_order_id: order.id
+                                    }
+                                });
+                            }
+                        }
+                    );
+                } )
                 .catch( async ( ex ) => {
                     return await responseServiceObj.sendException(res, {
                         msg: ex.toString()
                     });
                 } );
+        } catch (ex) {
+
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    update( req, res, next ) {
+
+        try {
+
+            let user_id = ObjectId(req.params.user_id);
+            let in_data = req.body;
+            let rules = {
+                order_id: 'required',
+                razorpay_payment_id: 'required',
+                razorpay_order_id: 'required',
+                razorpay_signature: 'required',
+                razorpay_response: 'required',
+                razorpay_options: 'required',
+            };
+
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+
+                return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+
+            $this.RazorpayObj.payments
+            .fetch( req.body.razorpay_payment_id )
+            .then( async (paymentDocument) => {
+
+                if( paymentDocument.status == 'captured' ) {
+                    in_data['payment_document'] = paymentDocument;
+                    in_data['amount'] = paymentDocument.amount;
+                    in_data['transaction_status'] = 'SUCCESS';
+
+                    let result = OrderServiceObj.update( in_data.order_id, in_data );
+
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Payment Successfull',
+                        data: {
+                            paymentDocument: paymentDocument,
+                            result: result
+                        }
+                    });
+                } else {
+
+                    in_data['transaction_status'] = 'FAILED';
+                    let result = OrderServiceObj.update( in_data.order_id, in_data );
+
+                    return responseServiceObj.sendException(res, {
+                        msg: 'Payment un-successfull',
+                        data: paymentDocument
+                    });
+                }
+            } )
+            .catch( (ex) => {
+                return responseServiceObj.sendException(res, {
+                    msg: ex.toString()
+                });
+            } );
+
+        } catch (ex) {
+
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    paymentFailed( req, res, next ) {
+
+        try {
+
+            let order_id = req.params.order_id;
+            
+            OrderServiceObj.paymentFailed( order_id, 'FAILED' )
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse(res, {
+                    msg: 'Payment Failed',
+                    data: {
+                        order: await OrderServiceObj.getById(order_id)
+                    }
+                });
+            } )
+            .catch( async (ex) => {
+                return responseServiceObj.sendException(res, {
+                    msg: ex.toString()
+                });
+            } );
+
         } catch (ex) {
 
             return responseServiceObj.sendException(res, {

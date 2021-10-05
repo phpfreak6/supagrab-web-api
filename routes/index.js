@@ -52,7 +52,7 @@ router.use('/coupons', CouponRouter);
 /**
  * auth middleware starts
  */
-router.use(AuthControllerObj.verifyToken);
+// router.use(AuthControllerObj.verifyToken);
 /**
  * auth middleware ends
  */
