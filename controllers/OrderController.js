@@ -190,16 +190,24 @@ module.exports = class OrderController {
                             discountAmt = 0;
 				            grandTotal = subTotal - discountAmt;
                         }
+                    } else {
 
-                        if( subTotal >= 700 ) {
-                            shippingCost = 0;
-                        
-                        } else {
-                            shippingCost = 50;
-                        }
-                        grandTotal = grandTotal + shippingCost;
-                        in_data.grand_total = grandTotal;
+                        grandTotal = grandTotal + subTotal;
                     }
+
+                    if( subTotal >= 700 ) {
+                        shippingCost = 0;
+                    
+                    } else {
+                        shippingCost = 50;
+                    }
+                    grandTotal = grandTotal + shippingCost;
+                    in_data.grand_total = grandTotal;
+
+                    console.log('in_data', in_data);
+                    console.log('subTotal', subTotal);
+                    console.log('grandTotal', grandTotal);
+
                     // below check Must be executed
                     if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
                         throw 'Amount calculations are not matched correctly.';
