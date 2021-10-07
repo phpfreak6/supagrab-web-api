@@ -69,7 +69,7 @@ module.exports = class OrderService {
         try {
 
             let id = ObjectId(in_id);
-            let result = await OrderModel.findOne({customer_id: id, status: {$ne: 'DELETED'}});
+            let result = await OrderModel.find({customer_id: id, status: {$ne: 'DELETED'}});
             return result;
         } catch (ex) {
 
