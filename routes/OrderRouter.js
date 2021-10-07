@@ -18,6 +18,14 @@ router.patch('/:user_id/order', [
     OrderControllerObj.update
 ]);
 
+router.get('/:user_id/order/:order_id', [
+    OrderControllerObj.getById
+]);
+
+router.get('/:user_id/order', [
+    OrderControllerObj.getByUser
+]);
+
 // router.patch('/:user_id/cart/:id/update-quantity', [
 //     OrderControllerObj.updateCart
 // ]);
