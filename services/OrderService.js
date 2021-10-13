@@ -3,7 +3,35 @@ const {ObjectId} = require('mongodb');
 
 module.exports = class OrderService {
 
-    constructor() {}
+    attributes;
+
+    constructor() {
+        this.attributes = ['_id', 'customer_id', 'sub_total', 'shipping_charge', 'tax_percentage', 'tax_amount', 'coupon_applied', 'coupon_code', 'coupon_discount_percent', 'coupon_discount_amount', 'grand_total', 'status', 'created_at','updated_at', 'deleted_at', 'address', 'products', 'customer_details', 'payment'];
+    }
+
+    async get(searchTxt) {
+        try {
+            if (!searchTxt) {
+                let result = await OrderModel.find(
+                    { status: { $ne: 'DELETED' } },
+                    // ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'],
+                    this.attributes,
+                    { sort: { created_at: -1 } });
+                return result;
+            } else {
+                let result = await OrderModel.find(
+                    { $and: [{ $or: [{ title: new RegExp(searchTxt, 'i') }], status: { $ne: 'DELETED' } }] },
+                    // ['_id', 'department_id', 'category_id', 'product_title', 'product_slug', 'attributes', 'reviews', 'images', 'status', 'created_at', 'updated_at', 'deleted_at'],
+                    this.attributes,
+                    {
+                        sort: { created_at: -1 }
+                    });
+                return result;
+            }
+        } catch (ex) {
+            throw ex;
+        }
+    }
 
     async insert(in_data) {
         try {
@@ -28,6 +56,16 @@ module.exports = class OrderService {
                 }, 
                 { new: true }
             );
+            return result;
+        } catch (ex) {
+            throw ex;
+        }
+    }
+
+    async updateStatus(in_id, in_data) {
+        try {
+            let id = ObjectId(in_id);
+            let result = await OrderModel.updateOne({ _id: id }, in_data);
             return result;
         } catch (ex) {
             throw ex;

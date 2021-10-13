@@ -10,20 +10,16 @@ const OrderControllerObj = new OrderController();
  * ORDER ROUTING STARTS
  */
 
-router.patch('/:user_id/order/:order_id/status', [
-    OrderControllerObj.paymentFailed
+router.patch('/:order_id', [
+    OrderControllerObj.setOrderStatus
 ]);
 
-router.patch('/:user_id/order', [
-    OrderControllerObj.update
-]);
-
-router.get('/:user_id/order/:order_id', [
+router.get('/:order_id', [
     OrderControllerObj.getById
 ]);
 
-router.get('/:user_id/order', [
-    OrderControllerObj.getByUser
+router.get('/', [
+    OrderControllerObj.get
 ]);
 
 // router.patch('/:user_id/cart/:id/update-quantity', [
@@ -41,10 +37,6 @@ router.get('/:user_id/order', [
 // router.get('/:user_id/cart/:id', [
 //     OrderControllerObj.getCartById
 // ]);
-
-router.post('/:user_id/order', [
-    OrderControllerObj.insert
-]);
 
 // router.get('/:user_id/cart/', [
 //     OrderControllerObj.getCartByUser
