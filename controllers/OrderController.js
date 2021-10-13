@@ -21,6 +21,8 @@ const OrderServiceObj = new OrderService();
 const CouponService = require('../services').CouponService;
 const CouponServiceObj = new CouponService();
 
+let PRODUCT_IMAGE_PATH = require('../config/config').PRODUCT_IMAGE_PATH;
+
 let $this;
 module.exports = class OrderController {
 
@@ -31,6 +33,90 @@ module.exports = class OrderController {
 
     constructor() {
         $this = this;
+    }
+
+    get(req, res, next) {
+
+        try {
+            let searchTxt = req.query.searchTxt;
+            OrderServiceObj
+                .get(searchTxt)
+                .then(async (result) => {
+                    return await responseServiceObj.sendResponse(res, {
+                        msg: 'Orders Fetched Successfully',
+                        data: { 
+                            order: result,
+                            PRODUCT_IMAGE_PATH: PRODUCT_IMAGE_PATH
+                        }
+                    });
+                })
+                .catch(async (ex) => {
+                    return await responseServiceObj.sendException(res, {
+                        msg: ex.toString()
+                    });
+                });
+        } catch (ex) {
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    getById( req, res, next ) {
+
+        try {
+
+            let order_id = req.params.order_id;
+            let user_id = req.params.user_id;
+
+            OrderServiceObj.getById(order_id)
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse(res, {
+                    msg: 'Record Found.',
+                    data: {
+                        order: result
+                    }
+                })
+            })
+            .catch( async (ex) => {
+                return responseServiceObj.sendException(res, {
+                    msg: ex.toString()
+                });
+            } );            
+        } catch (ex) {
+
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
+    }
+
+    getByUser( req, res, next ) {
+
+        try {
+
+            let user_id = req.params.user_id;
+
+            OrderServiceObj.getByUser(user_id)
+            .then( async (result) => {
+                return await responseServiceObj.sendResponse(res, {
+                    msg: 'Record Found.',
+                    data: {
+                        order: result
+                    }
+                })
+            })
+            .catch( async (ex) => {
+                return responseServiceObj.sendException(res, {
+                    msg: ex.toString()
+                });
+            } );            
+        } catch (ex) {
+
+            return responseServiceObj.sendException(res, {
+                msg: ex.toString()
+            });
+        }
     }
 
     insert(req, res, next) {
@@ -204,10 +290,6 @@ module.exports = class OrderController {
                     grandTotal = grandTotal + shippingCost;
                     in_data.grand_total = grandTotal;
 
-                    console.log('in_data', in_data);
-                    console.log('subTotal', subTotal);
-                    console.log('grandTotal', grandTotal);
-
                     // below check Must be executed
                     if( parseFloat( grandTotal ) != parseFloat( in_data['amount'] ) ) {
                         throw 'Amount calculations are not matched correctly.';
@@ -232,7 +314,6 @@ module.exports = class OrderController {
                     $this.RazorpayObj.orders.create(
                         options, 
                         async (err, order) => {
-                            console.log(order);
                             
                             if( err ) {
                                 return await responseServiceObj.sendException(res, {
@@ -370,57 +451,41 @@ module.exports = class OrderController {
         }
     }
 
-    getById( req, res, next ) {
-
+    setOrderStatus( req, res, next ) {
         try {
 
-            let order_id = req.params.order_id;
-            let user_id = req.params.user_id;
-
-            OrderServiceObj.getById(order_id)
-            .then( async (result) => {
-                return await responseServiceObj.sendResponse(res, {
-                    msg: 'Record Found.',
-                    data: {
-                        order: result
-                    }
-                })
-            })
-            .catch( async (ex) => {
+            let order_id = ObjectId(req.params.order_id);
+            let in_data = req.body;
+            let rules = {
+                status: 'required|in:OPEN,CLOSE,DELETED'
+            };
+    
+            let validation = new Validator(in_data, rules);
+            if (validation.fails()) {
+    
                 return responseServiceObj.sendException(res, {
+                    msg: responseServiceObj.getFirstError(validation)
+                });
+            }
+    
+            OrderServiceObj.updateStatus( order_id, in_data )
+            .then( async(result) => {
+                
+                return await responseServiceObj.sendResponse(res, {
+                    msg: 'Order Updated Successfully',
+                    data: {
+                        result: await OrderServiceObj.getById(order_id)
+                    }
+                });
+            } )
+            .catch( async (ex) => {
+                return await responseServiceObj.sendException(res, {
                     msg: ex.toString()
                 });
-            } );            
+            } );
+            
         } catch (ex) {
-
-            return responseServiceObj.sendException(res, {
-                msg: ex.toString()
-            });
-        }
-    }
-
-    getByUser( req, res, next ) {
-
-        try {
-
-            let user_id = req.params.user_id;
-
-            OrderServiceObj.getByUser(user_id)
-            .then( async (result) => {
-                return await responseServiceObj.sendResponse(res, {
-                    msg: 'Record Found.',
-                    data: {
-                        order: result
-                    }
-                })
-            })
-            .catch( async (ex) => {
-                return responseServiceObj.sendException(res, {
-                    msg: ex.toString()
-                });
-            } );            
-        } catch (ex) {
-
+    
             return responseServiceObj.sendException(res, {
                 msg: ex.toString()
             });

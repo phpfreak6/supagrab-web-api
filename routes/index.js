@@ -5,8 +5,8 @@ var router = express.Router({
 
 const authRouter = require('./authRouter');
 const NewsletterRouter = require('./NewsletterRouter');
-const userRouter = require('./usersRouter');
-const userAddressRouter = require('./userAddressRouter');
+const userRouter = require('./UsersRouter');
+const userAddressRouter = require('./UserAddressRouter');
 const WishlistRouter = require('./WishlistRouter');
 const FaqRouter = require('./FaqRouter');
 const CmsRouter = require('./CmsRouter');
@@ -21,6 +21,7 @@ const ProductAttributeRouter = require('./ProductAttributeRouter');
 const CartRouter = require('./CartRouter');
 const OrderRouter = require('./OrderRouter');
 const CouponRouter = require('./CouponRouter');
+const UsersOrderRouter = require('./UsersOrderRouter');
 
 const AuthController = require('../controllers/').AuthController;
 const AuthControllerObj = new AuthController();
@@ -47,6 +48,7 @@ router.use('/products/:productId/attributes', ProductAttributeRouter);
 router.use('/products/:productId/reviews', ProductReviewRouter);
 router.use('/products/:productId/ratings', ProductRatingRouter);
 router.use('/products', ProductRouter);
+
 router.use('/coupons', CouponRouter);
 
 /**
@@ -57,10 +59,12 @@ router.use('/coupons', CouponRouter);
  * auth middleware ends
  */
 
+router.use('/orders', OrderRouter);
+
 router.use('/users', userRouter);
 router.use('/users', userAddressRouter);
 router.use('/users', WishlistRouter);
 router.use('/users', CartRouter);
-router.use('/users', OrderRouter);
+router.use('/users', UsersOrderRouter);
 
 module.exports = router;
