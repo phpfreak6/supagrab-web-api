@@ -179,6 +179,12 @@ module.exports = class UserService {
         try {
 
             let id = ObjectId(in_id);
+            if( in_data.password ) {
+                // generate salt to hash password
+                const salt = await bcrypt.genSalt(10);
+                // now we set user password to hashed password
+                in_data.password = await bcrypt.hash(in_data.password, salt);
+            }
             let result = await UserModel.updateOne({_id: id}, in_data, {multi: false});
             return result;
         } catch (ex) {
