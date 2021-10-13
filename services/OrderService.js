@@ -64,4 +64,16 @@ module.exports = class OrderService {
             throw ex;
         }
     }
+
+    async getByUser(in_id) {
+        try {
+
+            let id = ObjectId(in_id);
+            let result = await OrderModel.find({customer_id: id, status: {$ne: 'DELETED'}});
+            return result;
+        } catch (ex) {
+
+            throw ex;
+        }
+    }
 }
